@@ -1,0 +1,13 @@
+{
+	"mindmap.title": "Carte mentale",
+	
+	"mindmap.new": "Nouvelle carte mentale",
+	"mindmap.create": "Créer",
+	"mindmap.edit": "Editer",
+
+	"mindmap.name": "Nom",
+	"mindmap.description": "Description",
+	
+	"mindmap.delete.confirm": "Voulez-vous vraiment supprimer cette carte mentale ?"
+
+}

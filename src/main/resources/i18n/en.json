@@ -1,0 +1,12 @@
+{
+	"mindmap.title": "Mindmap",
+	
+	"mindmap.new": "New mindmap",
+	"mindmap.create": "Create",
+	"mindmap.edit": "Edit",
+
+	"mindmap.name": "Name",
+	"mindmap.description": "Description",
+	
+	"mindmap.delete.confirm": "Do you really want to delete this mindmap?"
+}

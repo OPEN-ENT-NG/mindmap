@@ -1,0 +1,52 @@
+apply from: "gradle/vertx.gradle"
+
+dependencies {
+	compile "org.entcore:common:$entCoreVersion"
+}
+
+javadoc {
+  options.encoding = 'UTF-8'
+  classpath = configurations.provided
+  classpath += configurations.compile
+}
+
+repositories {
+    maven {
+        url "http://maven.web-education.net/nexus/content/groups/public"
+    }
+}
+
+def configurePom(def pom) {
+	pom.project {
+		description 'Mindmap'
+		inceptionYear '2014'
+		packaging 'zip'
+		url 'http://code.web-education.net/ong/mindmap'
+
+		developers {
+			developer {
+				id 'atos'
+				name 'Atos'
+				email 'dlfr-ong@atos.net'
+			}
+		}
+
+		scm {
+			url 'git@code.web-education.net:ong/mindmap.git'
+		}
+
+		properties {
+			setProperty('project.build.sourceEncoding', 'UTF8')
+		}
+	}
+}
+
+task deploy( type:Copy, dependsOn: 'classes', description: 'Assemble the module into the remote mods directory' ) {
+  into "../../springboard-neo/mods/$moduleName"
+  from compileJava
+  from 'src/main/resources'
+  into( 'lib' ) {
+    from configurations.compile
+  }
+}
+

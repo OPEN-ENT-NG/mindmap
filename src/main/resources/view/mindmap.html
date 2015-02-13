@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{#i18n}}mindmap.title{{/i18n}}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="{{#infra}}js/loader.js{{/infra}}" type="text/javascript" id="context"></script>
+        <script src="/mindmap/public/js/directives.js" type="text/javascript"></script>
+        <script src="/mindmap/public/js/model.js" type="text/javascript"></script>
+        <script src="/mindmap/public/js/controller.js" type="text/javascript"></script>
+        
+        <!--  Wisemapping dependencies : START -->
+        <script src="/mindmap/public/vendor/wisemapping/js/mootools-core.js" type="text/javascript"></script>
+        <script src="/mindmap/public/vendor/wisemapping/js/mootools-more.js" type="text/javascript"></script>
+        <script src="/mindmap/public/vendor/wisemapping/js/isolate-mootools.js" type="text/javascript"></script>
+        <script src="/mindmap/public/vendor/wisemapping/js/core.js" type="text/javascript"></script>
+        
+        <link rel="stylesheet/less" type="text/css" href="/mindmap/public/vendor/wisemapping/css/embedded.less"/>
+        <link rel="stylesheet/less" type="text/css" href="/mindmap/public/css/mindmap.less"/>
+        
+        <script src="/mindmap/public/vendor/wisemapping/js/less.js" type="text/javascript"></script>
+        
+        <!--  Wisemapping dependencies : END -->
+        
+
+        <script type="text/ng-template" id="empty"></script>
+    </head>
+
+    <body ng-controller="MindmapController">
+        <portal>
+        <div class="row">
+            <div class="twelve cell">
+                <div class="six cell">
+                    <h1 style="font-size: 26px; color: #000; margin-top: 17px; margin-bottom: 17px; ligne-height: 26px">
+                        <i class="mindmap"></i>
+                        <a ng-click="openMainPage()"><i18n >mindmap.title</i18n></a>
+                        <span ng-if="selectedMindmap.name && selectedMindmap.name.trim().length > 0">
+                            : [[mindmap.name]]
+                        </span>
+                    </h1>
+                </div>
+                <div class="contextual-buttons six cell">
+                    <button ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
+                        <i18n>mindmap.new</i18n>
+                    </button>
+                    <behaviour name="share" resource="selectedWiki" class="cell right-magnet">
+                        <button ng-click="display.showPanelForCurrentWiki = true" ng-if="selectedWiki">
+                            <i18n>wiki.share.current.wiki</i18n>
+                        </button>
+                    </behaviour>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <hr>
+        <div class="row patchwork" id="mindmap-content">
+                <container template="main" class="flexible content cell"></container>
+                <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+         </div>
+        </portal>
+    </div>
+    <script src="/mindmap/public/vendor/wisemapping/js/editor.js" type="text/javascript"></script>  
+    <script src="/mindmap/public/vendor/wisemapping/js/mindplot.js" type="text/javascript"></script>
+    </body>
+</html>
