@@ -21,9 +21,6 @@ MindmapAdapter.prototype.getMindmap = function() {
 
 
 MindmapAdapter.prototype.save = function(map) {
-	console.log("ADAPTER SAVE");
-	console.log(this.scope);
-	console.log(map);
 	this.scope.mindmap.map = map;
 	this.scope.saveMap();
 }

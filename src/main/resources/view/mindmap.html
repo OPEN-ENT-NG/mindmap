@@ -42,11 +42,12 @@
                     <button ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
                         <i18n>mindmap.new</i18n>
                     </button>
-                    <behaviour name="share" resource="selectedWiki" class="cell right-magnet">
-                        <button ng-click="display.showPanelForCurrentWiki = true" ng-if="selectedWiki">
-                            <i18n>wiki.share.current.wiki</i18n>
-                        </button>
-                    </behaviour>
+                    <button ng-if="mindmap && mindmap._id && action == 'mindmap-open'" class="cell right-magnet" style="margin-top:5px;" ng-click="openMainPage()">
+                        <i18n>Retour</i18n>
+                    </button>
+                    <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' && mindmap.myRights.contrib" id="save" class="cell right-magnet" style="margin-top:5px;">
+                        <i18n>Enregistrer</i18n>
+                    </button>
                 </div>
             </div>
             <div class="clear"></div>

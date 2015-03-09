@@ -68,7 +68,7 @@ public class MindmapController extends MongoDbControllerHelper{
     @Override
     @Put("/:id")
     @ApiDoc("Allows to update a mindmap associated to the given identifier")
-    @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
+    @SecuredAction(value = "mindmap.contrib", type = ActionType.RESOURCE)
     public void update(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + "mindmap", new Handler<JsonObject>() {
 
@@ -87,6 +87,7 @@ public class MindmapController extends MongoDbControllerHelper{
         super.delete(request);
     }
 
+
     @Get("/share/json/:id")
     @ApiDoc("Allows to get the current sharing of the mindmap given by its identifier")
     @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
@@ -94,7 +95,6 @@ public class MindmapController extends MongoDbControllerHelper{
         shareJson(request, false);
     }
 
-    /**
     @Put("/share/json/:id")
     @ApiDoc("Allows to update the current sharing of the mindmap given by its identifier")
     @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
@@ -108,6 +108,6 @@ public class MindmapController extends MongoDbControllerHelper{
     public void removeShareMindmap(HttpServerRequest request) {
         removeShare(request, false);
     }
-    **/
+
 
 }

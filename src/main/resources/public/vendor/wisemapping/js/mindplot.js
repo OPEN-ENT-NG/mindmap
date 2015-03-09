@@ -7896,6 +7896,7 @@ mindplot.PersistenceManager = new Class({
             console.log(u);
             m.onError(this._buildError())
         }
+        m.onSuccess();
     },
     load: function(d, c) {
         $assert(d, "mapId can not be null");
@@ -8087,18 +8088,6 @@ mindplot.LocalStorageManager = new Class({
         this.forceLoad = c
     },
     saveMapXml: function(j, i, g, h, f) {
-        console.log("====== J =====");
-        console.log(j);
-        console.log("====== I =====");
-        console.log(i);
-        console.log("====== G =====");
-        console.log(g);
-        console.log("====== H =====");
-        console.log(h);
-        console.log("====== F =====");
-        console.log(f);
-        console.log("====== ADAPTER =====");
-        console.log(mapAdapter);
         mapAdapter.save(i);
         //localStorage.setItem(j + "-xml", i)
     },
@@ -9665,7 +9654,6 @@ var dialogNotifier = new mindplot.widget.ModalDialogNotifier();
 $notifyModal = dialogNotifier.show.bind(dialogNotifier);
 mindplot.widget.ToolbarNotifier = new Class({
     initialize: function() {
-        console.log("INITIALISATION DE L'EFFET !!!!!!!");
         var b = $moo("headerNotifier");
         if (b) {
             this._effect = new Fx.Elements(b, {
@@ -9676,7 +9664,6 @@ mindplot.widget.ToolbarNotifier = new Class({
                 duration: 8000,
                 transition: Fx.Transitions.Expo.easeInOut
             });
-            console.log("_EFFECT ====" + this._effect);
         }
     },
     logError: function(b) {
@@ -11056,11 +11043,14 @@ mindplot.widget.Menu = new Class({
         var V = $moo("save");
         if (V) {
             this._addButton("save", false, false, function() {
-                this.save(V, N, true)
+               this.save(V, N, true)
             }.bind(this));
-            this._registerTooltip("save", $msg("SAVE"), "meta+S");
+            /*V.addEvent("click", function() {
+                this.save(V, N, true);
+                return V;
+            }.bind(this));*/
+            //this._registerTooltip("save", $msg("SAVE"), "meta+S");
             if (!aa) {
-                console.log("aa="+ aa);
                 Element.NativeEvents.unload = 1;
                 $moo(window).addEvent("unload", function() {
                     if (this.isSaveRequired()) {
@@ -11321,7 +11311,6 @@ mindplot.layout.LayoutManager = new Class({
             x: 0,
             y: 0
         };
-        console.log("JE SUIS APPELER LAYOUTMANAGER !!!!!!");
         this._treeSet = new mindplot.layout.RootedTreeSet();
         this._layout = new mindplot.layout.OriginalLayout(this._treeSet);
         var h = this._layout.createNode(g, e, f, "root");
@@ -11588,13 +11577,11 @@ mindplot.layout.Node = new Class({
 mindplot.layout.RootedTreeSet = new Class({
     initialize: function() {
         this._rootNodes = [];
-        console.log("JE SUIS UN NOUVEAU ROOTEDTREESET");
         console.log(this.dump());
     },
     setRoot: function(b) {
         $assert(b, "root can not be null");
         this._rootNodes.push(this._decodate(b));
-        console.log("setRoot");
         console.log(this.dump());
     },
     getTreeRoots: function() {
@@ -11606,9 +11593,6 @@ mindplot.layout.RootedTreeSet = new Class({
     },
     add: function(b) {
         $assert(b, "node can not be null");
-        console.log("liste nodes = " + this.getTreeRoots());
-        console.log("b=" + b);
-        console.log(this.dump());
         $assert(!this.find(b.getId(), false), "node already exits with this id. Id:" + b.getId());
         $assert(!b._children, "node already added");
         this._rootNodes.push(this._decodate(b))
@@ -11639,13 +11623,11 @@ mindplot.layout.RootedTreeSet = new Class({
     find: function(i, j) {
         $assert($defined(i), "id can not be null");
         var g = this._rootNodes;
-        console.log("g=" + g);
         var h = null;
         for (var l = 0; l < g.length; l++) {
             var k = g[l];
             h = this._find(i, k);
             if (h) {
-                console.log("h=" + h);
                 break
             }
         }
@@ -12900,11 +12882,9 @@ $moo(document).addEvent('loadcomplete', function(resource) {
     //designer.loadMap(mindmap);
     var mindmap;
     if (mapId.map == undefined) {
-        console.log("CREATE NEW MAP");
         mindplot.Messages.BUNDLES.en.CENTRAL_TOPIC = mapId.name;  // Attention a la locale...
         mindmap = mindplot.model.Mindmap.buildEmpty(mapId.name);
     } else {
-        console.log("LOAD SAVED MAP");
         mindmap = persistence.load(mapId.name);
     }
      
@@ -12913,15 +12893,7 @@ $moo(document).addEvent('loadcomplete', function(resource) {
     var r = q.toXML(mindmap);
     var v = core.Utils.innerXML(r);
 
-    console.log("====== R ======");
-    console.log(r);
-    console.log("====== V ======");
-    console.log(v);
-
     //mapAdapter.save(v);
-    console.log("=====");
-    console.log(mapId);
-    console.log("=====");
     designer.loadMap(mindmap);
     designer.fireEvent("loadSuccess")
 });

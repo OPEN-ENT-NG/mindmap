@@ -4,7 +4,7 @@ var mindmapExtensions = {
 			return {
 				scope: {
 					mindmap: '=',
-					editorid: '='
+					editorid: '=',
 				},
 				restrict: 'E',
 				replace: true,
@@ -12,7 +12,10 @@ var mindmapExtensions = {
 				link: function(scope, element, attrs) {			
 
 					element.on('$destroy', function() {
-						designer._cleanScreen();
+						// if (! scope.mindmap.readOnly) {
+						// 	designer._cleanScreen();
+							
+						// }
 						designer.destroy();
 						$moo(document).removeEvents("mousewheel");
 						$moo(document).removeEvents("keydown");
@@ -27,6 +30,7 @@ var mindmapExtensions = {
 					    mindplot.EventBus.instance = new mindplot.EventBus();
 					    options.container = "mindplot" + scope.editorid;
 					    options.mapId = scope.mindmap.name;
+					    options.readOnly = scope.mindmap.readOnly;
 					    var designer = buildDesigner(options);
 
 					    toolbarNotifier = new mindplot.widget.ToolbarNotifier();

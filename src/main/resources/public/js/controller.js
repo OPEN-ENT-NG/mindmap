@@ -1,3 +1,13 @@
+routes.define(function($routeProvider){
+    $routeProvider
+        .when('/view/:mindmapId', {
+            action: 'viewMindmap'
+        })
+        .otherwise({
+          action: 'listMindmap'
+        });
+});
+
 /**
  * Controller for mindmaps. All methods contained in this controller can be called
  * from the view.
@@ -5,13 +15,14 @@
  * @param template all templates.
  * @param model the mindmap model.
  */
-function MindmapController($scope, template, model) {
+function MindmapController($scope, template, model, route) {
     $scope.template = template;
     $scope.mindmaps = model.mindmaps;
     $scope.me = model.me;
     $scope.display = {};
     $scope.editorLoaded = false;
     $scope.editorId = 0;
+    $scope.action = 'mindmap-list';
     
 
     // By default open the mindmap list
@@ -24,6 +35,7 @@ function MindmapController($scope, template, model) {
      */
     $scope.newMindmap = function() {
         $scope.mindmap = new Mindmap();
+        $scope.action = 'mindmap-create';
         template.open('mindmap', 'mindmap-create');
 
     };
@@ -53,8 +65,9 @@ function MindmapController($scope, template, model) {
     $scope.openMindmap = function(mindmap) {
         $scope.editorId = $scope.editorId + 1;
         $scope.mindmap = $scope.selectedMindmap = mindmap;
-        mapAdapter.adapt($scope);    
-
+        mapAdapter.adapt($scope);
+        $scope.action = 'mindmap-open';
+        $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
         template.open('mindmap', 'mindmap-edit');
 
     }; 
@@ -63,13 +76,14 @@ function MindmapController($scope, template, model) {
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
         template.close('main');
+        $scope.action = 'mindmap-list';
         template.open('mindmap', 'mindmap-list');
     }
 
     $scope.openMainPage = function(){
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
-        template.close('main');
+        $scope.action = 'mindmap-list';
         template.open('mindmap', 'mindmap-list');
     }
 
@@ -132,6 +146,35 @@ function MindmapController($scope, template, model) {
         delete $scope.selectedMindmap;
         delete $scope.display.confirmDeleteMindmap;
     };
+
+    /**
+     * Allows to open the "share" panel by setting the
+     * "$scope.display.showPanel" variable to "true".
+     * @param mindmap the mindmap to share.
+     * @param event the current event.
+     */
+    $scope.shareMindmap = function(mindmap, event){
+        $scope.mindmap = mindmap;
+        $scope.display.showPanel = true;
+        event.stopPropagation();
+    };
+
+
+    route({
+        viewMindmap: function(params){     
+            model.mindmaps.sync(function() {
+                var m = _.find(model.mindmaps.all, function(mindmap){
+                    return mindmap._id === params.mindmapId;
+                });
+                $scope.openMindmap(m);
+            });
+
+        },
+        listMindmap: function(params){
+            console.log("hello from listMindmap");
+            $scope.openMainPage();
+        }
+    });
     
 }
 

@@ -1,9 +1,3 @@
-//loader.loadFile("/mindmap/public/vendor/wisemapping/js/mootools-core.js");
-//loader.loadFile("/mindmap/public/vendor/wisemapping/js/mootools-more.js");
-//loader.loadFile("/mindmap/public/vendor/wisemapping/js/isolate-mootools.js");
-//loader.loadFile("/mindmap/public/vendor/wisemapping/js/core.js");
-//loader.loadFile("/mindmap/public/vendor/wisemapping/js/editor.js"); 
-
 var mindmapBehaviours = {
     /**
      * Resources set by the user.
@@ -68,7 +62,7 @@ Behaviours.register('mindmap', {
         }
 
         return workflow;
-    }
+    },
 
     /**
      * Allows to define all rights to display in the share windows. Names are
@@ -76,11 +70,27 @@ Behaviours.register('mindmap', {
      * <code>@SecuredAction(value = "xxxx.read", type = ActionType.RESOURCE)</code>
      * without the prefix <code>xxx</code>.
      */
-    // resourceRights : function() {
-    //     return [ 'read', 'contrib', 'manager' ]
-    // }
+    resourceRights : function() {
+        return [ 'read', 'contrib', 'manager' ];
+    },
 
- });
+    loadResources: function(callback){
+        http().get('/mindmap/list/all').done(function(mindmaps) {          
+            this.resources = _.map(mindmaps, function(mindmap) {
+                return {
+                    title : mindmap.name,
+                    ownerName : mindmap.owner.displayName,
+                    owner : mindmap.owner.userId,
+                    icon : '/mindmap/public/img/mindmap.png',
+                    path : '/mindmap#/view/' + mindmap._id,
+                    id : mindmap._id
+                };
+            })
+            console.log(this.resources);
+            if(typeof callback === 'function'){
+                callback(this.resources);
+            }
+        }.bind(this));
+    }
+});
 
-console.log("FROM BEHAVIOUR");
-console.log(angular);

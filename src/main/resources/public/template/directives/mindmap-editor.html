@@ -1,7 +1,8 @@
 <div>
-  <div id="header">
+  <div id="header" ng-if="!mindmap.readOnly">
     <div id="toolbar">
         <div id="editTab" class="tabContent">
+            <!--
             <div id="persist" class="buttonContainer">
                 <div id="save" class="buttonOn">
                     <img src="/mindmap/public/vendor/wisemapping/images/save.png"/>
@@ -9,7 +10,7 @@
                 <div id="discard" class="buttonOn">
                     <img src="/mindmap/public/vendor/wisemapping/images/discard.png"/>
                 </div>
-            </div>
+            </div> -->
             <div id="edit" class="buttonContainer">
                 <div id="undoEdition" class="buttonOn">
                     <img src="/mindmap/public/vendor/wisemapping/images/undo.png"/>
@@ -80,7 +81,7 @@
           <div id="footerLogo"></div>
     </div>
   </div>
-
+  </behaviour>
   <div id="mindplot[[editorid]]" class="mindplot" onselectstart="return false;"></div>
 </div>
 
