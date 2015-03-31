@@ -3,8 +3,11 @@ var mindmapBehaviours = {
      * Resources set by the user.
      */
     resources : {
+        read : {
+            right : 'net-atos-entng-mindmap-controllers-MindmapController|retrieve'
+        },
         contrib : {
-            right : 'net-atos-entng-mindmap-controllers-MindmapController|edit'
+            right : 'net-atos-entng-mindmap-controllers-MindmapController|update'
         },
         manage : {
             right : 'net-atos-entng-mindmap-controllers-MindmapController|create'
@@ -16,6 +19,8 @@ var mindmapBehaviours = {
      * with a Java method of the server.
      */
     workflow : {
+        view : 'net.atos.entng.mindmap.controllers.MindmapController|view',
+        list : 'net.atos.entng.mindmap.controllers.MindmapController|list',
         create : 'net.atos.entng.mindmap.controllers.MindmapController|create'
     }
 };
@@ -35,7 +40,7 @@ Behaviours.register('mindmap', {
             resource.myRights = {};
         }
 
-        for ( var behaviour in mindmapBehaviours.resources) {
+        for (var behaviour in mindmapBehaviours.resources) {
             if (model.me.hasRight(rightsContainer, mindmapBehaviours.resources[behaviour]) || model.me.userId === resource.owner.userId || model.me.userId === rightsContainer.owner.userId) {
                 if (resource.myRights[behaviour] !== undefined) {
                     resource.myRights[behaviour] = resource.myRights[behaviour] && mindmapBehaviours.resources[behaviour];
@@ -44,6 +49,7 @@ Behaviours.register('mindmap', {
                 }
             }
         }
+        console.log(resource.myRights);
         return resource;
     },
 
@@ -55,7 +61,7 @@ Behaviours.register('mindmap', {
         var workflow = {};
 
         var mindmapWorkflow = mindmapBehaviours.workflow;
-        for ( var prop in mindmapWorkflow) {
+        for (var prop in mindmapWorkflow) {
             if (model.me.hasWorkflow(mindmapWorkflow[prop])) {
                 workflow[prop] = true;
             }
@@ -74,6 +80,9 @@ Behaviours.register('mindmap', {
         return [ 'read', 'contrib', 'manager' ];
     },
 
+    /**
+     * Function required by the "linker" component to display mindmap info
+     */
     loadResources: function(callback){
         http().get('/mindmap/list/all').done(function(mindmaps) {          
             this.resources = _.map(mindmaps, function(mindmap) {
@@ -86,7 +95,6 @@ Behaviours.register('mindmap', {
                     id : mindmap._id
                 };
             })
-            console.log(this.resources);
             if(typeof callback === 'function'){
                 callback(this.resources);
             }

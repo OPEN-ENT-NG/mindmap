@@ -20,8 +20,7 @@
         <script src="/mindmap/public/vendor/wisemapping/js/less.js" type="text/javascript"></script>
         
         <!--  Wisemapping dependencies : END -->
-        
-
+       
         <script type="text/ng-template" id="empty"></script>
     </head>
 
@@ -29,7 +28,7 @@
         <portal>
         <div class="row">
             <div class="twelve cell">
-                <div class="six cell">
+                <div class="seven cell">
                     <h1 style="font-size: 26px; color: #000; margin-top: 17px; margin-bottom: 17px; ligne-height: 26px">
                         <i class="mindmap"></i>
                         <a ng-click="openMainPage()"><i18n >mindmap.title</i18n></a>
@@ -38,15 +37,18 @@
                         </span>
                     </h1>
                 </div>
-                <div class="contextual-buttons six cell">
+                <div class="contextual-buttons five cell">
                     <button ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
                         <i18n>mindmap.new</i18n>
                     </button>
                     <button ng-if="mindmap && mindmap._id && action == 'mindmap-open'" class="cell right-magnet" style="margin-top:5px;" ng-click="openMainPage()">
-                        <i18n>Retour</i18n>
+                        <i18n>mindmap.back</i18n>
+                    </button>
+                    <button workflow="mindmap.view" ng-if="mindmap && mindmap._id && action == 'mindmap-open'"class="cell right-magnet" style="margin-top:5px;" ng-click="exportMindmap()">
+                        <i18n>mindmap.export</i18n>
                     </button>
                     <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' && mindmap.myRights.contrib" id="save" class="cell right-magnet" style="margin-top:5px;">
-                        <i18n>Enregistrer</i18n>
+                        <i18n>mindmap.save</i18n>
                     </button>
                 </div>
             </div>
@@ -56,10 +58,34 @@
         <div class="row patchwork" id="mindmap-content">
                 <container template="main" class="flexible content cell"></container>
                 <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+                <!-- Allows to display the panel to manage share rights -->
+                <div ng-if="display.showExportPanel">
+                    <lightbox show="display.showExportPanel" on-close="display.showExportPanel = false;">
+                        <h2><i18n>Exporter<i18n></h2>
+                        <div class="row">
+                            <p><i18n>mindmap.export.description</i18n>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p>
+                                <input type="radio" ng-model="exportType" value="png" checked >Format PNG</input>
+                            </p>
+                            <p>
+                                <input type="radio" ng-model="exportType" value="jpeg">Format JPEG</input>
+                            </p>
+                        </div>
+                        <div class="row">
+                                <button class="right-magnet" ng-click="display.showExportPanel = false;"><i18n>mindmap.cancel</i18n></button>
+                                <button class="right-magnet" ng-click="exportMindmapSubmit(exportType)"><i18n>mindmap.submit</i18n></button>
+                        </div>
+                    </lightbox>
+                </div>
          </div>
         </portal>
     </div>
     <script src="/mindmap/public/vendor/wisemapping/js/editor.js" type="text/javascript"></script>  
     <script src="/mindmap/public/vendor/wisemapping/js/mindplot.js" type="text/javascript"></script>
+    <script src="/mindmap/public/vendor/FileSaver.js/Blob.js" type="text/javascript"></script>
+    <script src="/mindmap/public/vendor/FileSaver.js/FileSaver.min.js" type="text/javascript"></script>
     </body>
 </html>

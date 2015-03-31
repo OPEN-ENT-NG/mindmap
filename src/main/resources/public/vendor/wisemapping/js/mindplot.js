@@ -10684,8 +10684,8 @@ mindplot.widget.IconPanel = new Class({
             id: "IconsPanel"
         });
         n.setStyles({
-            width: 253,
-            height: 230,
+            width: 250,
+            height: 253,
             padding: 5
         });
         n.addEvent("click", function(a) {

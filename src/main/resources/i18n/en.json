@@ -4,6 +4,13 @@
 	"mindmap.new": "New mindmap",
 	"mindmap.create": "Create",
 	"mindmap.edit": "Edit",
+	"mindmap.export": "Export",
+	"mindmap.back": "Back",
+	"mindmap.save": "Save",
+	"mindmap.cancel": "Cancel",
+	"mindmap.submit": "Submit",
+
+	"mindmap.export.description": "Get a graphic representation of your map including all colors and shapes to reuse in documents or for archiving",
 
 	"mindmap.name": "Name",
 	"mindmap.description": "Description",

@@ -3,6 +3,10 @@ apply plugin: 'scala'
 
 dependencies {
 	compile "org.entcore:common:$entCoreVersion"
+	compile("org.apache.xmlgraphics:batik-transcoder:1.7") {
+		exclude module: 'xalan'
+	}
+	compile "org.apache.xmlgraphics:batik-codec:1.7"
     testCompile "org.entcore:tests:$entCoreVersion"
 }
 

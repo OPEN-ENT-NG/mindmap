@@ -1,6 +1,8 @@
 package net.atos.entng.mindmap;
 
 import net.atos.entng.mindmap.controllers.MindmapController;
+import net.atos.entng.mindmap.exporter.MindmapJPEGExporter;
+import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
@@ -28,7 +30,11 @@ public class Mindmap extends BaseServer {
         conf.setCollection(MINDMAP_COLLECTION);
 
         setDefaultResourceFilter(new ShareAndOwner());
-        addController(new MindmapController(MINDMAP_COLLECTION));
+        addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION));
+
+        // Register verticle into the container
+        container.deployWorkerVerticle(MindmapPNGExporter.class.getName(), config);
+        container.deployWorkerVerticle(MindmapJPEGExporter.class.getName(), config);
     }
 
 }

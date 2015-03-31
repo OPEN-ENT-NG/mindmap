@@ -4,6 +4,13 @@
 	"mindmap.new": "Nouvelle carte mentale",
 	"mindmap.create": "Créer",
 	"mindmap.edit": "Editer",
+	"mindmap.export": "Exporter",
+	"mindmap.back": "Retour",
+	"mindmap.save": "Enregistrer",
+	"mindmap.cancel": "Annuler",
+	"mindmap.submit": "Envoyer",
+	
+	"mindmap.export.description": "Créer une représentation graphique de votre carte avec toutes les couleurs et les formes, pour l'inclure dans d'autres documents ou l'archiver",
 
 	"mindmap.name": "Nom",
 	"mindmap.description": "Description",

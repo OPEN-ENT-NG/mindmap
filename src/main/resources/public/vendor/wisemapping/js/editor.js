@@ -163,7 +163,7 @@ editor.WaitDialog = new Class({
                         transition:Fx.Transitions.Bounce.easeOut
                     });
                 },
-
+                
                 onBeforeOpen:function () {
                     this.overlay = new Overlay(this.options.inject, {
                         duration:this.options.duration
@@ -178,6 +178,7 @@ editor.WaitDialog = new Class({
 
                     }.bind(this));
                 },
+                
 
                 onBeforeClose:function () {
                     this.fx.start({
@@ -198,6 +199,7 @@ editor.WaitDialog = new Class({
         var result = new Element('div');
         result.setStyles({
             'text-align':'center',
+            'background-color': 'red',
             width:'400px'
         });
         var img = new Element('img', {'src':'/mindmap/public/vendor/wisemapping/images/ajax-loader.gif'});

@@ -1,7 +1,13 @@
+/**
+ * Mindmap routes declaration
+ */
 routes.define(function($routeProvider){
     $routeProvider
         .when('/view/:mindmapId', {
             action: 'viewMindmap'
+        })
+        .when('/print/:mindmapId', {
+            action: 'printMindmap'
         })
         .otherwise({
           action: 'listMindmap'
@@ -23,7 +29,6 @@ function MindmapController($scope, template, model, route) {
     $scope.editorLoaded = false;
     $scope.editorId = 0;
     $scope.action = 'mindmap-list';
-    
 
     // By default open the mindmap list
     template.open('mindmap', 'mindmap-list');
@@ -55,6 +60,9 @@ function MindmapController($scope, template, model, route) {
     };
 
 
+    /**
+     * Save the current mindmap in database
+     */
     $scope.saveMap = function() {
         $scope.master = angular.copy($scope.mindmap);
         $scope.master.save(function() {
@@ -62,6 +70,9 @@ function MindmapController($scope, template, model, route) {
         });
     };
 
+    /**
+     * Open a mindmap in the wisemapping editor
+     */ 
     $scope.openMindmap = function(mindmap) {
         $scope.editorId = $scope.editorId + 1;
         $scope.mindmap = $scope.selectedMindmap = mindmap;
@@ -70,8 +81,72 @@ function MindmapController($scope, template, model, route) {
         $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
         template.open('mindmap', 'mindmap-edit');
 
-    }; 
+    };
 
+    /**
+     * Open a mindmap in the wisemapping editor
+     */ 
+    // $scope.openMindmap = function(mindmap) {
+    //     $scope.editorId = $scope.editorId + 1;
+    //     $scope.mindmap = $scope.selectedMindmap = mindmap;
+    //     mapAdapter.adapt($scope);
+    //     $scope.action = 'mindmap-open';
+    //     $scope.mindmap.readOnly = true;
+    //     template.open('mindmap', 'mindmap-print');
+
+    // };
+
+    $scope.exportMindmap = function() {
+        $scope.display.showExportPanel = true;
+        $scope.exportType = "png";
+    }
+
+
+    function b64toBlob(b64Data, contentType, sliceSize) {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+
+        var byteCharacters = atob(b64Data);
+        var byteArrays = [];
+
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        var blob = new Blob(byteArrays, {type: contentType});
+        return blob;
+    }
+
+    $scope.exportMindmapSubmit = function(exportType) {
+        //http().get('/mindmap/export/'  + '/' + $scope.mindmap._id);
+        //alert(svgXml);
+
+        http().postJson('/mindmap/export/' + exportType, { svgXml: $('#workspaceContainer')[0].innerHTML})
+              .done(function(data) {
+
+            var filename = $scope.mindmap.name+"."+exportType;
+            var imageData = data.image;
+            saveAs(b64toBlob(imageData, "image/" + exportType), filename);
+
+            if(typeof callback === 'function'){
+                callback();
+            }
+        });
+        $scope.display.showExportPanel = false;
+    }  
+
+    /**
+     * Close the mindmap editor and open the mindmap list page
+     */
     $scope.cancelMindmapEdit = function() {
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
@@ -80,6 +155,9 @@ function MindmapController($scope, template, model, route) {
         template.open('mindmap', 'mindmap-list');
     }
 
+    /**
+     * List of mindmap objects
+     */
     $scope.openMainPage = function(){
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
@@ -101,7 +179,6 @@ function MindmapController($scope, template, model, route) {
             delete $scope.mindmap;
         }
 
-        console.log("Showbuttons = " + mindmap.showButtons);
         $scope.mindmaps.forEach(function(m) {
             if(!mindmap || m._id !== mindmap._id){
                 m.showButtons = false;
@@ -109,6 +186,9 @@ function MindmapController($scope, template, model, route) {
         });
     };
 
+    /**
+     * Edit the properties (name, description) of a mindmap
+     */
     $scope.editMindmap = function(mindmap, event) {
         event.stopPropagation();
         mindmap.showButtons = false;
@@ -160,7 +240,14 @@ function MindmapController($scope, template, model, route) {
     };
 
 
+    /**
+     * Mindmap routes definition
+     */
     route({
+
+        /**
+         * Retrieve a mindmap from its database id and open it in a wisemapping editor
+         */
         viewMindmap: function(params){     
             model.mindmaps.sync(function() {
                 var m = _.find(model.mindmaps.all, function(mindmap){
@@ -170,8 +257,21 @@ function MindmapController($scope, template, model, route) {
             });
 
         },
+
+        printMindmap: function(params){
+            model.mindmaps.sync(function() {
+                var m = _.find(model.mindmaps.all, function(mindmap){
+                    return mindmap._id === params.mindmapId;
+                });
+                $scope.openMindmap(m);
+            });
+
+        },
+
+        /**
+         * Display the mindmap list
+         **/
         listMindmap: function(params){
-            console.log("hello from listMindmap");
             $scope.openMainPage();
         }
     });

@@ -1,7 +1,13 @@
 package net.atos.entng.mindmap.controllers;
 
+import net.atos.entng.mindmap.service.MindmapService;
+import net.atos.entng.mindmap.service.impl.MindmapServiceImpl;
+
 import org.entcore.common.mongodb.MongoDbControllerHelper;
+import org.entcore.common.user.UserInfos;
+import org.entcore.common.user.UserUtils;
 import org.vertx.java.core.Handler;
+import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.json.JsonObject;
 
@@ -14,19 +20,25 @@ import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
 import fr.wseduc.webutils.request.RequestUtils;
 
-
 /**
  * Controller to manage URL paths for mindmaps.
  * @author AtoS
  */
-public class MindmapController extends MongoDbControllerHelper{
-    
+public class MindmapController extends MongoDbControllerHelper {
+
+    /**
+     * Mindmap service
+     */
+    final MindmapService mindmapService;
+
     /**
      * Default constructor.
+     * @param eb VertX event bus
      * @param collection MongoDB collection to request.
      */
-    public MindmapController(String collection) {
+    public MindmapController(EventBus eb, String collection) {
         super(collection);
+        this.mindmapService = new MindmapServiceImpl(eb);
     }
 
     @Get("")
@@ -87,7 +99,6 @@ public class MindmapController extends MongoDbControllerHelper{
         super.delete(request);
     }
 
-
     @Get("/share/json/:id")
     @ApiDoc("Allows to get the current sharing of the mindmap given by its identifier")
     @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
@@ -98,8 +109,26 @@ public class MindmapController extends MongoDbControllerHelper{
     @Put("/share/json/:id")
     @ApiDoc("Allows to update the current sharing of the mindmap given by its identifier")
     @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
-    public void shareMindmapSubmit(HttpServerRequest request) {
-        shareJsonSubmit(request, null);
+    public void shareMindmapSubmit(final HttpServerRequest request) {
+        UserUtils.getUserInfos(eb, request, new Handler<UserInfos>() {
+            @Override
+            public void handle(final UserInfos user) {
+                if (user != null) {
+                    final String id = request.params().get("id");
+                    if (id == null || id.trim().isEmpty()) {
+                        badRequest(request);
+                        return;
+                    }
+
+                    JsonObject params = new JsonObject();
+                    params.putString("uri", container.config().getString("userbook-host") + "/userbook/annuaire#" + user.getUserId() + "#" + user.getType());
+                    params.putString("username", user.getUsername());
+                    params.putString("mindmapUri", container.config().getString("host") + "/mindmap#/view/" + id);
+
+                    shareJsonSubmit(request, "notify-mindmap-shared.html", false, params, "name");
+                }
+            }
+        });
     }
 
     @Put("/share/remove/:id")
@@ -109,5 +138,29 @@ public class MindmapController extends MongoDbControllerHelper{
         removeShare(request, false);
     }
 
+    @Post("/export/png")
+    @ApiDoc("Export the mindmap in PNG format")
+    @SecuredAction(value = "mindmap.exportpng")
+    public void exportPngMindmap(final HttpServerRequest request) {
+        log.error("Request received !");
+        RequestUtils.bodyToJson(request, new Handler<JsonObject>() {
+            @Override
+            public void handle(final JsonObject event) {
+                log.error("Sending request to dedicated service");
+                mindmapService.exportPNG(request, event);
+            }
+        });
+    }
 
+    @Post("/export/jpeg")
+    @ApiDoc("Export the mindmap in JPEG format")
+    @SecuredAction(value = "mindmap.exportjpeg")
+    public void exportJpegMindmap(final HttpServerRequest request) {
+        RequestUtils.bodyToJson(request, new Handler<JsonObject>() {
+            @Override
+            public void handle(final JsonObject event) {
+                mindmapService.exportJPEG(request, event);
+            }
+        });
+    }
 }
