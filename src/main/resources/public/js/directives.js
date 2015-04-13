@@ -1,6 +1,6 @@
 var mindmapExtensions = {
 	addDirectives: function (module) {
-		module.directive("mindmapEditor", function($timeout, $locale) {
+		module.directive("mindmapEditor", function($timeout) {
 			return {
 				scope: {
 					mindmap: '=',
@@ -13,10 +13,6 @@ var mindmapExtensions = {
 
 					// Destroy the wisemapping properly	
 					element.on('$destroy', function() {
-						// if (! scope.mindmap.readOnly) {
-						// 	designer._cleanScreen();
-							
-						// }
 						designer.destroy();
 						$moo(document).removeEvents("mousewheel");
 						$moo(document).removeEvents("keydown");
@@ -33,8 +29,7 @@ var mindmapExtensions = {
 					    options.container = "mindplot" + scope.editorid;
 					    options.mapId = scope.mindmap.name;
 					    options.readOnly = scope.mindmap.readOnly;
-					    options.locale = $locale.id.split("-",1)[0];
-					    console.log("LA LOCALE:", $locale);
+					    options.locale = currentLanguage;
 					    
 					    mindplot.EventBus.instance = new mindplot.EventBus();
 					    var designer = buildDesigner(options);
@@ -45,7 +40,7 @@ var mindmapExtensions = {
 					    var persistence = mindplot.PersistenceManager.getInstance();
 					    var mindmap;
 					    if (mapId.map == undefined) {
-					        mindplot.Messages.BUNDLES.en.CENTRAL_TOPIC = mapId.name;  // Attention a la locale...
+					        mindplot.Messages.BUNDLES[currentLanguage].CENTRAL_TOPIC = mapId.name;
 					        mindmap = mindplot.model.Mindmap.buildEmpty(mapId.name);
 
 					    } else {

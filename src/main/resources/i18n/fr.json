@@ -17,6 +17,10 @@
 	
 	"mindmap.delete.confirm": "Voulez-vous vraiment supprimer cette carte mentale ?",
 	
+	"mindmap.read": "Lecteur",
+	"mindmap.contrib": "Contributeur",
+	"mindmap.manager": "Gestionnaire",
+	
     "group.AdminLocal": "Tous les administrateurs locaux",
     "group.Personnel": "Tous les personnels du groupe {0}.",
     "group.Relative": "Tous les parents du groupe {0}.",

@@ -140,8 +140,8 @@ public class MindmapController extends MongoDbControllerHelper {
 
     @Post("/export/png")
     @ApiDoc("Export the mindmap in PNG format")
-    @SecuredAction(value = "mindmap.exportpng")
-    public void exportPngMindmap(final HttpServerRequest request) {
+    @SecuredAction("mindmap.exportpng")
+    public void exportPngMindmapp(final HttpServerRequest request) {
         log.error("Request received !");
         RequestUtils.bodyToJson(request, new Handler<JsonObject>() {
             @Override
@@ -154,7 +154,7 @@ public class MindmapController extends MongoDbControllerHelper {
 
     @Post("/export/jpeg")
     @ApiDoc("Export the mindmap in JPEG format")
-    @SecuredAction(value = "mindmap.exportjpeg")
+    @SecuredAction("mindmap.exportjpeg")
     public void exportJpegMindmap(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, new Handler<JsonObject>() {
             @Override

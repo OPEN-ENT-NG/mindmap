@@ -15,5 +15,9 @@
 	"mindmap.name": "Name",
 	"mindmap.description": "Description",
 	
-	"mindmap.delete.confirm": "Do you really want to delete this mindmap?"
+	"mindmap.delete.confirm": "Do you really want to delete this mindmap?",
+	
+	"mindmap.read": "Reader",
+	"mindmap.contrib": "Contributor",
+	"mindmap.manager": "Manager"	
 }

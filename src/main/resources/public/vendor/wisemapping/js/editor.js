@@ -20,21 +20,11 @@ var designer = null;
 
 function buildDesigner(options) {
 
-    console.log("building designer");
-    console.log(options.container);
     var container = $moo(options.container);
-    console.log(container);
     $assert(container, 'container could not be null');
 
     // Register load events ...
-    console.log(mindplot.Designer);
     designer = new mindplot.Designer(options, container);
-    console.log(designer);
-    designer.addEvent('loadSuccess', function () {
-        /*window.waitDialog.close.delay(1000, window.waitDialog);
-        window.waitDialog = null;
-        window.mindmapLoadReady = true; ELD */
-    });
 
     window.onerror = function (message, url, lineNo) {
 
@@ -54,20 +44,6 @@ function buildDesigner(options) {
             }
         }
         errorMsg = errorMsg.toString();
-
-        /*
-        new Request({
-            method:'post',
-            url:"/c/restful/logger/editor",
-            headers:{"Content-Type":"application/json", "Accept":"application/json"},
-            emulation:false,
-            urlEncoded:false
-        }).post(JSON.encode({
-            jsErrorMsg:"Message: '" + errorMsg + "', line:'" + lineNo + "', url: :" + url,
-            jsStack:window.errorStack,
-            userAgent:navigator.userAgent,
-            mapId:options.mapId})); */
-
 
         // Close loading dialog ...
         if (window.waitDialog) {
@@ -218,12 +194,3 @@ editor.WaitDialog = new Class({
     }
 
 });
-
-// Show loading dialog ...
-//waitDialog = new editor.WaitDialog();
-//waitDialog.show(); ELD
-
-// Loading libraries ...
-//Asset.javascript("/mindmap/public/vendor/wisemapping/js/mindplot.js");
-
-console.log("editor.js loaded");

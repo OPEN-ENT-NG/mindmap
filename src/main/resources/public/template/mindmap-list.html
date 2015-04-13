@@ -1,10 +1,9 @@
-
 <div class="items" style="padding-right: 0px">
     <hr />
     <div class="row" ng-repeat="m in mindmaps.all" ng-click="openMindmap(m)" ng-class="{ selected: m._id === mindmap._id }">
         <div class="cell">
-            <img src="/mindmap/public/img/mindmap.png" height="90" width="90" style="padding:6px; background-color:#F6F6F6;" ng-if="(m.icon === undefined)" class="cell" />
-            <img ng-src="[[m.icon]]?thumbnail=120x120" ng-if="m.icon !== undefined" class="cell" />
+            <img skin-src="/img/illustrations/mindmap-default.png" ng-if="(m.icon === undefined)" class="cell" />
+            <img ng-src="[[m.icon]]?thumbnail=90x90" ng-if="m.icon !== undefined" class="cell" />
             <div test-mindmap></div>
         </div>
         <article>

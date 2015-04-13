@@ -1,4 +1,3 @@
-
 /**
  * Model to create a mindmap.
  */

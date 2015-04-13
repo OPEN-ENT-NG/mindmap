@@ -84,24 +84,16 @@ function MindmapController($scope, template, model, route) {
     };
 
     /**
-     * Open a mindmap in the wisemapping editor
-     */ 
-    // $scope.openMindmap = function(mindmap) {
-    //     $scope.editorId = $scope.editorId + 1;
-    //     $scope.mindmap = $scope.selectedMindmap = mindmap;
-    //     mapAdapter.adapt($scope);
-    //     $scope.action = 'mindmap-open';
-    //     $scope.mindmap.readOnly = true;
-    //     template.open('mindmap', 'mindmap-print');
-
-    // };
-
+     * Display export options
+     */
     $scope.exportMindmap = function() {
         $scope.display.showExportPanel = true;
         $scope.exportType = "png";
     }
 
-
+    /**
+     * Convert base64 data to Blob
+     */
     function b64toBlob(b64Data, contentType, sliceSize) {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
@@ -126,10 +118,10 @@ function MindmapController($scope, template, model, route) {
         return blob;
     }
 
+    /**
+     * Export a mindmap into png or jpeg
+     */
     $scope.exportMindmapSubmit = function(exportType) {
-        //http().get('/mindmap/export/'  + '/' + $scope.mindmap._id);
-        //alert(svgXml);
-
         http().postJson('/mindmap/export/' + exportType, { svgXml: $('#workspaceContainer')[0].innerHTML})
               .done(function(data) {
 
@@ -169,6 +161,7 @@ function MindmapController($scope, template, model, route) {
     /**
      * Allows to set "showButtons" to false for all mindmaps except the given one.
      * @param mindmap the current selected mindmap.
+     * @param event triggered event
      */
     $scope.hideAlmostAllButtons = function(mindmap, event) {
         event.stopPropagation();       
@@ -258,15 +251,16 @@ function MindmapController($scope, template, model, route) {
 
         },
 
-        printMindmap: function(params){
-            model.mindmaps.sync(function() {
-                var m = _.find(model.mindmaps.all, function(mindmap){
-                    return mindmap._id === params.mindmapId;
-                });
-                $scope.openMindmap(m);
-            });
 
-        },
+        // printMindmap: function(params){
+        //     model.mindmaps.sync(function() {
+        //         var m = _.find(model.mindmaps.all, function(mindmap){
+        //             return mindmap._id === params.mindmapId;
+        //         });
+        //         $scope.openMindmap(m);
+        //     });
+
+        // },
 
         /**
          * Display the mindmap list
@@ -277,5 +271,3 @@ function MindmapController($scope, template, model, route) {
     });
     
 }
-
-
