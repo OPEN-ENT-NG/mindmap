@@ -16,7 +16,6 @@
 
         <link rel="stylesheet" type="text/css" href="/mindmap/public/vendor/wisemapping/css/embedded.css"/>
         <link rel="stylesheet" type="text/css" href="/mindmap/public/css/mindmap.css"/>
-        
         <!--  Wisemapping dependencies : END -->
        
         <script type="text/ng-template" id="empty"></script>
@@ -27,7 +26,7 @@
         <div class="row">
             <div class="twelve cell">
                 <div class="seven cell">
-                    <h1 style="font-size: 26px; color: #000; margin-top: 17px; margin-bottom: 17px; ligne-height: 26px">
+                    <h1>
                         <a ng-click="openMainPage()"><i18n >mindmap.title</i18n></a>
                         <span ng-if="selectedMindmap.name && selectedMindmap.name.trim().length > 0">
                             : [[mindmap.name]]
@@ -38,13 +37,13 @@
                     <button ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
                         <i18n>mindmap.new</i18n>
                     </button>
-                    <button ng-if="mindmap && mindmap._id && action == 'mindmap-open'" class="cell right-magnet" style="margin-top:5px;" ng-click="openMainPage()">
+                    <button ng-if="mindmap && mindmap._id && action == 'mindmap-open'" class="cell right-magnet" ng-click="openMainPage()">
                         <i18n>mindmap.back</i18n>
                     </button>
-                    <button workflow="mindmap.view" ng-if="mindmap && mindmap._id && action == 'mindmap-open'" class="cell right-magnet" style="margin-top:5px;" ng-click="exportMindmap()">
+                    <button workflow="mindmap.view" ng-if="mindmap && mindmap._id && action == 'mindmap-open'" class="cell right-magnet"  ng-click="exportMindmap()"> 
                         <i18n>mindmap.export</i18n>
                     </button>
-                    <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' && mindmap.myRights.contrib" id="save" class="cell right-magnet" style="margin-top:5px;">
+                    <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' && mindmap.myRights.contrib" id="save" class="cell right-magnet">
                         <i18n>mindmap.save</i18n>
                     </button>
                 </div>
@@ -82,7 +81,7 @@
     </div>
     <script src="/mindmap/public/vendor/wisemapping/js/editor.min.js" type="text/javascript"></script>  
     <script src="/mindmap/public/vendor/wisemapping/js/mindplot.min.js" type="text/javascript"></script>
-    <script src="/mindmap/public/vendor/FileSaver.js/Blob.js" type="text/javascript"></script>
+    <script src="/mindmap/public/vendor/FileSaver.js/Blob.min.js" type="text/javascript"></script>
     <script src="/mindmap/public/vendor/FileSaver.js/FileSaver.min.js" type="text/javascript"></script>
     </body>
 </html>

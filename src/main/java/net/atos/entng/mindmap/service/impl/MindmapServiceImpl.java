@@ -40,11 +40,9 @@ public class MindmapServiceImpl implements MindmapService {
 
     @Override
     public void exportPNG(final HttpServerRequest request, JsonObject message) {
-        log.error("Going into cyberspace..");
         eb.send(MindmapPNGExporter.MINDMAP_PNGEXPORTER_ADDRESS, message, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
-                log.error("I have the reply, now responding to the client...");
                 JsonObject response = reply.body();
                 Integer status = response.getInteger("status");
                 Renders.renderJson(request, response, status);

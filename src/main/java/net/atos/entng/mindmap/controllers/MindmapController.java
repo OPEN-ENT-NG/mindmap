@@ -142,11 +142,9 @@ public class MindmapController extends MongoDbControllerHelper {
     @ApiDoc("Export the mindmap in PNG format")
     @SecuredAction("mindmap.exportpng")
     public void exportPngMindmapp(final HttpServerRequest request) {
-        log.error("Request received !");
         RequestUtils.bodyToJson(request, new Handler<JsonObject>() {
             @Override
             public void handle(final JsonObject event) {
-                log.error("Sending request to dedicated service");
                 mindmapService.exportPNG(request, event);
             }
         });

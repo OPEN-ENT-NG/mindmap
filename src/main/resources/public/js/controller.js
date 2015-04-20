@@ -251,17 +251,6 @@ function MindmapController($scope, template, model, route) {
 
         },
 
-
-        // printMindmap: function(params){
-        //     model.mindmaps.sync(function() {
-        //         var m = _.find(model.mindmaps.all, function(mindmap){
-        //             return mindmap._id === params.mindmapId;
-        //         });
-        //         $scope.openMindmap(m);
-        //     });
-
-        // },
-
         /**
          * Display the mindmap list
          **/

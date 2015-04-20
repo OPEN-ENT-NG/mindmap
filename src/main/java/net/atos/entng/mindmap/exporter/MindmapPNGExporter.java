@@ -35,7 +35,6 @@ public class MindmapPNGExporter extends AbstractMindmapExporter implements Handl
 
     @Override
     public void handle(Message<JsonObject> event) {
-        log.error("Starting the conversion");
         String svgXml = event.body().getString("svgXml");
         JsonObject result = new JsonObject();
         try {
@@ -46,7 +45,6 @@ public class MindmapPNGExporter extends AbstractMindmapExporter implements Handl
             log.error(e);
             result.putNumber("status", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
         } finally {
-            log.error("End of the conversion, replying...");
             event.reply(result);
         }
     }

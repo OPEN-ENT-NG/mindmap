@@ -286,7 +286,6 @@ public abstract class AbstractMindmapExporter extends Verticle {
         final File iconsDir = new File(baseImgDir, "icons");
 
         File iconFile = new File(iconsDir, iconName);
-        log.error(iconFile.getAbsolutePath().toString());
         if (!vertx.fileSystem().existsSync(iconFile.toString())) {
             // It's not a icon, must be a note, attach image ...
             final File legacyIconsDir = new File(baseImgDir, "images");
