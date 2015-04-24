@@ -1,36 +1,37 @@
 <article class="row twelve cell">
-    <div class="two cell">
-        <div>
-            <img skin-src="/img/illustrations/mindmap-default.png" class="cell mindmap-icon-patch " />
+    <form name="form">
+        <div class="two cell">
+            <div>
+                <img skin-src="/img/illustrations/mindmap-default.png" class="cell mindmap-icon-patch " />
+            </div>
         </div>
-    </div>
-    <div class="ten cell height-two">
-        <div class="absolute">
-            <div class="row">
-                <div class="twelve cell horizontal-spacing-twice vertical-spacing">
-                    <div class="row">
-                        <label class="three cell"><i18n>mindmap.name</i18n></label>
-                        <input type="text" class="nine cell" ng-model="mindmap.name" required />
+        <div class="ten cell height-two">
+            <div class="absolute">
+                <div class="row">
+                    <div class="twelve cell horizontal-spacing-twice vertical-spacing">
+                        <div class="row">
+                            <label class="three cell"><i18n>mindmap.name</i18n></label>
+                            <input type="text" class="nine cell" ng-model="mindmap.name" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="twelve cell horizontal-spacing-twice vertical-spacing">
+                        <div class="row">
+                            <label class="three cell"><i18n>mindmap.description</i18n></label>
+                            <input type="text" class="nine cell" ng-model="mindmap.description" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row bottom-locked">
+                    <div class="twelve cell horizontal-spacing-twice">
+                        <button class="right-magnet" ng-click="saveMindmap()" ng-disabled="form.$invalid">
+                            <i18n>save</i18n>
+                        </button>
+                        <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelMindmapEdit()" />
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="twelve cell horizontal-spacing-twice vertical-spacing">
-                    <div class="row">
-                        <label class="three cell"><i18n>mindmap.description</i18n></label>
-                        <input type="text" class="nine cell" ng-model="mindmap.description" required />
-                    </div>
-                </div>
-            </div>
-            <div class="row bottom-locked">
-                <div class="twelve cell horizontal-spacing-twice">
-                    <button class="right-magnet" ng-click="saveMindmap()" ng-disabled="form.$invalid">
-                        <i18n>save</i18n>
-                    </button>
-                    <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelMindmapEdit()" />
-                </div>
-            </div>
         </div>
-
-    </div>
+    </form>
 </article>

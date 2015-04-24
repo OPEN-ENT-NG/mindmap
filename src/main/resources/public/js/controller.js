@@ -10,7 +10,7 @@ routes.define(function($routeProvider){
             action: 'printMindmap'
         })
         .otherwise({
-          action: 'listMindmap'
+            action: 'listMindmap'
         });
 });
 
@@ -74,6 +74,9 @@ function MindmapController($scope, template, model, route) {
      * Open a mindmap in the wisemapping editor
      */ 
     $scope.openMindmap = function(mindmap) {
+        $scope.mindmaps.forEach(function(m) {
+            m.showButtons = false;
+        });
         $scope.editorId = $scope.editorId + 1;
         $scope.mindmap = $scope.selectedMindmap = mindmap;
         mapAdapter.adapt($scope);
@@ -134,6 +137,14 @@ function MindmapController($scope, template, model, route) {
             }
         });
         $scope.display.showExportPanel = false;
+    }
+
+    /**
+     * Check if the user can export either in JPEG either in PNG format
+     **/
+    $scope.canExport = function() {
+        var workflowRights = model.me.workflow["mindmap"];
+        return (workflowRights["exportpng"] || workflowRights["exportjpeg"]);
     }  
 
     /**
@@ -164,6 +175,27 @@ function MindmapController($scope, template, model, route) {
      * @param event triggered event
      */
     $scope.hideAlmostAllButtons = function(mindmap, event) {
+        event.stopPropagation();       
+
+        if (mindmap.showButtons) {
+            $scope.mindmap = mindmap;
+        } else {
+            delete $scope.mindmap;
+        }
+
+        $scope.mindmaps.forEach(function(m) {
+            if(!mindmap || m._id !== mindmap._id){
+                m.showButtons = false;
+            }
+        });
+    };
+
+        /**
+     * Allows to set "showButtons" to false for all mindmaps except the given one.
+     * @param mindmap the current selected mindmap.
+     * @param event triggered event
+     */
+    $scope.hideAllButtons = function(mindmap, event) {
         event.stopPropagation();       
 
         if (mindmap.showButtons) {

@@ -1964,7 +1964,7 @@ mindplot.TopicEventDispatcher = new Class({
     close: function(b) {
         if (this.isVisible()) {
             this._activeEditor.close(b);
-            this._activeEditor = null
+            this._activeEditor = null;
         }
     },
     show: function(c, d) {
@@ -3070,6 +3070,7 @@ mindplot.Designer = new Class({
         delete this._relPivot;
         delete this._clipboard;
         delete this._mindmap;
+        mindplot.TopicEventDispatcher.getInstance()._multilineEditor.close(false);
         console.log("Destroy designer END");
     },
     deactivateKeyboard: function() {
@@ -9643,10 +9644,6 @@ mindplot.widget.ModalDialogNotifier = new Class({
             text: this._messsage
         });
         f.inject(e);
-        var d = new Element("img", {
-            src: "images/alert-sign.png"
-        });
-        d.inject(e);
         return e
     }
 });
@@ -12458,7 +12455,7 @@ mindplot.Messages.BUNDLES.en = {
     ONE_TOPIC_MUST_BE_SELECTED: "Could not create a topic. One topic must be selected.",
     ONLY_ONE_TOPIC_MUST_BE_SELECTED_COLLAPSE: "Children can not be collapsed. One topic must be selected.",
     SAVE_COULD_NOT_BE_COMPLETED: "Save could not be completed, please try again latter.",
-    UNEXPECTED_ERROR_LOADING: "We're sorry, an unexpected error has occurred.\nTry again reloading the editor.If the problem persists, contact us to support@wisemapping.com.",
+    UNEXPECTED_ERROR_LOADING: "We're sorry, an unexpected error has occurred.\nTry again reloading the editor.",
     MAIN_TOPIC: "Main Topic",
     SUB_TOPIC: "Sub Topic",
     ISOLATED_TOPIC: "Isolated Topic",
@@ -12514,7 +12511,7 @@ mindplot.Messages.BUNDLES.es = {
     ONE_TOPIC_MUST_BE_SELECTED: "No ha sido posible crear un nuevo tópico. Al menos un tópico debe ser seleccionado.",
     ONLY_ONE_TOPIC_MUST_BE_SELECTED: "No ha sido posible crear un nuevo tópico. Sólo un tópico debe ser seleccionado.",
     SAVE_COULD_NOT_BE_COMPLETED: "Grabación no pudo ser completada. Intentelo mas tarde.",
-    UNEXPECTED_ERROR_LOADING: "Lo sentimos, un error inesperado ha ocurrido. Intentelo nuevamente recargando el editor. Si el problema persiste, contactenos a support@wisemapping.com.",
+    UNEXPECTED_ERROR_LOADING: "Lo sentimos, un error inesperado ha ocurrido. Intentelo nuevamente recargando el editor.",
     ZOOM_ERROR: "No es posible aplicar mas zoom.",
     ZOOM_IN_ERROR: "El zoom es muy alto.",
     MAIN_TOPIC: "Tópico Principal",
@@ -12576,7 +12573,7 @@ mindplot.Messages.BUNDLES.de = {
     ONE_TOPIC_MUST_BE_SELECTED: "Thema konnte nicht angelegt werden. Es muss ein Thema ausgewählt werden.",
     ONLY_ONE_TOPIC_MUST_BE_SELECTED_COLLAPSE: "Kinderknoten können nicht eingefaltet werden. Es muss ein Thema ausgewäht werden.",
     SAVE_COULD_NOT_BE_COMPLETED: "Sichern wurde nicht abgeschlossen. Versuchen Sie es später nocheinmal.",
-    UNEXPECTED_ERROR_LOADING: "E tut uns Leid, ein unerwarteter Fehler ist aufgetreten.\nVersuchen Sie, den Editor neu zu laden. Falls das Problem erneut auftritt, bitte kontaktieren Sie uns unter support@wisemapping.com.",
+    UNEXPECTED_ERROR_LOADING: "E tut uns Leid, ein unerwarteter Fehler ist aufgetreten.\nVersuchen Sie, den Editor neu zu laden.",
     MAIN_TOPIC: "Hauptthema",
     SUB_TOPIC: "Unterthema",
     ISOLATED_TOPIC: "Isoliertes Thema",
@@ -12634,7 +12631,7 @@ mindplot.Messages.BUNDLES.fr = {
     ONE_TOPIC_MUST_BE_SELECTED: "Impossible de créer un noeud. Un noeud parent doit être sélectionné au préalable.",
     ONLY_ONE_TOPIC_MUST_BE_SELECTED_COLLAPSE: "Un noeud enfant ne peut pas être réduit. Un noeud doit être sélectionné.",
     SAVE_COULD_NOT_BE_COMPLETED: "Enregistrement impossible. Essayer ultérieurement.",
-    UNEXPECTED_ERROR_LOADING: "Nous sommes désolés, une erreur vient de survenir.\nEssayez de recharger l'éditeur. Si le problème persiste, contactez-nous : support@wisemapping.com.",
+    UNEXPECTED_ERROR_LOADING: "Nous sommes désolés, une erreur vient de survenir.\nEssayez de recharger l'éditeur.",
     MAIN_TOPIC: "Noeud titre principal",
     SUB_TOPIC: "Noeud sous-titre",
     ISOLATED_TOPIC: "Noeud isolé",
@@ -12651,6 +12648,7 @@ mindplot.Messages.BUNDLES.fr = {
     REMOVE: "Supprimer",
     WRITE_YOUR_TEXT_HERE: "Écrivez votre texte ici ...",
     LINK: "Lien",
+    OPEN_LINK: "Ouvrir URL",
     DUMMY: ""
 };
 mindplot.Messages.BUNDLES.pt_br = {
@@ -12690,7 +12688,7 @@ mindplot.Messages.BUNDLES.pt_br = {
     ONLY_ONE_TOPIC_MUST_BE_SELECTED: "N\u00e3o foi poss\u00edvel criar t\u00f3pico. Apenas um t\u00f3pico deve ser selecionado.",
     ONE_TOPIC_MUST_BE_SELECTED: "N\u00e3o foi poss\u00edvel criar t\u00f3pico. Um t\u00f3pico deve ser selecionado.",
     SAVE_COULD_NOT_BE_COMPLETED: "Salvamento n\u00e3o pode ser completado. Tente novamente mais tarde.",
-    UNEXPECTED_ERROR_LOADING: "Ocorreu um erro inesperado.\nTente recarregar novamente o editor. Se o problema persistir, contacte-nos em support@wisemapping.com.",
+    UNEXPECTED_ERROR_LOADING: "Ocorreu um erro inesperado.\nTente recarregar novamente o editor.",
     MAIN_TOPIC: "T\u00f3pico Principal",
     SUB_TOPIC: "Sub T\u00f3pico",
     ISOLATED_TOPIC: "T\u00f3pico Isolado",
@@ -12743,7 +12741,7 @@ mindplot.Messages.BUNDLES.zh_cn = {
     ONE_TOPIC_MUST_BE_SELECTED: "不能创建节点。必须选择一个节点。",
     ONLY_ONE_TOPIC_MUST_BE_SELECTED_COLLAPSE: "子节点不能折叠。必须选择一个节点。",
     SAVE_COULD_NOT_BE_COMPLETED: "保存未完成。稍后再试。",
-    UNEXPECTED_ERROR_LOADING: "抱歉，突遭错误，我们无法处理你的请求。\n尝试重新装载编辑器。如果问题依然存在请联系support@wisemapping.com。",
+    UNEXPECTED_ERROR_LOADING: "抱歉，突遭错误，我们无法处理你的请求。\n尝试重新装载编辑器。",
     MAIN_TOPIC: "主节点",
     SUB_TOPIC: "子节点",
     ISOLATED_TOPIC: "独立节点",
@@ -12795,7 +12793,7 @@ mindplot.Messages.BUNDLES.zh_tw = {
     ONE_TOPIC_MUST_BE_SELECTED: "不能創建節點。必須選擇一個節點。",
     ONLY_ONE_TOPIC_MUST_BE_SELECTED_COLLAPSE: "子節點不能折疊。必須選擇一個節點。",
     SAVE_COULD_NOT_BE_COMPLETED: "保存未完成。稍後再試。",
-    UNEXPECTED_ERROR_LOADING: "抱歉，突遭錯誤，我們無法處理你的請求。\n嘗試重新裝載編輯器。如果問題依然存在請聯繫support@wisemapping.com。",
+    UNEXPECTED_ERROR_LOADING: "抱歉，突遭錯誤，我們無法處理你的請求。\n嘗試重新裝載編輯器。",
     MAIN_TOPIC: "主節點",
     SUB_TOPIC: "子節點",
     ISOLATED_TOPIC: "獨立節點",
@@ -12844,7 +12842,7 @@ mindplot.Messages.BUNDLES.ca = {
     ONE_TOPIC_MUST_BE_SELECTED: "No ha estat possible crear un nou tòpic. Com a mínim ha de seleccionar un tòpic.",
     ONLY_ONE_TOPIC_MUST_BE_SELECTED: "No ha estar possible crear un nou tòpic. Només un tòpic ha d'estar seleccionat.",
     SAVE_COULD_NOT_BE_COMPLETED: "No s'ha pogut desar. Provi més tard.",
-    UNEXPECTED_ERROR_LOADING: "Ho sentim, un error ha esdevingut inesperadament. Provi recarregant l'editor, si el problema continua contacti a support@wisemapping.com.",
+    UNEXPECTED_ERROR_LOADING: "Ho sentim, un error ha esdevingut inesperadament. Provi recarregant l'editor.",
     ZOOM_ERROR: "No es pot fer més zoom.",
     ZOOM_IN_ERROR: "El zoom és massa creixent.",
     MAIN_TOPIC: "Tòpic principal",
@@ -12868,43 +12866,28 @@ mindplot.Messages.BUNDLES.ca = {
     SESSION_EXPIRED: "La seva sessió ha finalitzat. Si us plau, torni a connectar-se.",
     DUMMY: ""
 };
-//$moo(document).fireEvent("loadcomplete", "mind");
 
-//'welcome';
-$moo(document).addEvent('loadcomplete', function(resource) {
-    var mapId = mapAdapter.getMindmap();
-    var options = loadDesignerOptions();
-    var designer = buildDesigner(options);
+// $moo(document).addEvent('loadcomplete', function(resource) {
+//     var mapId = mapAdapter.getMindmap();
+//     var options = loadDesignerOptions();
+//     var designer = buildDesigner(options);
 
-    // Load map from XML file persisted on disk...
-    var persistence = mindplot.PersistenceManager.getInstance();
-    //var mindmap = mindmap = persistence.load(mapId);
-    //designer.loadMap(mindmap);
-    var mindmap;
-    if (mapId.map == undefined) {
-        mindplot.Messages.BUNDLES.en.CENTRAL_TOPIC = mapId.name;  // Attention a la locale...
-        mindmap = mindplot.model.Mindmap.buildEmpty(mapId.name);
-    } else {
-        mindmap = persistence.load(mapId.name);
-    }
+//     var persistence = mindplot.PersistenceManager.getInstance();
+
+//     var mindmap;
+//     if (mapId.map == undefined) {
+//         mindplot.Messages.BUNDLES.en.CENTRAL_TOPIC = mapId.name;  // Attention a la locale...
+//         mindmap = mindplot.model.Mindmap.buildEmpty(mapId.name);
+//     } else {
+//         mindmap = persistence.load(mapId.name);
+//     }
      
-    console.log(persistence);
-    var q = mindplot.persistence.XMLSerializerFactory.getSerializerFromMindmap(mindmap);
-    var r = q.toXML(mindmap);
-    var v = core.Utils.innerXML(r);
+//     console.log(persistence);
+//     var q = mindplot.persistence.XMLSerializerFactory.getSerializerFromMindmap(mindmap);
+//     var r = q.toXML(mindmap);
+//     var v = core.Utils.innerXML(r);
 
-    //mapAdapter.save(v);
-    designer.loadMap(mindmap);
-    designer.fireEvent("loadSuccess")
-});
-
-//$moo(document).fireEvent("loadcomplete", "mind");
-//var launch = function (e) {
-  //  alert("launch");
- //   if (e) {
-//        alert(e);
-//    }
-    
-//}
-
-//launch();
+//     //mapAdapter.save(v);
+//     designer.loadMap(mindmap);
+//     designer.fireEvent("loadSuccess")
+// });

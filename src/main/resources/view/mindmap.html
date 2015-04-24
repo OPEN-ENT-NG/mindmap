@@ -34,13 +34,13 @@
                     </h1>
                 </div>
                 <div class="contextual-buttons five cell">
-                    <button ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
+                    <button workflow="mindmap.create" ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
                         <i18n>mindmap.new</i18n>
                     </button>
                     <button ng-if="mindmap && mindmap._id && action == 'mindmap-open'" class="cell right-magnet" ng-click="openMainPage()">
                         <i18n>mindmap.back</i18n>
                     </button>
-                    <button workflow="mindmap.view" ng-if="mindmap && mindmap._id && action == 'mindmap-open'" class="cell right-magnet"  ng-click="exportMindmap()"> 
+                    <button workflow="mindmap.view" ng-if="mindmap && mindmap._id && action == 'mindmap-open' && canExport()" class="cell right-magnet"  ng-click="exportMindmap()"> 
                         <i18n>mindmap.export</i18n>
                     </button>
                     <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' && mindmap.myRights.contrib" id="save" class="cell right-magnet">
@@ -63,16 +63,16 @@
                             </p>
                         </div>
                         <div class="row">
-                            <p>
-                                <input type="radio" ng-model="exportType" value="png" checked >Format PNG</input>
+                            <p workflow="mindmap.exportpng" >
+                                <input type="radio" ng-model="exportType" value="png"><span>Format PNG</span>
                             </p>
-                            <p>
-                                <input type="radio" ng-model="exportType" value="jpeg">Format JPEG</input>
+                            <p workflow="mindmap.exportjpeg">
+                                <input type="radio" ng-model="exportType" value="jpeg"><span>Format JPEG</span>
                             </p>
                         </div>
                         <div class="row">
-                                <button class="right-magnet" ng-click="display.showExportPanel = false;"><i18n>mindmap.cancel</i18n></button>
-                                <button class="right-magnet" ng-click="exportMindmapSubmit(exportType)"><i18n>mindmap.submit</i18n></button>
+                            <button class="right-magnet" ng-click="display.showExportPanel = false;"><i18n>mindmap.cancel</i18n></button>
+                            <button class="right-magnet" ng-click="exportMindmapSubmit(exportType)"><i18n>mindmap.submit</i18n></button>
                         </div>
                     </lightbox>
                 </div>

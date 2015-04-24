@@ -21,7 +21,9 @@ var mindmapBehaviours = {
     workflow : {
         view : 'net.atos.entng.mindmap.controllers.MindmapController|view',
         list : 'net.atos.entng.mindmap.controllers.MindmapController|list',
-        create : 'net.atos.entng.mindmap.controllers.MindmapController|create'
+        create : 'net.atos.entng.mindmap.controllers.MindmapController|create',
+        exportpng : 'net.atos.entng.mindmap.controllers.MindmapController|exportPngMindmap',
+        exportjpeg : 'net.atos.entng.mindmap.controllers.MindmapController|exportJpegMindmap'
     }
 };
 

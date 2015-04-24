@@ -5,7 +5,7 @@
     top: 50%;
     left: 50%;
     z-index: 11000;
-    width: 450px;
+    width: 490px;
     margin: -250px 0 0 -250px;
     background-color: #ffffff;
     border: 1px solid #999;
@@ -44,7 +44,11 @@
     text-shadow: 1px 1px 0 #fff;
     /*color: black;*/
     /*border-bottom: 1px solid #eee;*/
-    padding: 10px 10px;
+    /*padding: 10px 10px;*/
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left:10px;
+    padding-right: 0px;
     font-size: 18px;
     color: #1bbded;
 }
@@ -57,7 +61,7 @@
     display: block;
     cursor: pointer;
     top: 8px;
-    left: 470px;
+    left: 515px;
     position: absolute;
 }
 
