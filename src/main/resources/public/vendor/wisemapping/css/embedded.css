@@ -1,5 +1,4 @@
 @import "libraries/moodialog/css/MooDialog.css";
-
 /********************************************************************************/
 /* Header & Toolbar Styles */
 /********************************************************************************/
@@ -206,7 +205,7 @@ div.toolbarPanelLinkSelectedLink {
   background-color: #efefef;
 }
 .toolbarPaneTip {
-  background-color: #e4e2d2;
+  background-color: #f0f0f0;
   padding: 5px 5px;
   color: #f5f5f5;
   /*font-weight: bold;*/

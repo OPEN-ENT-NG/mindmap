@@ -49,6 +49,7 @@ tr {
     text-align: center;
     vertical-align: middle;
     width: 18px;
+    padding: 0px;
 }
 
 .palette-cell .palette-colorswatch {

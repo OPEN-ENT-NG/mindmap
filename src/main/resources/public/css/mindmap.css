@@ -1,11 +1,11 @@
 div.mindplot {
-  border: 1px solid #CCC;
+  border: 1px solid #ddd;
 }
 div#toolbar {
-  background-color: #e4dcca;
+  background-color: #f0f0f0;
   background-image: none;
-  border-color: #e4dcca;
-  border-right: 2px solid #e4dcca;
+  border-color: #f0f0f0;
+  border-right: 2px solid #f0f0f0;
 }
 img.mindmap-icon-patch {
   width: 97px !important;

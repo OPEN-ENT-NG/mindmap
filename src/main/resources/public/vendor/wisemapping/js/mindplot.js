@@ -10681,8 +10681,8 @@ mindplot.widget.IconPanel = new Class({
             id: "IconsPanel"
         });
         n.setStyles({
-            width: 250,
-            height: 253,
+            width: 240,
+            height: 280,
             padding: 5
         });
         n.addEvent("click", function(a) {
@@ -11146,10 +11146,8 @@ mindplot.widget.Menu = new Class({
         if (K) {
             var L = 900;
             var P = 500;
-            //var aj = (screen.width / 2) - (L / 2); ELD
-            //var T = (screen.height / 2) - (P / 2); ELD
-            var aj = (930 / 2) - (L / 2);
-            var T = (650 / 2) - (P / 2);
+            var aj = (screen.width / 2) - (L / 2);
+            var T = (screen.height / 2) - (P / 2);
             K.addEvent("click", function(a) {
                 window.open("https://www.youtube.com/tv?vq=medium#/watch?v=rKxZwNKs9cE", "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=" + L + ", height=" + P + ", top=" + T + ", left=" + aj);
                 a.preventDefault()
