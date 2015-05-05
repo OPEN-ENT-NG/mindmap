@@ -104,22 +104,28 @@ function loadDesignerOptions(jsonConf) {
         result = this.options;
     }
     else {
-        var containerPosition = $moo("mindmap-content").getPosition();
+        var mindmapContainerPosition = $moo("mindmap-content").getPosition();
+        var mindmapContainerSize = $moo("mindmap-content").getSize();
+
 
         // Set workspace screen size as default. In this way, resize issues are solved.
         var containerSize = {
-            height: parseInt(window.innerHeight) - containerPosition.y - 30,
-            width:  $moo("toolbar").getSize().x 
+            height: parseInt(window.innerHeight) - mindmapContainerPosition.y - 30,
+            width:  mindmapContainerSize.x 
         };
 
         var viewPort = {
-            height: parseInt(window.innerHeight) - containerPosition.y - 70 - 30 ,
-            width: $moo("toolbar").getSize().x 
+            height: parseInt(window.innerHeight) - mindmapContainerPosition.y - 70 - 30 ,
+            width: mindmapContainerSize.x 
         };
         
         // Editor toolbar should not resize 
-        $moo("toolbar").setStyle('width', viewPort.width);
-        $moo("header").setStyle('width', viewPort.width);
+
+        var toolbar = $moo("toolbar");
+        if (null != toolbar) {
+            $moo("toolbar").setStyle('width', viewPort.width);
+            $moo("header").setStyle('width', viewPort.width);
+        }
         result = {readOnly:false, zoom:0.85, saveOnLoad:true, size:containerSize, viewPort:viewPort, container:'mindplot', locale:'en'};
     }
     return result;
