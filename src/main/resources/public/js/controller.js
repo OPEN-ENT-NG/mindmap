@@ -28,6 +28,7 @@ function MindmapController($scope, template, model, route) {
     $scope.display = {};
     $scope.editorLoaded = false;
     $scope.editorId = 0;
+    $scope.exportInProgress = false;
     $scope.action = 'mindmap-list';
 
     // By default open the mindmap list
@@ -125,13 +126,14 @@ function MindmapController($scope, template, model, route) {
      * Export a mindmap into png or jpeg
      */
     $scope.exportMindmapSubmit = function(exportType) {
+        $scope.exportInProgress = true;
         http().postJson('/mindmap/export/' + exportType, { svgXml: $('#workspaceContainer')[0].innerHTML})
               .done(function(data) {
 
             var filename = $scope.mindmap.name+"."+exportType;
             var imageData = data.image;
             saveAs(b64toBlob(imageData, "image/" + exportType), filename);
-
+            $scope.$apply("exportInProgress = false");
             if(typeof callback === 'function'){
                 callback();
             }
