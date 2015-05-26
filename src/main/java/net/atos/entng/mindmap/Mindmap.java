@@ -3,6 +3,7 @@ package net.atos.entng.mindmap;
 import net.atos.entng.mindmap.controllers.MindmapController;
 import net.atos.entng.mindmap.exporter.MindmapJPEGExporter;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
+import net.atos.entng.mindmap.service.impl.MindmapRepositoryEvents;
 
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
@@ -25,6 +26,8 @@ public class Mindmap extends BaseServer {
     @Override
     public void start() {
         super.start();
+
+        setRepositoryEvents(new MindmapRepositoryEvents());
 
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(MINDMAP_COLLECTION);
