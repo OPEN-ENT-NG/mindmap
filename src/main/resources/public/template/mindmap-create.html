@@ -1,35 +1,27 @@
-<article class="row twelve cell">
+<article class="row">
     <form name="form">
-        <div class="two cell">
-            <div>
-                <img skin-src="/img/illustrations/mindmap-default.png" class="cell mindmap-icon-patch " />
-            </div>
-        </div>
-        <div class="ten cell height-two">
-            <div class="absolute">
-                <div class="row">
-                    <div class="twelve cell horizontal-spacing-twice vertical-spacing">
-                        <div class="row">
-                            <label class="three cell"><i18n>mindmap.name</i18n></label>
-                            <input type="text" class="nine cell" ng-model="mindmap.name" required />
-                        </div>
-                    </div>
+        <div class="rigid-grid row">
+            <div class="two cell clip height-two">
+                <div class="absolute" loading-panel="upload-wiki-thumbnail">
+                    <image-select ng-model="mindmap.thumbnail" default="/img/illustrations/mindmap-default.png"></image-select>
                 </div>
-                <div class="row">
-                    <div class="twelve cell horizontal-spacing-twice vertical-spacing">
-                        <div class="row">
-                            <label class="three cell"><i18n>mindmap.description</i18n></label>
-                            <input type="text" class="nine cell" ng-model="mindmap.description" required />
-                        </div>
+            </div>
+            <div class="margin-two height-three">
+                <div class="twelve cell horizontal-spacing">
+                    <input type="text" ng-model="mindmap.name" class="twelve cell" i18n-placeholder="mindmap.name" required />
+                    <div class="row">
+                        <hr class="row" />
+                    </div>
+                    <textarea ng-model="mindmap.description" class="twelve cell" i18n-placeholder="mindmap.description" required />
+                    <div class="row">
+                        <hr class="row" />
                     </div>
                 </div>
                 <div class="row bottom-locked">
-                    <div class="twelve cell horizontal-spacing-twice">
-                        <button class="right-magnet" ng-click="saveMindmap()" ng-disabled="form.$invalid">
-                            <i18n>save</i18n>
-                        </button>
-                        <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelMindmapEdit()" />
-                    </div>
+                    <button ng-click="saveMindmap()" class="right-magnet" ng-disabled="form.$invalid">
+                        <i18n>save</i18n>
+                    </button>
+                    <input type="button" class="button right-magnet cancel" ng-click="cancelMindmapEdit()" i18n-value="cancel">
                 </div>
             </div>
         </div>

@@ -110,13 +110,13 @@ function loadDesignerOptions(jsonConf) {
 
         // Set workspace screen size as default. In this way, resize issues are solved.
         var containerSize = {
-            height: parseInt(window.innerHeight) - mindmapContainerPosition.y - 30,
-            width:  mindmapContainerSize.x 
+            height: parseInt(window.innerHeight) - mindmapContainerPosition.y - 70,
+            width:  mindmapContainerSize.x
         };
 
         var viewPort = {
-            height: parseInt(window.innerHeight) - mindmapContainerPosition.y - 70 - 30 ,
-            width: mindmapContainerSize.x 
+            height: parseInt(window.innerHeight) - mindmapContainerPosition.y - 70 - 70 ,
+            width: mindmapContainerSize.x
         };
         
         // Editor toolbar should not resize 

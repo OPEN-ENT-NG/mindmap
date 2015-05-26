@@ -10042,17 +10042,19 @@ mindplot.widget.LinkEditor = new Class({
             action: "none",
             id: "linkFormId"
         });
-        var m = new Element("select");
+        var m = new Element("label", {
+            text: "URL"
+        });
         m.setStyles({
             margin: "5px"
         });
-        new Element("option", {
-            text: "URL"
-        }).inject(m);
+        // new Element("option", {
+        //     text: "URL"
+        // }).inject(m);
         m.inject(s);
         var n = new Element("input", {
             placeholder: "http://www.example.com/",
-            type: Browser.ie ? "text" : "url",
+            type: Browser.ie ? "text" : "text",
             required: true,
             autofocus: "autofocus"
         });
@@ -10081,7 +10083,7 @@ mindplot.widget.LinkEditor = new Class({
             this.close()
         }.bind(this));
         var l = new Element("div").setStyles({
-            paddingTop: 5,
+            paddingTop: 35,
             textAlign: "center"
         });
         var o = new Element("input", {

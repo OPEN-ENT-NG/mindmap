@@ -22,7 +22,7 @@
     -webkit-background-clip: padding-box;
     -moz-background-clip: padding-box;
     background-clip: padding-box;
-    padding: 30px;
+    padding: 30px 22px 50px 30px ;
 }
 
 .MooDialogTitle {
@@ -55,7 +55,7 @@
 
 .MooDialog .close {
     /*background: url(dialog-close.png) no-repeat;*/
-    background: url("/assets/themes/neo/img/icons/close.png") no-repeat;
+    background: url("/assets/themes/leo/img/icons/glyphicons_207_remove_2.png") no-repeat;
     width: 30px;
     height: 30px;
     display: block;

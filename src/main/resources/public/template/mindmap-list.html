@@ -1,49 +1,76 @@
-<div class="items" style="padding-right: 0px">
-    <hr />
-    <div class="row" ng-repeat="m in mindmaps.all" ng-click="openMindmap(m)" ng-class="{ selected: m._id === mindmap._id }">
-        <div class="cell">
-            <img skin-src="/img/illustrations/mindmap-default.png" ng-if="(m.icon === undefined)" class="cell" />
-            <img ng-src="[[m.icon]]?thumbnail=90x90" ng-if="m.icon !== undefined" class="cell" />
+<div class="twelve cell" workflow="mindmap.list">
+    <div class="row rigid-grid">
+        <!-- Search bar -->
+        <div class="four cell">
+            <autocomplete
+                    workflow="mindmap.list"
+                    options="searchbar.mindmaps"
+                    ng-change="openPageFromSearchbar(selectedMindmap._id)"
+                    ng-model="selectedMindmap">
+            </autocomplete>
         </div>
-        <article>
-            <h1>[[m.name]]</h1>
-            <strong class="small-text">
-                <span>
-                    [[m.description]]
-                </span>
-            </strong>
-            <div class="bottom-locked">
-                <behaviour name="manage" resource="m">
-                    <input type="checkbox" ng-model="m.showButtons" ng-click="hideAlmostAllButtons(m, $event)"/>
-                </behaviour>
+    </div>
+    
+    <div class="fallen dominos">
+        <div class="item" ng-repeat="m in mindmaps.all">
+            <section class="domino cyan">
+                <div class="top" ng-click="openMindmap(m)">
+                    <img class="absolute" skin-src="[[getMindmapThumbnail(m)]]" />
+                </div>
+                <div class="bottom">
+                    <div class="content">
+                        <div class="cell" ng-click="openMindmap(m)">
+                            <strong>[[m.name]]</strong>
+                            <br />[[m.owner.displayName]]
+                            <br />[[formatDate(m.modified)]]
+                        </div>
+                        <div ng-show="canManageMindmap(m)" class="bottom-locked eleven vertical-spacing-twice">
+                            <input type="checkbox" data-ng-model="m.selected" class="right-magnet cell" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <!-- Allows to display a confirm dialog before deleting a mindmap -->
+    <div ng-if="display.confirmDeleteMindmap">
+        <lightbox show="display.confirmDeleteMindmap" on-close="cancelRemoveMindmap()">
+            <p><i18n>mindmap.delete.confirm</i18n></p>
+            <p ng-repeat="mindmap in mindmaps.selection()">[[mindmap.name]]</p>
+            <div class="row">
+                <button class="right-magnet" ng-click="removeMindmap()"><i18n>remove</i18n></button>
+                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveMindmap()" />
             </div>
-            <div class="small-hidden buttons" ng-class="{ hidden: !m.showButtons || m._id !== mindmap._id}" style="cursor:default;" ng-click="$event.stopPropagation()">
-                <behaviour name="manage" resource="m">
-                    <button ng-click="editMindmap(m, $event)"><i18n>edit</i18n></button>
-                    <button ng-click="confirmRemoveMindmap(m, $event)"><i18n>remove</i18n></button>
-                    <button ng-click="shareMindmap(m, $event)"><i18n>share</i18n></button>
-                </behaviour>
-            </div>
-        </article>
+        </lightbox>
+    </div>
+   
+    <!-- Allows to display the panel to manage share rights -->
+    <div ng-if="display.showPanel">
+        <lightbox show="display.showPanel" on-close="display.showPanel = false;">
+            <share-panel app-prefix="'mindmap'" resources="mindmap"></share-panel>
+        </lightbox>
     </div>
 </div>
-
-<!-- Allows to display a confirm dialog before deleting a mindmap -->
-<div ng-if="display.confirmDeleteMindmap">
-    <lightbox show="display.confirmDeleteMindmap" on-close="cancelRemoveMindmap()">
+    
+<section class="toggle-buttons" ng-class="{ hide: mindmaps.selection().length === 0 }">
+    <div class="toggle">
         <div class="row">
-            <i18n>mindmap.delete.confirm</i18n>
+            <resource-right name="contrib" resource="mindmaps.selection()" class="cell">
+                <button ng-if="mindmaps.selection().length === 1" ng-click="editMindmap(mindmaps.selection()[0], $event)">
+                    <i18n>properties</i18n>
+                </button>
+            </resource-right>
+            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
+                <button ng-click="shareMindmap(mindmaps.selection(), $event)">
+                    <i18n>share</i18n>
+                </button>
+            </resource-right>
+            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
+                <button ng-click="display.confirmDeleteMindmap = true">
+                    <i18n>remove</i18n>
+                </button>
+            </resource-right>
         </div>
-        <div class="row">
-            <button class="right-magnet" ng-click="removeMindmap()"><i18n>remove</i18n></button>
-            <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveMindmap()" />
-        </div>
-    </lightbox>
-</div>
-
-<!-- Allows to display the panel to manage share rights -->
-<div ng-if="display.showPanel">
-    <lightbox show="display.showPanel" on-close="display.showPanel = false;">
-        <share-panel app-prefix="'mindmap'" resources="mindmap"></share-panel>
-    </lightbox>
-</div>
+    </div>
+</section>

@@ -10,7 +10,7 @@ var mindmapBehaviours = {
             right : 'net-atos-entng-mindmap-controllers-MindmapController|update'
         },
         manage : {
-            right : 'net-atos-entng-mindmap-controllers-MindmapController|create'
+            right : 'net-atos-entng-mindmap-controllers-MindmapController|delete'
         }
     },
 

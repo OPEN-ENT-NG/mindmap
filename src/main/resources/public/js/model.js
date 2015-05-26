@@ -24,7 +24,6 @@ Mindmap.prototype.save = function(callback) {
  * @param callback a function to call after create.
  */
 Mindmap.prototype.create = function(callback) {
-	console.log(this);
     http().postJson('/mindmap', this).done(function() {
         if(typeof callback === 'function'){
             callback();
@@ -67,6 +66,7 @@ Mindmap.prototype.toJSON = function() {
     return {
         name: this.name,
         description: this.description,
+        thumbnail: this.thumbnail,
         map: this.map
     }
 };

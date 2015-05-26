@@ -6,9 +6,6 @@ routes.define(function($routeProvider){
         .when('/view/:mindmapId', {
             action: 'viewMindmap'
         })
-        .when('/print/:mindmapId', {
-            action: 'printMindmap'
-        })
         .otherwise({
             action: 'listMindmap'
         });
@@ -21,11 +18,12 @@ routes.define(function($routeProvider){
  * @param template all templates.
  * @param model the mindmap model.
  */
-function MindmapController($scope, template, model, route) {
+function MindmapController($scope, template, model, route, $timeout) {
     $scope.template = template;
     $scope.mindmaps = model.mindmaps;
     $scope.me = model.me;
     $scope.display = {};
+    $scope.searchbar = {};
     $scope.editorLoaded = false;
     $scope.editorId = 0;
     $scope.exportInProgress = false;
@@ -33,6 +31,7 @@ function MindmapController($scope, template, model, route) {
 
     // By default open the mindmap list
     template.open('mindmap', 'mindmap-list');
+    template.open('side-panel', 'mindmap-side-panel');
     
     
     /**
@@ -55,12 +54,42 @@ function MindmapController($scope, template, model, route) {
         $scope.master = angular.copy($scope.mindmap);
         $scope.master.save(function() {
             $scope.mindmaps.sync(function() {
+                 $scope.updateSearchBar();
                  $scope.cancelMindmapEdit();
             });
         });
     };
 
 
+    /**
+     * Update the search bar according server mindmaps
+     */    
+    $scope.updateSearchBar = function() {
+        model.mindmaps.sync(function() {
+            $scope.searchbar.mindmaps = $scope.mindmaps.all.map(function(mindmap) {
+                return {
+                    title : mindmap.name,
+                    _id : mindmap._id,
+                    toString : function() {
+                                    return this.title;
+                               }
+                }
+            });
+        });
+    }
+
+    // Update search bar
+    $scope.updateSearchBar();
+
+
+    /**
+     * Opens a mindmap through the search bar
+     */
+    $scope.openPageFromSearchbar = function(mindmapId) {
+        window.location.hash = '/view/' + mindmapId;
+    };
+    
+    
     /**
      * Save the current mindmap in database
      */
@@ -70,21 +99,50 @@ function MindmapController($scope, template, model, route) {
             $scope.mindmaps.sync();
         });
     };
-
+    
+    /**
+     * Retrieve the mindmap thumbnail if there is one
+     */
+    $scope.getMindmapThumbnail = function(mindmap){
+        if(!mindmap.thumbnail || mindmap.thumbnail === ''){
+            return '/img/illustrations/mindmap-default.png';
+        }
+        return mindmap.thumbnail + '?thumbnail=120x120';
+    };
+    
     /**
      * Open a mindmap in the wisemapping editor
      */ 
     $scope.openMindmap = function(mindmap) {
-        $scope.mindmaps.forEach(function(m) {
-            m.showButtons = false;
-        });
-        $scope.editorId = $scope.editorId + 1;
-        $scope.mindmap = $scope.selectedMindmap = mindmap;
-        mapAdapter.adapt($scope);
-        $scope.action = 'mindmap-open';
-        $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
-        template.open('mindmap', 'mindmap-edit');
+        delete $scope.mindmap;
+        delete $scope.selectedMindmap;
 
+        template.close('main');
+        template.close('mindmap');
+
+        // Need to wait before opening a mindmap
+        $timeout(function() {
+            $scope.mindmaps.forEach(function(m) {
+                m.showButtons = false;
+            });
+            $scope.editorId = $scope.editorId + 1;
+            $scope.mindmap = $scope.selectedMindmap = mindmap;
+            mapAdapter.adapt($scope);
+            $scope.action = 'mindmap-open';
+            $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
+            template.open('mindmap', 'mindmap-edit');
+            window.location.hash = '/view/' + $scope.mindmap._id;
+
+        })
+
+    };
+
+
+    /**
+     * Display date in French format
+     */ 
+    $scope.formatDate = function(dateObject){
+        return moment(dateObject.$date).lang('fr').calendar();
     };
 
     /**
@@ -94,7 +152,7 @@ function MindmapController($scope, template, model, route) {
         $scope.display.showExportPanel = true;
         $scope.exportType = "png";
     }
-
+    
     /**
      * Convert base64 data to Blob
      */
@@ -142,6 +200,15 @@ function MindmapController($scope, template, model, route) {
     }
 
     /**
+     * Checks if a user is a manager
+     */
+    $scope.canManageMindmap = function(mindmap){
+        return (mindmap.myRights.contrib !== undefined || 
+                mindmap.myRights.manage !== undefined);
+    };
+
+
+    /**
      * Check if the user can export either in JPEG either in PNG format
      **/
     $scope.canExport = function() {
@@ -168,6 +235,7 @@ function MindmapController($scope, template, model, route) {
         delete $scope.selectedMindmap;
         $scope.action = 'mindmap-list';
         template.open('mindmap', 'mindmap-list');
+        window.location.hash = "";
     }
 
 
@@ -192,7 +260,7 @@ function MindmapController($scope, template, model, route) {
         });
     };
 
-        /**
+    /**
      * Allows to set "showButtons" to false for all mindmaps except the given one.
      * @param mindmap the current selected mindmap.
      * @param event triggered event
@@ -248,10 +316,16 @@ function MindmapController($scope, template, model, route) {
      * Allows to remove the current mindmap in the scope.
      */
     $scope.removeMindmap = function() {
-        $scope.mindmap.delete();
+        _.map($scope.mindmaps.selection(), function(mindmap){
+            mindmap.delete(function() {
+                $scope.updateSearchBar();
+            });
+        });
+
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
-        delete $scope.display.confirmDeleteMindmap;
+        $scope.display.confirmDeleteMindmap = false;
+
     };
 
     /**
@@ -280,7 +354,11 @@ function MindmapController($scope, template, model, route) {
                 var m = _.find(model.mindmaps.all, function(mindmap){
                     return mindmap._id === params.mindmapId;
                 });
-                $scope.openMindmap(m);
+                if (m) {
+                    $scope.openMindmap(m);
+                } else {
+                    $scope.openMainPage();
+                }
             });
 
         },
