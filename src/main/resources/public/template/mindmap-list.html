@@ -56,7 +56,7 @@
 <section class="toggle-buttons" ng-class="{ hide: mindmaps.selection().length === 0 }">
     <div class="toggle">
         <div class="row">
-            <resource-right name="contrib" resource="mindmaps.selection()" class="cell">
+            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
                 <button ng-if="mindmaps.selection().length === 1" ng-click="editMindmap(mindmaps.selection()[0], $event)">
                     <i18n>properties</i18n>
                 </button>
