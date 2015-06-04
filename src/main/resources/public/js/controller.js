@@ -28,6 +28,7 @@ function MindmapController($scope, template, model, route, $timeout) {
     $scope.editorId = 0;
     $scope.exportInProgress = false;
     $scope.action = 'mindmap-list';
+    $scope.notFound = false;
 
     // By default open the mindmap list
     template.open('mindmap', 'mindmap-list');
@@ -116,6 +117,8 @@ function MindmapController($scope, template, model, route, $timeout) {
     $scope.openMindmap = function(mindmap) {
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
+        $scope.notFound = false;
+        console.log("notFound = " + $scope.notFound);
 
         template.close('main');
         template.close('mindmap');
@@ -203,8 +206,7 @@ function MindmapController($scope, template, model, route, $timeout) {
      * Checks if a user is a manager
      */
     $scope.canManageMindmap = function(mindmap){
-        return (mindmap.myRights.contrib !== undefined || 
-                mindmap.myRights.manage !== undefined);
+        return (mindmap.myRights.manage !== undefined);
     };
 
 
@@ -355,8 +357,10 @@ function MindmapController($scope, template, model, route, $timeout) {
                     return mindmap._id === params.mindmapId;
                 });
                 if (m) {
+                    $scope.notFound = "false";
                     $scope.openMindmap(m);
                 } else {
+                    $scope.notFound = "true";
                     $scope.openMainPage();
                 }
             });

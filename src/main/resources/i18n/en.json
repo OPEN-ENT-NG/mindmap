@@ -16,8 +16,10 @@
 	"mindmap.description": "Description",
 	
 	"mindmap.delete.confirm": "Do you really want to delete this mindmap?",
-	
+
 	"mindmap.read": "Reader",
 	"mindmap.contrib": "Contributor",
-	"mindmap.manager": "Manager"	
+	"mindmap.manager": "Manager",
+
+	"mindmap.or.page.notfound.or.unauthorized": "The mindmap or the webpage requested either does not exists, either has been deleted, or you do not have permission to access it."
 }

@@ -13,7 +13,9 @@ var mindmapExtensions = {
 
 					// Destroy the wisemapping properly	
 					element.on('$destroy', function() {
-						designer.destroy();
+						if (designer) {
+							designer.destroy();
+						}
 						$moo(document).removeEvents("mousewheel");
 						$moo(document).removeEvents("keydown");
 						mindmap = null;
