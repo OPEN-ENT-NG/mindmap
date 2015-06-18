@@ -51,7 +51,6 @@ function MindmapController($scope, template, model, route, $timeout) {
      * current mindmap this method closes the edit view too.
      */
     $scope.saveMindmap = function() {
-        console.log($scope.mindmap);
         $scope.master = angular.copy($scope.mindmap);
         $scope.master.save(function() {
             $scope.mindmaps.sync(function() {
@@ -118,7 +117,6 @@ function MindmapController($scope, template, model, route, $timeout) {
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
         $scope.notFound = false;
-        console.log("notFound = " + $scope.notFound);
 
         template.close('main');
         template.close('mindmap');
@@ -184,7 +182,7 @@ function MindmapController($scope, template, model, route, $timeout) {
     }
 
     /**
-     * Export a mindmap into png or jpeg
+     * Export a mindmap into png or svg
      */
     $scope.exportMindmapSubmit = function(exportType) {
         $scope.exportInProgress = true;
@@ -193,7 +191,11 @@ function MindmapController($scope, template, model, route, $timeout) {
 
             var filename = $scope.mindmap.name+"."+exportType;
             var imageData = data.image;
-            saveAs(b64toBlob(imageData, "image/" + exportType), filename);
+            if ("svg" !== exportType) {
+                saveAs(b64toBlob(imageData, "image/" + exportType), filename);
+            } else {
+                saveAs(new Blob([imageData], {type: "image/svg+xml;charset=utf-8"}), filename);
+            }
             $scope.$apply("exportInProgress = false");
             if(typeof callback === 'function'){
                 callback();
@@ -211,11 +213,11 @@ function MindmapController($scope, template, model, route, $timeout) {
 
 
     /**
-     * Check if the user can export either in JPEG either in PNG format
+     * Check if the user can export either in SVG either in PNG format
      **/
     $scope.canExport = function() {
         var workflowRights = model.me.workflow["mindmap"];
-        return (workflowRights["exportpng"] || workflowRights["exportjpeg"]);
+        return (workflowRights["exportpng"] || workflowRights["exportsvg"]);
     }  
 
     /**

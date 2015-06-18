@@ -1,10 +1,12 @@
 package net.atos.entng.mindmap.exporter;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
+
+import java.io.IOException;
+
 import net.atos.entng.mindmap.exception.MindmapExportException;
 
 import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
@@ -38,10 +40,10 @@ public class MindmapPNGExporter extends AbstractMindmapExporter implements Handl
         String svgXml = event.body().getString("svgXml");
         JsonObject result = new JsonObject();
         try {
-            String image = this.transformSvg(svgXml, new PNGTranscoder());
+            String image = this.transformSvg(svgXml, "image/png");
             result.putString("image", image);
             result.putNumber("status", HttpResponseStatus.OK.code());
-        } catch (TranscoderException | MindmapExportException e) {
+        } catch (TranscoderException | MindmapExportException | IOException e) {
             log.error(e);
             result.putNumber("status", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
         } finally {

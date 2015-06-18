@@ -17,10 +17,10 @@ public interface MindmapService {
     void exportPNG(HttpServerRequest request, JsonObject message);
 
     /**
-     * Export a mindmap in JPEG image
+     * Export a mindmap in SVG format
      * @param request Client HTTP request
      * @param message Request parameters
      */
-    void exportJPEG(HttpServerRequest request, JsonObject message);
+    void exportSVG(HttpServerRequest request, JsonObject message);
 
 }

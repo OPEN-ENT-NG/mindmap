@@ -1,7 +1,7 @@
 package net.atos.entng.mindmap.service.impl;
 
-import net.atos.entng.mindmap.exporter.MindmapJPEGExporter;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
+import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
 import net.atos.entng.mindmap.service.MindmapService;
 
 import org.vertx.java.core.Handler;
@@ -52,8 +52,8 @@ public class MindmapServiceImpl implements MindmapService {
     }
 
     @Override
-    public void exportJPEG(final HttpServerRequest request, JsonObject message) {
-        eb.send(MindmapJPEGExporter.MINDMAP_JPEGEXPORTER_ADDRESS, message, new Handler<Message<JsonObject>>() {
+    public void exportSVG(final HttpServerRequest request, JsonObject message) {
+        eb.send(MindmapSVGExporter.MINDMAP_SVGEXPORTER_ADDRESS, message, new Handler<Message<JsonObject>>() {
             @Override
             public void handle(Message<JsonObject> reply) {
                 JsonObject response = reply.body();
@@ -61,6 +61,7 @@ public class MindmapServiceImpl implements MindmapService {
                 Renders.renderJson(request, response, status);
             }
         });
+
     }
 
 }

@@ -23,7 +23,7 @@ var mindmapBehaviours = {
         list : 'net.atos.entng.mindmap.controllers.MindmapController|list',
         create : 'net.atos.entng.mindmap.controllers.MindmapController|create',
         exportpng : 'net.atos.entng.mindmap.controllers.MindmapController|exportPngMindmap',
-        exportjpeg : 'net.atos.entng.mindmap.controllers.MindmapController|exportJpegMindmap'
+        exportsvg : 'net.atos.entng.mindmap.controllers.MindmapController|exportSvgMindmap'
     }
 };
 

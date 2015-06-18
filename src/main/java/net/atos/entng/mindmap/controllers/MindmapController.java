@@ -150,14 +150,14 @@ public class MindmapController extends MongoDbControllerHelper {
         });
     }
 
-    @Post("/export/jpeg")
-    @ApiDoc("Export the mindmap in JPEG format")
-    @SecuredAction("mindmap.exportjpeg")
-    public void exportJpegMindmap(final HttpServerRequest request) {
+    @Post("/export/svg")
+    @ApiDoc("Export the mindmap in SVG format")
+    @SecuredAction("mindmap.exportsvg")
+    public void exportSvgMindmap(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, new Handler<JsonObject>() {
             @Override
             public void handle(final JsonObject event) {
-                mindmapService.exportJPEG(request, event);
+                mindmapService.exportSVG(request, event);
             }
         });
     }

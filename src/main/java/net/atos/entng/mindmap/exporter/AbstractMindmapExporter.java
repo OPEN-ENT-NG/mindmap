@@ -33,6 +33,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.json.impl.Base64;
 import org.vertx.java.core.logging.Logger;
@@ -48,7 +49,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Abstract class to export mindmap. The functions embedded in this class have been developped by Wisemapping. Small
- * changes have been done in order to make it work in ENG context
+ * changes have been done in order to make it work in ONG context
  * @author AtoS
  */
 public abstract class AbstractMindmapExporter extends Verticle {
@@ -79,24 +80,33 @@ public abstract class AbstractMindmapExporter extends Verticle {
     private static final float IMAGE_LARGE = 2048f;
 
     /**
-     * Transform a SVG mindmap into a base64 image
+     * Transform a mindmap according mimetype
      * @param svgXml Mindmap in SVG format
-     * @param transcoder Transcoder to use
-     * @return The image representation of the mindmap encoded in base64
+     * @param mimetype Expected mimetype
+     * @return The transformed mindmap
      * @throws TranscoderException If an error occurs while transcoding
+     * @throws IOException
      */
-    protected String transformSvg(String svgXml, Transcoder transcoder) throws MindmapExportException, TranscoderException {
-        transcoder.addTranscodingHint(ImageTranscoder.KEY_WIDTH, IMAGE_LARGE);
-
+    protected String transformSvg(String svgXml, String mimetype) throws MindmapExportException, TranscoderException, IOException {
         final String svgString = normalizeSvg(svgXml);
-        final TranscoderInput input = new TranscoderInput(new CharArrayReader(svgString.toCharArray()));
+        String svgTransformed;
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        if ("image/png".equals(mimetype)) {
+            Transcoder transcoder = new PNGTranscoder();
+            transcoder.addTranscodingHint(ImageTranscoder.KEY_WIDTH, IMAGE_LARGE);
 
-        TranscoderOutput transcoderOutput = new TranscoderOutput(os);
-        transcoder.transcode(input, transcoderOutput);
+            final TranscoderInput input = new TranscoderInput(new CharArrayReader(svgString.toCharArray()));
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            TranscoderOutput transcoderOutput = new TranscoderOutput(os);
 
-        return Base64.encodeBytes(os.toByteArray());
+            transcoder.transcode(input, transcoderOutput);
+            svgTransformed = Base64.encodeBytes(os.toByteArray());
+        } else {
+            // Defaut is image/svg+xml
+            svgTransformed = svgString;
+        }
+
+        return svgTransformed;
     }
 
     /**
