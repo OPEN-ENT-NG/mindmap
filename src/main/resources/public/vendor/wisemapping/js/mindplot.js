@@ -212,6 +212,7 @@ web2d.peer.svg.ElementPeer = new Class({
     positionRelativeTo: function(elem, options) {
         options = !$defined(options) ? {} : options;
         options.relativeTo = $moo(this._native);
+        options.offset={x:0, y:-8};
         elem.position(options)
     },
     moveToFront: function() {
@@ -6805,10 +6806,14 @@ mindplot.MultilineTextEditor = new Class({
         });
         c.setStyles({
             border: "1px gray dashed",
-            background: "rgba(98, 135, 167, .3)",
+            background: "rgba(98, 135, 167, .8)",
+            color: "rgb(255, 255, 255)",
             outline: "0 none",
             resize: "none",
-            overflow: "hidden"
+            overflow: "hidden",
+            width: "auto",
+            height: "auto",
+            padding: "0px"
         });
         c.inject(d);
         return d
@@ -6881,7 +6886,7 @@ mindplot.MultilineTextEditor = new Class({
             f.setAttribute("cols", e);
             f.setAttribute("rows", d.length);
             this._containerElem.setStyles({
-                width: (e + 3) + "em",
+                width: (e + 1) + "em",
                 height: f.getSize().height
             })
         }
@@ -6957,7 +6962,7 @@ mindplot.MultilineTextEditor = new Class({
             fontFamily: f.font,
             fontStyle: f.style,
             fontWeight: f.weight,
-            color: f.color
+            color: "rgb(255, 255, 255)"
         };
         e.setStyles(d);
         this._containerElem.setStyles(d)
