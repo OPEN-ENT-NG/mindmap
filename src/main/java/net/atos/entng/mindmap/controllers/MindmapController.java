@@ -1,15 +1,23 @@
 package net.atos.entng.mindmap.controllers;
 
+import java.util.Map;
+
+import net.atos.entng.mindmap.Mindmap;
 import net.atos.entng.mindmap.service.MindmapService;
 import net.atos.entng.mindmap.service.impl.MindmapServiceImpl;
 
+import org.entcore.common.events.EventStore;
+import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 import org.vertx.java.core.Handler;
+import org.vertx.java.core.Vertx;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.http.HttpServerRequest;
+import org.vertx.java.core.http.RouteMatcher;
 import org.vertx.java.core.json.JsonObject;
+import org.vertx.java.platform.Container;
 
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Delete;
@@ -31,6 +39,16 @@ public class MindmapController extends MongoDbControllerHelper {
      */
     final MindmapService mindmapService;
 
+	private EventStore eventStore;
+	private enum MindmapEvent { ACCESS }
+
+	@Override
+	public void init(Vertx vertx, Container container, RouteMatcher rm,
+			Map<String, fr.wseduc.webutils.security.SecuredAction> securedActions) {
+		super.init(vertx, container, rm, securedActions);
+		eventStore = EventStoreFactory.getFactory().getEventStore(Mindmap.class.getSimpleName());
+	}
+
     /**
      * Default constructor.
      * @param eb VertX event bus
@@ -45,6 +63,9 @@ public class MindmapController extends MongoDbControllerHelper {
     @SecuredAction("mindmap.view")
     public void view(HttpServerRequest request) {
         renderView(request);
+
+		// Create event "access to application Mindmap" and store it, for module "statistics"
+		eventStore.createAndStoreEvent(MindmapEvent.ACCESS.name(), request);
     }
 
     @Override
