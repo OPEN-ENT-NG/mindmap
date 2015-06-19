@@ -42,7 +42,7 @@
                         <button workflow="mindmap.create" ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
                             <i18n>mindmap.new</i18n>
                         </button>
-                        <button workflow="mindmap.view" ng-if="mindmap && mindmap._id && action == 'mindmap-open' && canExport()" class="cell right-magnet"  ng-click="exportMindmap()"> 
+                        <button workflow="mindmap.view" ng-if="mindmap && mindmap._id && action == 'mindmap-open' && canExport()" class="cell right-magnet" ng-click="exportMindmap()" ng-disabled="exportInProgress"> 
                             <i18n>mindmap.export</i18n>
                         </button>
                         <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' && mindmap.myRights.contrib" id="save" class="cell right-magnet">
@@ -66,10 +66,10 @@
                             </div>
                             <div class="row">
                                 <p workflow="mindmap.exportpng" >
-                                    <input type="radio" ng-model="exportType" value="png"><span>Format PNG</span>
+                                    <input type="radio" ng-model="exportType" value="png"><span><i18n>mindmap.format.png</i18n></span>
                                 </p>
                                 <p workflow="mindmap.exportsvg">
-                                    <input type="radio" ng-model="exportType" value="svg"><span>Format SVG</span>
+                                    <input type="radio" ng-model="exportType" value="svg"><span><i18n>mindmap.format.svg</i18n></span>
                                 </p>
                             </div>
                             <div class="row">
