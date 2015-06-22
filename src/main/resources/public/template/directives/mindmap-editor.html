@@ -1,8 +1,8 @@
 <div>
-  <div id="header" ng-if="!mindmap.readOnly">
+  <div id="header">
     <div id="toolbar">
         <div id="editTab" class="tabContent">
-            <div id="edit" class="buttonContainer">
+            <div id="edit" class="buttonContainer" ng-if="!mindmap.readOnly">
                 <div id="undoEdition" class="buttonOn">
                     <img src="/mindmap/public/vendor/wisemapping/images/undo.png"/>
                 </div>
@@ -18,7 +18,7 @@
                     <img src="/mindmap/public/vendor/wisemapping/images/zoom-out.png"/>
                 </div>
             </div>
-            <div id="node" class="buttonContainer">
+            <div id="node" class="buttonContainer" ng-if="!mindmap.readOnly">
                 <div id="topicShape" class="buttonExtOn">
                     <img src="/mindmap/public/vendor/wisemapping/images/topic-shape.png"/>
                 </div>
@@ -47,7 +47,7 @@
                     <img src="/mindmap/public/vendor/wisemapping/images/topic-relation.png"/>
                 </div>
             </div>
-            <div id="font" class="buttonContainer">
+            <div id="font" class="buttonContainer" ng-if="!mindmap.readOnly">
                 <div id="fontFamily" class="buttonOn">
                     <img src="/mindmap/public/vendor/wisemapping/images/font-type.png"/>
                 </div>
