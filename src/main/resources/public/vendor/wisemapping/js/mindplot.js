@@ -9958,6 +9958,7 @@ mindplot.widget.NoteEditor = new Class({
             value: $msg("ACCEPT"),
             "class": "btn-primary"
         });
+        k.setStyle("margin", "5px");
         //k.addClass("button");
         k.inject(p);
         if ($defined(o.getValue())) {
@@ -10075,6 +10076,7 @@ mindplot.widget.LinkEditor = new Class({
             type: "button",
             value: $msg("OPEN_LINK")
         });
+        t.setStyle("float", "right");
         t.inject(s);
         t.addEvent("click", function() {
             window.open(n.value, "_blank", "status=1,width=700,height=450,resizable=1")
@@ -10096,6 +10098,7 @@ mindplot.widget.LinkEditor = new Class({
             value: $msg("ACCEPT"),
             "class": "btn-primary"
         });
+        o.setStyle("margin", "5px");
         //o.addClass("button");
         o.inject(l);
         if ($defined(p.getValue())) {
@@ -12648,7 +12651,7 @@ mindplot.Messages.BUNDLES.fr = {
     CENTRAL_TOPIC_CAN_NOT_BE_DELETED: "Le noeud racine ne peut pas être effacé.",
     RELATIONSHIP_COULD_NOT_BE_CREATED: "Impossible de créer relation. Un noeud parent doit être sélectionné au préalable.",
     SELECTION_COPIED_TO_CLIPBOARD: "Noeuds sélectionnés copiés dans le presse-papiers.",
-    ACCEPT: "Accepter",
+    ACCEPT: "Valider",
     CANCEL: "Annuler",
     REMOVE: "Supprimer",
     WRITE_YOUR_TEXT_HERE: "Écrivez votre texte ici ...",
