@@ -37,17 +37,19 @@ public class MindmapController extends MongoDbControllerHelper {
     /**
      * Mindmap service
      */
-    final MindmapService mindmapService;
+    private final MindmapService mindmapService;
 
-	private EventStore eventStore;
-	private enum MindmapEvent { ACCESS }
+    private EventStore eventStore;
 
-	@Override
-	public void init(Vertx vertx, Container container, RouteMatcher rm,
-			Map<String, fr.wseduc.webutils.security.SecuredAction> securedActions) {
-		super.init(vertx, container, rm, securedActions);
-		eventStore = EventStoreFactory.getFactory().getEventStore(Mindmap.class.getSimpleName());
-	}
+    private enum MindmapEvent {
+        ACCESS
+    }
+
+    @Override
+    public void init(Vertx vertx, Container container, RouteMatcher rm, Map<String, fr.wseduc.webutils.security.SecuredAction> securedActions) {
+        super.init(vertx, container, rm, securedActions);
+        eventStore = EventStoreFactory.getFactory().getEventStore(Mindmap.class.getSimpleName());
+    }
 
     /**
      * Default constructor.
@@ -64,8 +66,8 @@ public class MindmapController extends MongoDbControllerHelper {
     public void view(HttpServerRequest request) {
         renderView(request);
 
-		// Create event "access to application Mindmap" and store it, for module "statistics"
-		eventStore.createAndStoreEvent(MindmapEvent.ACCESS.name(), request);
+        // Create event "access to application Mindmap" and store it, for module "statistics"
+        eventStore.createAndStoreEvent(MindmapEvent.ACCESS.name(), request);
     }
 
     @Override

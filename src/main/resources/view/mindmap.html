@@ -56,7 +56,8 @@
 		    <section id="mindmap-content">
                     <container template="main" class="flexible content cell"></container>
                     <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
-                    <!-- Allows to display the panel to manage share rights -->
+                    
+                    <!-- Allows to display the export panel -->
                     <div ng-if="display.showExportPanel">
                         <lightbox show="display.showExportPanel" on-close="display.showExportPanel = false;">
                             <h2><i18n>Exporter<i18n></h2>
