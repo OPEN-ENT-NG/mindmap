@@ -51,7 +51,6 @@ Behaviours.register('mindmap', {
                 }
             }
         }
-        console.log(resource.myRights);
         return resource;
     },
 
@@ -88,11 +87,15 @@ Behaviours.register('mindmap', {
     loadResources: function(callback){
         http().get('/mindmap/list/all').done(function(mindmaps) {          
             this.resources = _.map(mindmaps, function(mindmap) {
+                mapIcon = mindmap.thumbnail;
+                if (!mapIcon) {
+                    mapIcon = "/img/illustrations/mindmap-default.png";
+                }
                 return {
                     title : mindmap.name,
                     ownerName : mindmap.owner.displayName,
                     owner : mindmap.owner.userId,
-                    icon : '/mindmap/public/img/mindmap.png',
+                    icon : mapIcon,
                     path : '/mindmap#/view/' + mindmap._id,
                     id : mindmap._id
                 };
