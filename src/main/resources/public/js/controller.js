@@ -161,6 +161,9 @@ function MindmapController($scope, template, model, route, $timeout) {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
 
+        // Fix for IE and Safari : remove whitespace characters (such as space, tab, carriage return, new line)
+        b64Data= b64Data.replace(/\s/g, '');
+        
         var byteCharacters = atob(b64Data);
         var byteArrays = [];
 
