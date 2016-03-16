@@ -5,9 +5,11 @@ import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
 import net.atos.entng.mindmap.service.impl.MindmapRepositoryEvents;
 
+import net.atos.entng.mindmap.service.impl.MindmapSearchingEvents;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
+import org.entcore.common.service.impl.MongoDbSearchService;
 
 /**
  * Server to manage mindmaps. This class is the entry point of the Vert.x module.
@@ -33,6 +35,7 @@ public class Mindmap extends BaseServer {
         conf.setCollection(MINDMAP_COLLECTION);
 
         setDefaultResourceFilter(new ShareAndOwner());
+        setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
         addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION));
 
         // Register verticle into the container
