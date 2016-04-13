@@ -144,11 +144,14 @@ public class MindmapController extends MongoDbControllerHelper {
                     }
 
                     JsonObject params = new JsonObject();
-                    params.putString("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType());
+                    params.putString("uri", container.config().getString("host", "http://localhost:8090") +
+                    		"/userbook/annuaire#" + user.getUserId() + "#" + user.getType());
                     params.putString("username", user.getUsername());
-                    params.putString("mindmapUri", "/mindmap#/view/" + id);
+                    params.putString("mindmapUri", container.config().getString("host", "http://localhost:8090") +
+                    		"/mindmap#/view/" + id);
+                    params.putString("resourceUri", params.getString("mindmapUri"));
 
-                    shareJsonSubmit(request, "notify-mindmap-shared.html", false, params, "name");
+                    shareJsonSubmit(request, "mindmap.share", false, params, "name");
                 }
             }
         });
