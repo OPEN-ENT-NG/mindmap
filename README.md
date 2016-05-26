@@ -58,6 +58,9 @@ La Carte Mentale permet d’organiser des idées, des concepts, des prises de no
 Des permissions sur les différentes actions possibles sur les cartes mentales, dont la contribution et la gestion, sont configurées dans les cartes mentales (via des partages Ent-core).
 Le droit de lecture, correspondant à qui peut consulter la carte mentale est également configuré de cette manière.
 
+La Carte Mentale met en œuvre un comportement de recherche sur le nom et la description des cartes.
+
+
 ## Modèle de persistance
 
 Les données du module sont stockées dans une collection Mongo "mindmap".
@@ -69,6 +72,11 @@ Le module serveur utilise un contrôleur de déclaration :
 * `MindmapController` : Point d'entrée à l'application, Routage des vues, sécurité globale et déclaration de l'ensemble des comportements relatifs aux cartes mentales (liste, création, modification, destruction, export et partage)
 
 Le contrôleur étend les classes du framework Ent-core exploitant les CrudServices de base.
+
+Le module serveur met en œuvre deux évènements issus du framework Ent-core :
+
+* `MindmapRepositoryEvents` : Logique de changement d'année scolaire
+* `MindmapSearchingEvents` : Logique de recherche
 
 Un jsonschema permet de vérifier les données reçues par le serveur, il se trouve dans le dossier "src/main/resources/jsonschema".
 
