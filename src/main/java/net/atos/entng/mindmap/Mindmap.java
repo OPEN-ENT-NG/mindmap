@@ -54,7 +54,9 @@ public class Mindmap extends BaseServer {
         conf.setCollection(MINDMAP_COLLECTION);
 
         setDefaultResourceFilter(new ShareAndOwner());
-        setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
+        if (config.getBoolean("searching-event", true)) {
+            setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
+        }
         addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION));
 
         // Register verticle into the container
