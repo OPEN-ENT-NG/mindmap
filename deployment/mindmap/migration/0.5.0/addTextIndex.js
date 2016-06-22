@@ -1,0 +1,1 @@
+db.mindmap.createIndex({ "name": "text", "description": "text" });
