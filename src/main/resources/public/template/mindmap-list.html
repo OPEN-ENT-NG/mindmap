@@ -10,7 +10,7 @@
             </autocomplete>
         </div>
     </div>
-    
+
     <div class="fallen dominos">
         <div class="item" ng-repeat="m in mindmaps.all">
             <section class="domino cyan">
@@ -24,15 +24,16 @@
                             <br />[[m.owner.displayName]]
                             <br />[[formatDate(m.modified)]]
                         </div>
-                        <div ng-show="canManageMindmap(m)" class="bottom-locked eleven vertical-spacing-twice">
-                            <input type="checkbox" data-ng-model="m.selected" class="right-magnet cell" />
-                        </div>
                     </div>
                 </div>
+                <span ng-show="canManageMindmap(m)">
+                    <check-tool ng-model="m.selected" ng-click="$event.stopPropagation()" ></check-tool>
+                </span>
             </section>
         </div>
+
     </div>
-    
+
     <!-- Allows to display a confirm dialog before deleting a mindmap -->
     <div ng-if="display.confirmDeleteMindmap">
         <lightbox show="display.confirmDeleteMindmap" on-close="cancelRemoveMindmap()">
@@ -44,7 +45,7 @@
             </div>
         </lightbox>
     </div>
-   
+
     <!-- Allows to display the panel to manage share rights -->
     <div ng-if="display.showPanel">
         <lightbox show="display.showPanel" on-close="display.showPanel = false;">
@@ -52,7 +53,7 @@
         </lightbox>
     </div>
 </div>
-    
+
 <section class="toggle-buttons" ng-class="{ hide: mindmaps.selection().length === 0 }">
     <div class="toggle">
         <div class="row">
