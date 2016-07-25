@@ -3,6 +3,7 @@
   "config": {
     "main" : "net.atos.entng.mindmap.Mindmap",
     "port" : 8666,
+    "auto-redeploy": false,
     "app-name" : "Mindmap",
     "app-address" : "/mindmap",
     "app-icon" : "mindmap-large",
