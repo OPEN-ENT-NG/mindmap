@@ -143,7 +143,7 @@ function MindmapController($scope, template, model, route, $timeout) {
      * Display date in French format
      */ 
     $scope.formatDate = function(dateObject){
-        return moment(dateObject.$date).lang('fr').calendar();
+        return moment(dateObject.$date).lang(currentLanguage).calendar();
     };
 
     /**
