@@ -33,8 +33,8 @@ function MindmapController($scope, template, model, route, $timeout) {
     // By default open the mindmap list
     template.open('mindmap', 'mindmap-list');
     template.open('side-panel', 'mindmap-side-panel');
-    
-    
+
+
     /**
      * Allows to create a new mindmap and open the "mindmap-edit.html" template into
      * the "main" div.
@@ -63,7 +63,7 @@ function MindmapController($scope, template, model, route, $timeout) {
 
     /**
      * Update the search bar according server mindmaps
-     */    
+     */
     $scope.updateSearchBar = function() {
         model.mindmaps.sync(function() {
             $scope.searchbar.mindmaps = $scope.mindmaps.all.map(function(mindmap) {
@@ -88,8 +88,8 @@ function MindmapController($scope, template, model, route, $timeout) {
     $scope.openPageFromSearchbar = function(mindmapId) {
         window.location.hash = '/view/' + mindmapId;
     };
-    
-    
+
+
     /**
      * Save the current mindmap in database
      */
@@ -99,20 +99,20 @@ function MindmapController($scope, template, model, route, $timeout) {
             $scope.mindmaps.sync();
         });
     };
-    
+
     /**
      * Retrieve the mindmap thumbnail if there is one
      */
     $scope.getMindmapThumbnail = function(mindmap){
         if(!mindmap.thumbnail || mindmap.thumbnail === ''){
-            return '/img/illustrations/mindmap-default.png';
+            return '/img/illustrations/image-default.svg';
         }
         return mindmap.thumbnail + '?thumbnail=120x120';
     };
-    
+
     /**
      * Open a mindmap in the wisemapping editor
-     */ 
+     */
     $scope.openMindmap = function(mindmap) {
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
@@ -141,7 +141,7 @@ function MindmapController($scope, template, model, route, $timeout) {
 
     /**
      * Display date in French format
-     */ 
+     */
     $scope.formatDate = function(dateObject){
         return moment(dateObject.$date).lang(currentLanguage).calendar();
     };
@@ -153,7 +153,7 @@ function MindmapController($scope, template, model, route, $timeout) {
         $scope.display.showExportPanel = true;
         $scope.exportType = "png";
     }
-    
+
     /**
      * Convert base64 data to Blob
      */
@@ -163,7 +163,7 @@ function MindmapController($scope, template, model, route, $timeout) {
 
         // Fix for IE and Safari : remove whitespace characters (such as space, tab, carriage return, new line)
         b64Data= b64Data.replace(/\s/g, '');
-        
+
         var byteCharacters = atob(b64Data);
         var byteArrays = [];
 
@@ -221,7 +221,7 @@ function MindmapController($scope, template, model, route, $timeout) {
     $scope.canExport = function() {
         var workflowRights = model.me.workflow["mindmap"];
         return (workflowRights["exportpng"] || workflowRights["exportsvg"]);
-    }  
+    }
 
     /**
      * Close the mindmap editor and open the mindmap list page
@@ -252,7 +252,7 @@ function MindmapController($scope, template, model, route, $timeout) {
      * @param event triggered event
      */
     $scope.hideAlmostAllButtons = function(mindmap, event) {
-        event.stopPropagation();       
+        event.stopPropagation();
 
         if (mindmap.showButtons) {
             $scope.mindmap = mindmap;
@@ -273,7 +273,7 @@ function MindmapController($scope, template, model, route, $timeout) {
      * @param event triggered event
      */
     $scope.hideAllButtons = function(mindmap, event) {
-        event.stopPropagation();       
+        event.stopPropagation();
 
         if (mindmap.showButtons) {
             $scope.mindmap = mindmap;
@@ -356,7 +356,7 @@ function MindmapController($scope, template, model, route, $timeout) {
         /**
          * Retrieve a mindmap from its database id and open it in a wisemapping editor
          */
-        viewMindmap: function(params){     
+        viewMindmap: function(params){
             model.mindmaps.sync(function() {
                 var m = _.find(model.mindmaps.all, function(mindmap){
                     return mindmap._id === params.mindmapId;
@@ -379,5 +379,5 @@ function MindmapController($scope, template, model, route, $timeout) {
             $scope.openMainPage();
         }
     });
-    
+
 }
