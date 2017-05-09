@@ -21,21 +21,26 @@
 
     <body ng-controller="MindmapController" class="mindmap">
         <portal ng-if="!notFound">
+
             <div class="row">
                 <div class="twelve cell">
+
                     <div class="seven cell">
-                        <h1>
-                            <i class="mindmap">
-                                <side-panel ng-if="selectedMindmap">
-                                    <container template="side-panel"></container>
-                                </side-panel>
-                            </i>
-                            <a ng-click="openMainPage()"><i18n >mindmap.title</i18n></a>
-                            <span ng-if="selectedMindmap.name && selectedMindmap.name.trim().length > 0">
-                                : [[mindmap.name]]
-                            </span>
-                        </h1>
+                        <side-panel class="zero-mobile" ng-if="selectedMindmap">
+                            <container template="side-panel"></container>
+                        </side-panel>
+                        <app-title>
+                            <h1>
+                                <i class="mindmap"></i>
+                                <span ng-click="openMainPage()"><i18n>mindmap.title</i18n></span> <span subtitle ng-if="selectedMindmap.name && selectedMindmap.name.trim().length > 0"> >  [[mindmap.name]]</span>
+                            </h1>
+                        </app-title>
+
                     </div>
+
+
+
+
                     <div class="contextual-buttons five cell">
                         <button workflow="mindmap.create" ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
                             <i18n>mindmap.new</i18n>
@@ -50,6 +55,8 @@
                 </div>
                 <div class="clear"></div>
             </div>
+
+
             <hr>
 		    <section id="mindmap-content">
                     <container template="main" class="flexible content cell"></container>
