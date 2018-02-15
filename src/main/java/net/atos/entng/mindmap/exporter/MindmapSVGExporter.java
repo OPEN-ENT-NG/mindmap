@@ -26,11 +26,11 @@ import java.io.IOException;
 import net.atos.entng.mindmap.exception.MindmapExportException;
 
 import org.apache.batik.transcoder.TranscoderException;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.json.JsonObject;
-import org.vertx.java.core.logging.Logger;
-import org.vertx.java.core.logging.impl.LoggerFactory;
+import io.vertx.core.Handler;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 
 /**
  * Verticle for exporting mindmap in SVG format
@@ -49,9 +49,9 @@ public class MindmapSVGExporter extends AbstractMindmapExporter implements Handl
     public static final String MINDMAP_SVGEXPORTER_ADDRESS = "mindmap.svgexporter";
 
     @Override
-    public void start() {
+    public void start() throws Exception {
         super.start();
-        vertx.eventBus().registerHandler(MINDMAP_SVGEXPORTER_ADDRESS, this);
+        vertx.eventBus().localConsumer(MINDMAP_SVGEXPORTER_ADDRESS, this);
     }
 
     @Override
@@ -60,11 +60,11 @@ public class MindmapSVGExporter extends AbstractMindmapExporter implements Handl
         JsonObject result = new JsonObject();
         try {
             String image = this.transformSvg(svgXml, "image/svg+xml");
-            result.putString("image", image);
-            result.putNumber("status", HttpResponseStatus.OK.code());
+            result.put("image", image);
+            result.put("status", HttpResponseStatus.OK.code());
         } catch (TranscoderException | MindmapExportException | IOException e) {
             log.error(e);
-            result.putNumber("status", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+            result.put("status", HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
         } finally {
             event.reply(result);
         }

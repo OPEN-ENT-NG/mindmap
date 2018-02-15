@@ -45,7 +45,7 @@ public class Mindmap extends BaseServer {
      * Entry point of the Vert.x module
      */
     @Override
-    public void start() {
+    public void start() throws Exception {
         super.start();
 
         setRepositoryEvents(new MindmapRepositoryEvents());
@@ -60,8 +60,8 @@ public class Mindmap extends BaseServer {
         addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION));
 
         // Register verticle into the container
-        container.deployWorkerVerticle(MindmapPNGExporter.class.getName(), config);
-        container.deployWorkerVerticle(MindmapSVGExporter.class.getName(), config);
+        getVertx().deployVerticle(MindmapPNGExporter.class.getName());
+        getVertx().deployVerticle(MindmapSVGExporter.class.getName());
     }
 
 }

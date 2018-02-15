@@ -20,8 +20,8 @@
 package net.atos.entng.mindmap.service.impl;
 
 import org.entcore.common.service.impl.MongoDbRepositoryEvents;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.json.JsonArray;
+import io.vertx.core.Handler;
+import io.vertx.core.json.JsonArray;
 
 public class MindmapRepositoryEvents extends MongoDbRepositoryEvents {
 
