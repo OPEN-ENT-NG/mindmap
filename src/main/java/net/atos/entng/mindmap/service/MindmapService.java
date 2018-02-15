@@ -19,8 +19,8 @@
 
 package net.atos.entng.mindmap.service;
 
-import org.vertx.java.core.http.HttpServerRequest;
-import org.vertx.java.core.json.JsonObject;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonObject;
 
 /**
  * Service interface for mindmap module

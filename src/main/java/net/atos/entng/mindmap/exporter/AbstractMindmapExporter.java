@@ -26,6 +26,7 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Base64;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -53,11 +54,10 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
-import org.vertx.java.core.buffer.Buffer;
-import org.vertx.java.core.json.impl.Base64;
-import org.vertx.java.core.logging.Logger;
-import org.vertx.java.core.logging.impl.LoggerFactory;
-import org.vertx.java.platform.Verticle;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.AbstractVerticle;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -71,7 +71,7 @@ import org.xml.sax.SAXException;
  * changes have been done in order to make it work in ONG context
  * @author AtoS
  */
-public abstract class AbstractMindmapExporter extends Verticle {
+public abstract class AbstractMindmapExporter extends AbstractVerticle {
 
     /**
      * Class logger
@@ -119,7 +119,7 @@ public abstract class AbstractMindmapExporter extends Verticle {
             TranscoderOutput transcoderOutput = new TranscoderOutput(os);
 
             transcoder.transcode(input, transcoderOutput);
-            svgTransformed = Base64.encodeBytes(os.toByteArray());
+            svgTransformed = Base64.getEncoder().encodeToString(os.toByteArray());
         } else {
             // Defaut is image/svg+xml
             svgTransformed = svgString;
@@ -288,8 +288,8 @@ public abstract class AbstractMindmapExporter extends Verticle {
                     // Obtains file name ...
                     try {
                         final File iconFile = iconFile(imgUrl);
-                        imageContent = vertx.fileSystem().readFileSync(iconFile.toString());
-                        String b64 = Base64.encodeBytes(imageContent.getBytes());
+                        imageContent = vertx.fileSystem().readFileBlocking(iconFile.toString());
+                        String b64 = Base64.getEncoder().encodeToString(imageContent.getBytes());
 
                         elem.setAttribute("xlink:href", "data:image/png;base64," + b64);
                         elem.appendChild(document.createTextNode(" "));
@@ -315,18 +315,18 @@ public abstract class AbstractMindmapExporter extends Verticle {
         final File iconsDir = new File(baseImgDir, "icons");
 
         File iconFile = new File(iconsDir, iconName);
-        if (!vertx.fileSystem().existsSync(iconFile.toString())) {
+        if (!vertx.fileSystem().existsBlocking(iconFile.toString())) {
             // It's not a icon, must be a note, attach image ...
             final File legacyIconsDir = new File(baseImgDir, "images");
             iconFile = new File(legacyIconsDir, iconName);
         }
 
-        if (!vertx.fileSystem().existsSync(iconFile.toString())) {
+        if (!vertx.fileSystem().existsBlocking(iconFile.toString())) {
             final File legacyIconsDir = new File(iconsDir, "legacy");
             iconFile = new File(legacyIconsDir, iconName);
         }
 
-        if (!vertx.fileSystem().existsSync(iconFile.toString())) {
+        if (!vertx.fileSystem().existsBlocking(iconFile.toString())) {
             log.error("Icon not found");
             throw new IOException("Icon could not be found:" + imgUrl);
         }

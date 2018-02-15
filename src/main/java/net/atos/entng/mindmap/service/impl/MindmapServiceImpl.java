@@ -19,17 +19,18 @@
 
 package net.atos.entng.mindmap.service.impl;
 
+import io.vertx.core.AsyncResult;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
 import net.atos.entng.mindmap.service.MindmapService;
 
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.eventbus.EventBus;
-import org.vertx.java.core.eventbus.Message;
-import org.vertx.java.core.http.HttpServerRequest;
-import org.vertx.java.core.json.JsonObject;
-import org.vertx.java.core.logging.Logger;
-import org.vertx.java.core.logging.impl.LoggerFactory;
+import io.vertx.core.Handler;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 
 import fr.wseduc.webutils.http.Renders;
 
@@ -59,10 +60,10 @@ public class MindmapServiceImpl implements MindmapService {
 
     @Override
     public void exportPNG(final HttpServerRequest request, JsonObject message) {
-        eb.send(MindmapPNGExporter.MINDMAP_PNGEXPORTER_ADDRESS, message, new Handler<Message<JsonObject>>() {
+        eb.send(MindmapPNGExporter.MINDMAP_PNGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
             @Override
-            public void handle(Message<JsonObject> reply) {
-                JsonObject response = reply.body();
+            public void handle(AsyncResult<Message<JsonObject>> reply) {
+                JsonObject response = reply.result().body();
                 Integer status = response.getInteger("status");
                 Renders.renderJson(request, response, status);
             }
@@ -72,10 +73,10 @@ public class MindmapServiceImpl implements MindmapService {
 
     @Override
     public void exportSVG(final HttpServerRequest request, JsonObject message) {
-        eb.send(MindmapSVGExporter.MINDMAP_SVGEXPORTER_ADDRESS, message, new Handler<Message<JsonObject>>() {
+        eb.send(MindmapSVGExporter.MINDMAP_SVGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
             @Override
-            public void handle(Message<JsonObject> reply) {
-                JsonObject response = reply.body();
+            public void handle(AsyncResult<Message<JsonObject>> reply) {
+                JsonObject response = reply.result().body();
                 Integer status = response.getInteger("status");
                 Renders.renderJson(request, response, status);
             }
