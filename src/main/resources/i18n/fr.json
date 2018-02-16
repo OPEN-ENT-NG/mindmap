@@ -1,31 +1,23 @@
 {
-	"mindmap.title": "Carte mentale",
-	
-	"mindmap.new": "Créer une carte mentale",
-	"mindmap.create": "Créer",
-	"mindmap.edit": "Editer",
-	"mindmap.export": "Exporter",
-	"mindmap.back": "Retour",
-	"mindmap.save": "Enregistrer",
-	"mindmap.cancel": "Annuler",
-	"mindmap.submit": "Envoyer",
-	
-	"mindmap.export.description": "Créer une représentation graphique de votre carte avec toutes les couleurs et les formes, pour l'inclure dans d'autres documents ou l'archiver",
-
-	"mindmap.name": "Nom",
-	"mindmap.description": "Description",
-	
-	"mindmap.delete.confirm": "Voulez-vous vraiment supprimer cette carte mentale ?",
-	
-	"mindmap.read": "Lecteur",
-	"mindmap.contrib": "Contributeur",
-	"mindmap.manager": "Gestionnaire",
-
+    "mindmap.title": "Carte mentale",
+    "mindmap.new": "Créer une carte mentale",
+    "mindmap.create": "Créer",
+    "mindmap.edit": "Editer",
+    "mindmap.export": "Exporter",
+    "mindmap.back": "Retour",
+    "mindmap.save": "Enregistrer",
+    "mindmap.cancel": "Annuler",
+    "mindmap.submit": "Envoyer",
+    "mindmap.export.description": "Créer une représentation graphique de votre carte avec toutes les couleurs et les formes, pour l'inclure dans d'autres documents ou l'archiver",
+    "mindmap.name": "Nom",
+    "mindmap.description": "Description",
+    "mindmap.delete.confirm": "Voulez-vous vraiment supprimer cette carte mentale ?",
+    "mindmap.read": "Lecteur",
+    "mindmap.contrib": "Contributeur",
+    "mindmap.manager": "Gestionnaire",
     "mindmap.format.png": "Format PNG",
     "mindmap.format.svg": "Format SVG",
-
     "mindmap.or.page.notfound.or.unauthorized": "La carte mentale ou la page demandée n'existe pas, a été supprimée, ou vous n'avez pas les droits pour y accéder.",
-	
     "group.AdminLocal": "Tous les administrateurs locaux du groupe {0}.",
     "group.Personnel": "Tous les personnels du groupe {0}.",
     "group.Relative": "Tous les parents du groupe {0}.",
@@ -38,12 +30,11 @@
     "group.class.Teacher": "Tous les enseignants de la classe {0}.",
     "group.class.Guest": "Tous les invités de la classe {0}.",
     "group.contrib": "Tous les contributeurs de la communauté {0}.",
-    "group.manager": "Tous les gestionnnaires de la communauté {0}.",
+    "group.manager": "Tous les gestionnaires de la communauté {0}.",
     "group.read": "Tous les lecteurs de la communauté {0}.",
     "group.school.Personnel": "Tous les personnels de l'{0}.",
     "group.school.Relative": "Tous les parents de l'{0}.",
     "group.school.Student": "Tous les élèves de l'{0}.",
     "group.school.Teacher": "Tous les enseignants de l'{0}.",
     "group.school.Guest": "Tous les invités de l'{0}."
-
 }
