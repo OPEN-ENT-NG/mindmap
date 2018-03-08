@@ -33,6 +33,7 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 			});
 
 			// Wait for all requirements to be loaded
+			$timeout(function() {
 				var mindmap;
 				var mapId = scope.mindmap;
 
@@ -60,6 +61,7 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 				}
 
 				designer.loadMap(mindmap);
+			});
 		}
 	};
 }]);
