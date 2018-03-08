@@ -23,6 +23,7 @@ model.build = function() {
 
     this.mindmaps = new Mindmaps();
     this.mindmaps.sync();
+    console.log('--- load model workflow');
 };
 
 

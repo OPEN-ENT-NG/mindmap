@@ -2,7 +2,6 @@ import { ng } from 'entcore';
 
 declare let designer: any;
 declare let $moo: any;
-declare let mindmap: any;
 declare let mindplot: any;
 declare let loadDesignerOptions: any;
 declare let currentLanguage: any;
@@ -11,7 +10,7 @@ declare let toolbarNotifier: any;
 declare let $notify: any;
 
 
-export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$document', function($timeout) {
+export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout', function($timeout) {
 
 	return {
 		scope: {
@@ -23,19 +22,18 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$document'
 		templateUrl: '/mindmap/public/template/directives/mindmap-editor.html',
 		link: function(scope, element, attrs) {
 
-			// Destroy the wisemapping properly
+            // Destroy the wisemapping properly
 			element.on('$destroy', function() {
 				if (designer) {
 					designer.destroy();
 				}
 				$moo(document).removeEvents("mousewheel");
 				$moo(document).removeEvents("keydown");
-				mindmap = null;
 				mindplot.EventBus.instance = null;
 			});
 
 			// Wait for all requirements to be loaded
-			$timeout(function() {
+				var mindmap;
 				var mapId = scope.mindmap;
 
 				// Mindmap editor options
@@ -52,7 +50,7 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$document'
 				$notify = toolbarNotifier.logMessage.bind(toolbarNotifier);
 
 				var persistence = mindplot.PersistenceManager.getInstance();
-				var mindmap;
+
 				if (mapId.map == undefined) {
 					mindplot.Messages.BUNDLES[currentLanguage].CENTRAL_TOPIC = mapId.name;
 					mindmap = mindplot.model.Mindmap.buildEmpty(mapId.name);
@@ -62,7 +60,6 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$document'
 				}
 
 				designer.loadMap(mindmap);
-			});
 		}
 	};
 }]);
