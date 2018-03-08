@@ -16,7 +16,6 @@ export class Mindmap implements Selectable {
 
     constructor(mindmap?) {
         this.rights = new Rights(this);
-        console.log(JSON.stringify(this.rights));
         this.rights.fromBehaviours();
 
         if(mindmap){

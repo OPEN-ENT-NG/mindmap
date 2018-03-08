@@ -1,4 +1,4 @@
-import { ng, routes, angular, moment, _, template } from 'entcore';
+import { ng, routes, angular, moment, _, template, Behaviours } from 'entcore';
 import http from 'axios';
 import { Mindmap } from '../model';
 
@@ -215,8 +215,9 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
      * Check if the user can export either in SVG either in PNG format
      **/
     $scope.canExport = function() {
-        var workflowRights = model.me.workflow["mindmap"];
-        return (workflowRights["exportpng"] || workflowRights["exportsvg"]);
+        var workflowRights = Behaviours.applicationsBehaviours.mindmap.rights.workflow;
+
+        return (model.me.hasWorkflow(workflowRights["exportpng"]) || model.me.hasWorkflow(workflowRights["exportsvg"]));
     }
 
     /**
