@@ -130,7 +130,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $scope.mindmap = $scope.selectedMindmap = mindmap;
             mapAdapter.adapt($scope);
             $scope.action = 'mindmap-open';
-            $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
+
+            $scope.mindmap.readOnly = model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.resourceRights(['contrib']));
             template.open('mindmap', 'mindmap-edit');
             window.location.hash = '/view/' + $scope.mindmap._id;
 
@@ -207,7 +208,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
      * Checks if a user is a manager
      */
     $scope.canManageMindmap = function(mindmap){
-        return (mindmap.myRights.manage !== undefined);
+        return model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.resourceRights(['manage']));
     };
 
 
