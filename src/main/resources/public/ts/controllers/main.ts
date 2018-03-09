@@ -130,7 +130,6 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $scope.mindmap = $scope.selectedMindmap = mindmap;
             mapAdapter.adapt($scope);
             $scope.action = 'mindmap-open';
-
             $scope.mindmap.readOnly = model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.resourceRights(['contrib']));
             template.open('mindmap', 'mindmap-edit');
             window.location.hash = '/view/' + $scope.mindmap._id;
@@ -208,7 +207,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
      * Checks if a user is a manager
      */
     $scope.canManageMindmap = function(mindmap){
-        return model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.resourceRights(['manage']));
+        return model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.resourceRights(['manager']))
+            || model.me.userId === mindmap.owner.userId;
     };
 
 
@@ -356,7 +356,6 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
          */
         viewMindmap: async (params) => {
             model.mindmaps.sync(function() {
-                console.log('syn');
                 var m = _.find(model.mindmaps.all, function(mindmap){
                     return mindmap._id === params.mindmapId;
                 });
@@ -375,8 +374,6 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
          * Display the mindmap list
          **/
         listMindmap: async (params) => {
-            console.log('syn2');
-
             $scope.openMainPage();
         }
     });
