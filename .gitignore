@@ -1,4 +1,3 @@
-node_modules/
 .DS_Store
 .gradle
 .idea
@@ -24,13 +23,12 @@ mods
 data
 developer.id
 *.mod.json
-**/ts/entcore
-**/ts/**/*.js
-**/ts/*.js
-**/ts/**/*.js.map
-**/ts/*.js.map
-**/template/entcore
-**/temp
-**/dist
-**/.DS_Store
-**/view/*.html
+src/main/resources/public/dist
+src/main/resources/public/temp
+src/main/resources/public/js
+src/main/resources/public/template/entcore
+src/main/resources/view/
+rev-manifest.json
+/build
+/bin
+node_modules/

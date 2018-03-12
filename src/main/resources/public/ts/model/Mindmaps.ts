@@ -1,4 +1,4 @@
-import { _ } from 'entcore';
+import {Behaviours, _ } from 'entcore';
 import { Selection } from 'entcore-toolkit';
 import { Mindmap } from './index';
 import http from 'axios';
@@ -15,7 +15,7 @@ export class Mindmaps extends Selection<Mindmap> {
 
             this.all = [];
             _.forEach(mindmaps.data, (mindmap) => {
-                this.all.push(new Mindmap(mindmap));
+                this.all.push(Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
             });
 
             if(typeof callback === 'function'){
