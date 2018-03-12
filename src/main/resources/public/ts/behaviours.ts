@@ -32,5 +32,22 @@ Behaviours.register('mindmap', {
     resourceRights: function () {
         return ['read', 'contrib', 'manager'];
     },
+    resource: function (resource) {
+        var rightsContainer = resource;
+        if (!resource.myRights) {
+            resource.myRights = {};
+        }
+
+        for (var behaviour in mindmapBehaviours.resources) {
+            if (model.me.hasRight(rightsContainer, mindmapBehaviours.resources[behaviour]) || model.me.userId === resource.owner.userId || model.me.userId === rightsContainer.owner.userId) {
+                if (resource.myRights[behaviour] !== undefined) {
+                    resource.myRights[behaviour] = resource.myRights[behaviour] && mindmapBehaviours.resources[behaviour];
+                } else {
+                    resource.myRights[behaviour] = mindmapBehaviours.resources[behaviour];
+                }
+            }
+        }
+        return resource;
+    },
     loadResources: async () => {}
 });
