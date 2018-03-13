@@ -191,7 +191,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
      */
     $scope.exportMindmapSubmit = function(exportType) {
         $scope.exportInProgress = true;
-        http.post('/mindmap/export/' + exportType, ({ svgXml: $('#workspaceContainer')[0].innerHTML} as any).toJSON())
+        http.post('/mindmap/export/' + exportType, { svgXml: $('#workspaceContainer')[0].innerHTML})
             .then(function(data) {
                 var filename = $scope.mindmap.name+"."+exportType;
                 var imageData = data.data.image;
