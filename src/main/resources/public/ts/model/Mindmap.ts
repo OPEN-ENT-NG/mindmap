@@ -75,9 +75,10 @@ export class Mindmap implements Selectable {
      * @param callback a function to call after delete.
      */
     delete (callback) {
+        var that = this; 
         http.delete('/mindmap/' + this._id, {data: this.toJSON()})
             .then( () => {
-            model.mindmaps.remove(this);
+            model.mindmaps.remove(that);
             if(typeof callback === 'function'){
                 callback();
             }
