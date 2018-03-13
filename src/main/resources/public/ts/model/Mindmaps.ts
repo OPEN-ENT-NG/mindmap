@@ -24,9 +24,9 @@ export class Mindmaps extends Selection<Mindmap> {
         });
     };
 
-    remove (item) {
-        this.all = _.remove(this.all, function(n) {
-            return n === item;
+    remove (mindmap) {
+        this.all = _(this.all).filter(function (item) {
+            return item._id !== mindmap._id;
         });
     };
 

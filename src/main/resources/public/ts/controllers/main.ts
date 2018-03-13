@@ -328,6 +328,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         _.map($scope.mindmaps.selection(), function(mindmap){
             mindmap.delete(function() {
                 $scope.updateSearchBar();
+                $scope.$apply();
             });
         });
 
