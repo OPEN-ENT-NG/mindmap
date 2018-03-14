@@ -76,7 +76,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 }
             });
         });
-s    }
+    }
 
     // Update search bar
     $scope.updateSearchBar();
