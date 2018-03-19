@@ -6,7 +6,11 @@
 * Description : Application de conception de carte mentale. L'application permet de construire en ligne une carte mentale, de la partager et de l'exporter. Elle est s'appuie sur une librairie issue de  http://www.wisemapping.com/.
 
 # Documentation technique
-
+## Build
+<pre>
+    gulp build
+    gradle install 
+</pre>
 ## Construction
 
 <pre>
