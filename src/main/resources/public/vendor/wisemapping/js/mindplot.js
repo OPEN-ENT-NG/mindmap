@@ -10461,7 +10461,7 @@ mindplot.widget.LinkIconTooltip = new Class({
             "padding-top": "5px"
         });
         var m = new Element("img", {
-            src: "https://api.thumbalizr.com/?url=" + h.getModel().getUrl() + "&width=250",
+            src: "http://free.pagepeeker.com/v2/thumbs.php?size=m&url=" + h.getModel().getUrl(),
             img: h.getModel().getUrl(),
             alt: h.getModel().getUrl()
         });
