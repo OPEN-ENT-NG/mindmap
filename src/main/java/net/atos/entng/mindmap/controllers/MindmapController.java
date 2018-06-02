@@ -191,6 +191,33 @@ public class MindmapController extends MongoDbControllerHelper {
         removeShare(request, false);
     }
 
+    @Put("/share/resource/:id")
+    @ApiDoc("Allows to update the current sharing of the mindmap given by its identifier")
+    @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
+    public void shareResource(final HttpServerRequest request) {
+        UserUtils.getUserInfos(eb, request, new Handler<UserInfos>() {
+            @Override
+            public void handle(final UserInfos user) {
+                if (user != null) {
+                    final String id = request.params().get("id");
+                    if(id == null || id.trim().isEmpty()) {
+                        badRequest(request, "invalid.id");
+                        return;
+                    }
+
+                    JsonObject params = new JsonObject();
+                    params.put("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType());
+                    params.put("username", user.getUsername());
+                    params.put("mindmapUri", "/mindmap#/view/" + id);
+                    params.put("resourceUri", params.getString("mindmapUri"));
+
+                    shareResource(request, "mindmap.share", false, params, "name");
+                }
+            }
+        });
+    }
+
+
     @Post("/export/png")
     @ApiDoc("Export the mindmap in PNG format")
     @SecuredAction("mindmap.exportpng")
