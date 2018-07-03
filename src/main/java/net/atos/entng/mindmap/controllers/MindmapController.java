@@ -167,7 +167,8 @@ public class MindmapController extends MongoDbControllerHelper {
                     params.put("username", user.getUsername());
                     params.put("mindmapUri", "/mindmap#/view/" + id);
                     params.put("resourceUri", params.getString("mindmapUri"));
-
+                    params.put("pushNotif", new JsonObject().put("title", "mindmap.notification.shared")
+                    .put("body", user.getUsername() + " a partagé une carte mentale"));
                     shareJsonSubmit(request, "mindmap.share", false, params, "name");
                 }
             }
