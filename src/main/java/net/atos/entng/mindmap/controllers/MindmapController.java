@@ -21,6 +21,7 @@ package net.atos.entng.mindmap.controllers;
 
 import java.util.Map;
 
+import fr.wseduc.webutils.I18n;
 import net.atos.entng.mindmap.Mindmap;
 import net.atos.entng.mindmap.service.MindmapService;
 import net.atos.entng.mindmap.service.impl.MindmapServiceImpl;
@@ -167,6 +168,15 @@ public class MindmapController extends MongoDbControllerHelper {
                     params.put("username", user.getUsername());
                     params.put("mindmapUri", "/mindmap#/view/" + id);
                     params.put("resourceUri", params.getString("mindmapUri"));
+
+                    params.put("pushNotif", new JsonObject().put("title", "mindmap.notification.shared")
+                            .put("body", I18n.getInstance()
+                                    .translate(
+                                            "mindmap.notification.shared.two",
+                                            getHost(request),
+                                            I18n.acceptLanguage(request),
+                                            user.getUsername()
+                                    )));
 
                     shareJsonSubmit(request, "mindmap.share", false, params, "name");
                 }
