@@ -3621,7 +3621,7 @@ mindplot.Designer = new Class({
         var g = function(a) {
             return a.getShapeType() != mindplot.model.TopicShape.LINE
         };
-        var f = "Color can not be set to line topics.";
+        var f = "La couleur ne peut pas être définie sur des sujets en ligne.";
         var e = this.getModel().filterTopicsIds(g, f);
         if (e.length > 0) {
             this._actionDispatcher.changeBackgroundColorToTopic(e, h)
@@ -3631,7 +3631,7 @@ mindplot.Designer = new Class({
         var g = function(a) {
             return a.getShapeType() != mindplot.model.TopicShape.LINE
         };
-        var f = "Color can not be set to line topics.";
+        var f = "La couleur ne peut pas être définie sur des sujets en ligne.";
         var e = this.getModel().filterTopicsIds(g, f);
         if (e.length > 0) {
             this._actionDispatcher.changeBorderColorToTopic(e, h)
