@@ -49,5 +49,16 @@ Behaviours.register('mindmap', {
         }
         return resource;
     },
-    loadResources: async () => {}
+    loadResources: async function()  {
+        const response = await http.get('/mindmap/list/all');
+        this.resources = response.data.map(e => ({
+            title: e.name,
+            ownerName: e.owner.displayName,
+            owner: e.owner.userId,
+            icon: e.thumbnail || "/img/illustrations/mindmap-default.png",
+            path: '/mindmap#/view/' + e._id,
+            id: e._id
+        }));
+
+    }
 });

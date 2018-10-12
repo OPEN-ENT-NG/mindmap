@@ -1,11 +1,11 @@
-import { model, Rights } from 'entcore';
+import { model, Rights, Shareable } from 'entcore';
 import http from 'axios';
-import {Mix, Selectable} from "entcore-toolkit";
+import { Mix, Selectable } from "entcore-toolkit";
 
 /**
  * Model to create a mindmap.
  */
-export class Mindmap implements Selectable {
+export class Mindmap implements Selectable, Shareable {
     _id: any;
     name: any;
     description: any;
@@ -13,12 +13,13 @@ export class Mindmap implements Selectable {
     map: any;
     rights: any;
     selected: boolean;
-
+    shared: any
+    owner: any
     constructor(mindmap?) {
         this.rights = new Rights(this);
         this.rights.fromBehaviours();
 
-        if(mindmap){
+        if (mindmap) {
             Mix.extend(this, mindmap);
         }
     };
@@ -32,7 +33,7 @@ export class Mindmap implements Selectable {
      * this method calls the create method otherwise it calls the update method.
      * @param callback a function to call after saving.
      */
-    save (callback) {
+    save(callback) {
         if (this._id) {
             this.update(callback);
         } else {
@@ -48,9 +49,9 @@ export class Mindmap implements Selectable {
      * persist data.
      * @param callback a function to call after create.
      */
-    create (callback) {
-        http.post('/mindmap', this.toJSON()).then(function() {
-            if(typeof callback === 'function'){
+    create(callback) {
+        http.post('/mindmap', this.toJSON()).then(function () {
+            if (typeof callback === 'function') {
                 callback();
             }
         });
@@ -61,9 +62,9 @@ export class Mindmap implements Selectable {
      * data.
      * @param callback a function to call after create.
      */
-    update (callback) {
-        http.put('/mindmap/' + this._id, this.toJSON()).then(function() {
-            if(typeof callback === 'function'){
+    update(callback) {
+        http.put('/mindmap/' + this._id, this.toJSON()).then(function () {
+            if (typeof callback === 'function') {
                 callback();
             }
         });
@@ -74,22 +75,22 @@ export class Mindmap implements Selectable {
      * data.
      * @param callback a function to call after delete.
      */
-    delete (callback) {
-        var that = this; 
-        http.delete('/mindmap/' + this._id, {data: this.toJSON()})
-            .then( () => {
-            model.mindmaps.remove(that);
-            if(typeof callback === 'function'){
-                callback();
-            }
-        });
+    delete(callback) {
+        var that = this;
+        http.delete('/mindmap/' + this._id, { data: this.toJSON() })
+            .then(() => {
+                (model as any).mindmaps.remove(that);
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            });
     };
 
     /**
      * Allows to convert the current mindmap into a JSON format.
      * @return the current mindmap in JSON format.
      */
-    toJSON () {
+    toJSON() {
         return {
             name: this.name,
             description: this.description,
