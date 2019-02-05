@@ -3082,7 +3082,7 @@ mindplot.Designer = new Class({
         var d = this._workspace;
         var c = d.getScreenManager();
         console.log($moo(document));
-        $moo(document).addEvent("mousewheel", function(f) { // ELD
+        $moo(document).getElementById("workspace").addEvent("mousewheel", function(f) { // ELD
             var b = c.getContainer().getCoordinates();
             var a = f.client.y < b.top || f.client.y > b.bottom || f.client.x < b.left || f.client.x > b.right;
             if (!a) {
