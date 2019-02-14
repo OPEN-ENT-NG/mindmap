@@ -19,19 +19,15 @@
 
 package net.atos.entng.mindmap.service.impl;
 
+import io.vertx.core.Vertx;
 import org.entcore.common.service.impl.MongoDbRepositoryEvents;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 
 public class MindmapRepositoryEvents extends MongoDbRepositoryEvents {
 
-    public MindmapRepositoryEvents() {
-        super("net-atos-entng-mindmap-controllers-MindmapController|delete");
-    }
-
-    @Override
-    public void exportResources(String exportId, String userId, JsonArray groups, String exportPath, String locale, String host, Handler<Boolean> handler) {
-        log.warn("Method exportResources is not implemented in MindmapRepositoryEvents");
+    public MindmapRepositoryEvents(Vertx vertx) {
+        super(vertx,"net-atos-entng-mindmap-controllers-MindmapController|delete",null,null);
     }
 
 }

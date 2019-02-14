@@ -48,7 +48,7 @@ public class Mindmap extends BaseServer {
     public void start() throws Exception {
         super.start();
 
-        setRepositoryEvents(new MindmapRepositoryEvents());
+        setRepositoryEvents(new MindmapRepositoryEvents(vertx));
 
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(MINDMAP_COLLECTION);
