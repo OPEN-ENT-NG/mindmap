@@ -7,6 +7,7 @@
     "app-name" : "Mindmap",
     "app-address" : "/mindmap",
     "app-icon" : "mindmap-large",
+    "app-type" : "END_USER",
     "host": "${host}",
     "ssl" : $ssl,
     "userbook-host": "${host}",
