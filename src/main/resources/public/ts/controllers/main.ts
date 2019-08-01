@@ -19,6 +19,7 @@ declare let saveAs: (data, name, opts?) => void;
 export const MindmapController = ng.controller('MindmapController', ['$scope', 'model', 'route', '$timeout',
     ($scope, model, route, $timeout) => {
 
+    $scope.printMode = false;
     $scope.template = template;
     $scope.mindmaps = model.mindmaps;
     $scope.me = model.me;
@@ -137,8 +138,33 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             window.location.hash = '/view/' + $scope.mindmap._id;
 
         })
-
     };
+        $scope.printMindmap = function(mindmap) {
+            delete $scope.mindmap;
+            delete $scope.selectedMindmap;
+            $scope.notFound = false;
+            $scope.printMode = true;
+
+            template.close('main');
+            template.close('mindmap');
+
+            // Need to wait before opening a mindmap
+            $timeout(function() {
+                $scope.mindmaps.forEach(function(m) {
+                    m.showButtons = false;
+                });
+                $scope.editorId = $scope.editorId + 1;
+                $scope.mindmap = $scope.selectedMindmap = mindmap;
+                mapAdapter.adapt($scope);
+                $scope.action = 'mindmap-open';
+                //$scope.mindmap.readOnly = model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.rights.resource.contrib);
+
+                $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
+                template.open('mindmap', 'mindmap-print');
+                window.location.hash = '/print/' + $scope.mindmap._id;
+
+            })
+        };
 
 
     /**
@@ -368,6 +394,24 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 if (m) {
                     $scope.notFound = "false";
                     $scope.openMindmap(m);
+                } else {
+                    $scope.notFound = "true";
+                    $scope.openMainPage();
+                }
+            });
+
+        },
+        /**
+         * Retrieve a mindmap from its database id and open it in a wisemapping editor
+         */
+        printMindmap: async (params) => {
+            model.mindmaps.sync(function() {
+                var m = _.find(model.mindmaps.all, function(mindmap){
+                    return mindmap._id === params.mindmapId;
+                });
+                if (m) {
+                    $scope.notFound = "false";
+                    $scope.printMindmap(m);
                 } else {
                     $scope.notFound = "true";
                     $scope.openMainPage();

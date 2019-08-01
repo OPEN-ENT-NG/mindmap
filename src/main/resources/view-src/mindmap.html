@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-controller="MindmapController" ng-class="{print: printMode}">
     <head>
         <title>{{#i18n}}mindmap.title{{/i18n}}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -17,8 +17,8 @@
         <script type="text/ng-template" id="empty"></script>
     </head>
 
-    <body ng-controller="MindmapController" class="mindmap">
-        <portal ng-if="!notFound">
+    <body class="mindmap">
+        <portal ng-if="!notFoundd && !printMode">
                 <infotip name="mindmap-no-mobile" class="warning zero-desktop">
                     <strong><i18n>warning.no.mobile</i18n></strong>
                 </infotip>
@@ -79,6 +79,9 @@
 		      </section>
         </portal>
 
+        <div ng-if="printMode">
+            <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+        </div>
         <div ng-if="notFound">
             <div ng-if="!me.userId" class="absolute">
                 <default-styles>

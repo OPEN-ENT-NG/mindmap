@@ -7,6 +7,7 @@ const mindmapBehaviours = {
         view: 'net.atos.entng.mindmap.controllers.MindmapController|view',
         list: 'net.atos.entng.mindmap.controllers.MindmapController|list',
         create: 'net.atos.entng.mindmap.controllers.MindmapController|create',
+        publish: 'net.atos.entng.mindmap.controllers.MindmapController|publishToLibrary',
         exportpng: 'net.atos.entng.mindmap.controllers.MindmapController|exportPngMindmap',
         exportsvg: 'net.atos.entng.mindmap.controllers.MindmapController|exportSvgMindmap'
     },

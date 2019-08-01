@@ -81,6 +81,14 @@
                 </button>
             </resource-right>
             <resource-right name="manage" resource="mindmaps.selection()" class="cell">
+                <button workflow="mindmap.publish" ng-if="mindmaps.selection().length === 1" library item="[[mindmaps.selection()[0]._id]]">
+                    <i18n>publish.to.bpr</i18n>
+                </button>
+            </resource-right>
+            <button ng-if="mindmaps.selection().length === 1" ng-click="printMindmap(mindmaps.selection()[0], $event)">
+                <i18n>print</i18n>
+            </button>
+            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
                 <button ng-click="shareMindmap(mindmaps.selection(), $event)">
                     <i18n>share</i18n>
                 </button>
