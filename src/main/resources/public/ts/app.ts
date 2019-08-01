@@ -15,6 +15,11 @@ for (let directive in directives) {
     ng.directives.push(directives[directive]);
 }
 
+ng.configs.push(ng.config(['libraryServiceProvider', function(libraryServiceProvider) {
+    libraryServiceProvider.setApplicationShareToLibraryEndpointFn(function(id: string) {
+        return `/mindmap/${id}/library`;
+    });
+}]));
 
 /**
  * Allows to create a model and load the list of mindmaps from the backend.
@@ -33,6 +38,9 @@ routes.define(($routeProvider) => {
     $routeProvider
         .when('/view/:mindmapId', {
             action: 'viewMindmap'
+        })
+        .when('/print/:mindmapId', {
+            action: 'printMindmap'
         })
         .otherwise({
             action: 'listMindmap'
