@@ -146,10 +146,16 @@ public class MindmapController extends MongoDbControllerHelper {
     }
 
     @Post("/:id/library")
-    @ResourceFilter(OwnerOnly.class)
-    @SecuredAction("mindmap.publish")
+    @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
     public void publishToLibrary(final HttpServerRequest request) {
-        LibraryUtils.share(eb, request);
+        LibraryUtils.publish("MindMap", eb, request);
+    }
+
+    @Get("/publish")
+    @SecuredAction("mindmap.publish")
+    public void publish(final HttpServerRequest request) {
+        // This route is used to create publish Workflow right, nothing to do
+        return;
     }
 
     @Get("/share/json/:id")

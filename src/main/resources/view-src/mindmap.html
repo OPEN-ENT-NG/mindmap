@@ -17,7 +17,7 @@
         <script type="text/ng-template" id="empty"></script>
     </head>
 
-    <body class="mindmap">
+    <body class="mindmap" library-root>
         <portal ng-if="!notFoundd && !printMode">
                 <infotip name="mindmap-no-mobile" class="warning zero-desktop">
                     <strong><i18n>warning.no.mobile</i18n></strong>
@@ -115,6 +115,7 @@
                 </portal>
             </div>
         </div>
+        <library-publish></library-publish>
         <script src="/mindmap/public/vendor/wisemapping/js/editor.min.js" type="text/javascript"></script>
         <script src="/mindmap/public/vendor/wisemapping/js/mindplot.min.js" type="text/javascript"></script>
         <script src="/mindmap/public/vendor/FileSaver.js/Blob.min.js" type="text/javascript"></script>
