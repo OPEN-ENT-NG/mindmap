@@ -4,6 +4,7 @@ import { Mindmap } from './model';
 import { Mindmaps } from './model';
 import * as controllers from './controllers';
 import * as directives from './directives';
+import { LibraryServiceProvider } from "entcore/types/src/ts/library/library.service";
 
 declare let module: any;
 
@@ -15,16 +16,21 @@ for (let directive in directives) {
     ng.directives.push(directives[directive]);
 }
 
-ng.configs.push(ng.config(['libraryServiceProvider', function(libraryServiceProvider) {
-    libraryServiceProvider.setApplicationShareToLibraryEndpointFn(function(id: string) {
+ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServiceProvider: LibraryServiceProvider<Mindmap>) {
+    libraryServiceProvider.setPublishUrlGetterFromId(function (id: string) {
         return `/mindmap/${id}/library`;
+    });
+    libraryServiceProvider.setInvokableResourceInformationGetterFromResource(function () {
+        return function (resource: Mindmap) {
+            return {id: resource._id, resourceInformation: {title: resource.name, cover: resource.thumbnail}}
+        };
     });
 }]));
 
 /**
  * Allows to create a model and load the list of mindmaps from the backend.
  */
-model.build = function() {
+model.build = function () {
 
     this.mindmaps = new Mindmaps();
     this.mindmaps.sync();
