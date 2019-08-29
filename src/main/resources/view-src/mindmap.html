@@ -36,7 +36,7 @@
 						</app-title>
                     </div>                   
                     <div class="contextual-buttons five cell">
-                        <button workflow="mindmap.create" ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()" class="cell right-magnet">
+                        <button workflow="mindmap.create" ng-if="(!mindmap || !mindmap._id) && mindmaps.all.length" ng-click="newMindmap()" class="cell right-magnet">
                             <i18n>mindmap.new</i18n>
                         </button>
                         <button workflow="mindmap.view" ng-if="mindmap && mindmap._id && action == 'mindmap-open' && canExport()" class="cell right-magnet" ng-click="exportMindmap()" ng-disabled="exportInProgress">
