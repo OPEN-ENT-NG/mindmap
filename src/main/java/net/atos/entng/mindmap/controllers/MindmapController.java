@@ -26,7 +26,6 @@ import net.atos.entng.mindmap.Mindmap;
 import net.atos.entng.mindmap.service.MindmapService;
 import net.atos.entng.mindmap.service.impl.MindmapServiceImpl;
 
-import org.entcore.common.appregistry.LibraryUtils;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.http.filter.OwnerOnly;
@@ -143,12 +142,6 @@ public class MindmapController extends MongoDbControllerHelper {
     @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
     public void delete(HttpServerRequest request) {
         super.delete(request);
-    }
-
-    @Post("/:id/library")
-    @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
-    public void publishToLibrary(final HttpServerRequest request) {
-        LibraryUtils.publish("MindMap", eb, request);
     }
 
     @Get("/publish")
