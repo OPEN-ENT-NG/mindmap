@@ -19,7 +19,15 @@ for (let directive in directives) {
 ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServiceProvider: LibraryServiceProvider<Mindmap>) {
     libraryServiceProvider.setInvokableResourceInformationGetterFromResource(function () {
         return function (resource: Mindmap) {
-            return {id: resource._id, resourceInformation: {title: resource.name, cover: resource.thumbnail}}
+            return {
+                id: resource._id, 
+                resourceInformation: {
+                    title: resource.name, 
+                    cover: resource.thumbnail,
+                    application: 'Mindmap',
+                    pdfUri: `/mindmap#/print/${resource._id}`
+                }
+            }
         };
     });
 }]));
