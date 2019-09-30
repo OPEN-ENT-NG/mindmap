@@ -19,9 +19,9 @@
 
     <body class="mindmap" library-root>
         <portal ng-if="!notFoundd && !printMode">
-                <infotip name="mindmap-no-mobile" class="warning zero-desktop">
-                    <strong><i18n>warning.no.mobile</i18n></strong>
-                </infotip>
+            <infotip name="mindmap-no-mobile" class="warning zero-desktop">
+                <strong><i18n>warning.no.mobile</i18n></strong>
+            </infotip>
             <div class="row">    
                 <div class="twelve cell">
                     <div class="seven cell">
@@ -51,41 +51,42 @@
             </div>
 
 		    <section id="mindmap-content">
-                    <container template="main" class="flexible content cell"></container>
-                    <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+                <container template="main" class="flexible content cell"></container>
+                <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
 
-                    <!-- Allows to display the export panel -->
-                    <div ng-if="display.showExportPanel">
-                        <lightbox show="display.showExportPanel" on-close="display.showExportPanel = false;">
-                            <h2><i18n>mindmap.export<i18n></h2>
-                            <div class="row">
-                                <p><i18n>mindmap.export.description</i18n>
-                                </p>
-                            </div>
-                            <div class="row">
-                                <p workflow="mindmap.exportpng" >
-                                    <input type="radio" ng-model="exportType" value="png"><span><i18n>mindmap.format.png</i18n></span>
-                                </p>
-                                <p workflow="mindmap.exportsvg">
-                                    <input type="radio" ng-model="exportType" value="svg"><span><i18n>mindmap.format.svg</i18n></span>
-                                </p>
-                            </div>
-                            <div class="row">
-                                <button class="right-magnet" ng-click="display.showExportPanel = false;"><i18n>mindmap.cancel</i18n></button>
-                                <button class="right-magnet" ng-click="exportMindmapSubmit(exportType)"><i18n>mindmap.submit</i18n></button>
-                            </div>
-                        </lightbox>
-                    </div>
-		      </section>
+                <!-- Allows to display the export panel -->
+                <div ng-if="display.showExportPanel">
+                    <lightbox show="display.showExportPanel" on-close="display.showExportPanel = false;">
+                        <h2><i18n>mindmap.export<i18n></h2>
+                        <div class="row">
+                            <p><i18n>mindmap.export.description</i18n>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <p workflow="mindmap.exportpng" >
+                                <input type="radio" ng-model="exportType" value="png"><span><i18n>mindmap.format.png</i18n></span>
+                            </p>
+                            <p workflow="mindmap.exportsvg">
+                                <input type="radio" ng-model="exportType" value="svg"><span><i18n>mindmap.format.svg</i18n></span>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <button class="right-magnet" ng-click="display.showExportPanel = false;"><i18n>mindmap.cancel</i18n></button>
+                            <button class="right-magnet" ng-click="exportMindmapSubmit(exportType)"><i18n>mindmap.submit</i18n></button>
+                        </div>
+                    </lightbox>
+                </div>
+            </section>
         </portal>
 
         <div ng-if="printMode">
-            <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+            <section id="mindmap-content">
+                <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+            </section>
         </div>
         <div ng-if="notFound">
             <div ng-if="!me.userId" class="absolute">
                 <default-styles>
-
                     <h1><a data-reload><i class="oops"></i><i18n>oops</i18n></a></h1>
                     <article>
                         <div class="row">
@@ -96,12 +97,10 @@
                             <button data-reload onclick="history.go(-1)"><i18n>back</i18n></button>
                         </div>
                     </article>
-
                 </default-styles>
             </div>
             <div ng-if="me.userId" class="absolute">
                 <portal>
-
                     <h1><a data-reload><i class="oops"></i><i18n>oops</i18n></a></h1>
                     <article>
                         <div class="row">

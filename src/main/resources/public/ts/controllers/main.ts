@@ -16,8 +16,8 @@ declare let saveAs: (data, name, opts?) => void;
  * @param model the mindmap model.
  */
 
-export const MindmapController = ng.controller('MindmapController', ['$scope', 'model', 'route', '$timeout',
-    ($scope, model, route, $timeout) => {
+export const MindmapController = ng.controller('MindmapController', ['$scope', 'model', 'route', '$timeout', '$sce',
+    ($scope, model, route, $timeout, $sce) => {
 
     $scope.printMode = false;
     $scope.template = template;
@@ -139,33 +139,37 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
 
         })
     };
-        $scope.printMindmap = function(mindmap) {
-            delete $scope.mindmap;
-            delete $scope.selectedMindmap;
-            $scope.notFound = false;
-            $scope.printMode = true;
+    $scope.printMindmap = function(mindmap) {
+        delete $scope.mindmap;
+        delete $scope.selectedMindmap;
+        $scope.notFound = false;
+        $scope.printMode = true;
 
-            template.close('main');
-            template.close('mindmap');
+        template.close('main');
+        template.close('mindmap');
+        template.close('mindmap-list');
 
-            // Need to wait before opening a mindmap
-            $timeout(function() {
-                $scope.mindmaps.forEach(function(m) {
-                    m.showButtons = false;
-                });
-                $scope.editorId = $scope.editorId + 1;
-                $scope.mindmap = $scope.selectedMindmap = mindmap;
-                mapAdapter.adapt($scope);
-                $scope.action = 'mindmap-open';
-                //$scope.mindmap.readOnly = model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.rights.resource.contrib);
+        // Need to wait before opening a mindmap
+        $timeout(function() {
+            $scope.mindmaps.forEach(function(m) {
+                m.showButtons = false;
+            });
+            $scope.editorId = $scope.editorId + 1;
+            $scope.mindmap = $scope.selectedMindmap = mindmap;
+            mapAdapter.adapt($scope);
+            $scope.action = 'mindmap-open';
+            //$scope.mindmap.readOnly = model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.rights.resource.contrib);
 
-                $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
-                template.open('mindmap', 'mindmap-print');
-                window.location.hash = '/print/' + $scope.mindmap._id;
+            $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
+            template.open('mindmap', 'mindmap-print');
+            window.location.hash = '/print/' + $scope.mindmap._id;
+        })
 
-            })
-        };
-
+        this.svgLoaded = () => {
+            $scope.svg = $sce.trustAsHtml($('#workspaceContainer')[0].innerHTML);
+            $('#mindmap-editor')[0].remove();
+        }
+    };
 
     /**
      * Display date in French format
