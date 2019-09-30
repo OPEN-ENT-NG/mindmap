@@ -15,7 +15,8 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 	return {
 		scope: {
 			mindmap: '=',
-			editorid: '='
+			editorid: '=',
+			svgLoaded: '&?'
 		},
 		restrict: 'E',
 		replace: true,
@@ -61,6 +62,7 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 				}
 
 				designer.loadMap(mindmap);
+				scope.svgLoaded();
 			});
 		}
 	};

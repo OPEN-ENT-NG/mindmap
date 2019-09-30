@@ -1,1 +1,13 @@
-[[mindmap]]
+<div>
+    <span>name: [[mindmap.name]]</span>
+    <span>description: [[mindmap.description]]</span>
+</div>
+
+<div>
+    <ng-bind-html ng-bind-html="svg">
+    </ng-bind-html>
+</div>
+
+<div id="mindmap-editor">
+    <mindmap-editor mindmap="mindmap" editorId="editorId" svg-loaded="svgLoaded()"></mindmap-editor>
+</div>
