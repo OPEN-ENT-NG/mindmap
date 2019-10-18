@@ -1,6 +1,7 @@
 import { ng, routes, angular, moment, _, template, Behaviours } from 'entcore';
 import http from 'axios';
 import { Mindmap } from '../model';
+import * as jQuery from "jquery";
 
 declare let mapAdapter: any;
 declare let currentLanguage: any;
@@ -133,7 +134,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $scope.action = 'mindmap-open';
             //$scope.mindmap.readOnly = model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.rights.resource.contrib);
 
-            $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
+            $scope.mindmap.readOnly = (!$scope.mindmap.myRights.contrib);
             template.open('mindmap', 'mindmap-edit');
             window.location.hash = '/view/' + $scope.mindmap._id;
 
@@ -160,15 +161,19 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $scope.action = 'mindmap-open';
             //$scope.mindmap.readOnly = model.me.hasRight(mindmap, Behaviours.applicationsBehaviours.mindmap.rights.resource.contrib);
 
-            $scope.mindmap.readOnly = ($scope.mindmap.myRights.contrib ? false : true);
+            $scope.mindmap.readOnly = (!$scope.mindmap.myRights.contrib);
             template.open('mindmap', 'mindmap-print');
             window.location.hash = '/print/' + $scope.mindmap._id;
-        })
+        });
 
         this.svgLoaded = () => {
             $scope.svg = $sce.trustAsHtml($('#workspaceContainer')[0].innerHTML);
             $('#mindmap-editor')[0].remove();
-        }
+            setTimeout(() => {
+                window.print()
+            }, 1000)
+        };
+
     };
 
     /**
