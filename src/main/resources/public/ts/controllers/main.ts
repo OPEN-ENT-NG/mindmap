@@ -142,7 +142,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
     };
     $scope.printMindmap = function(mindmap, redirect=true) {
         if(redirect){
-            window.open('/mindmap/print#/print/' + mindmap._id);
+            window.open('/mindmap/print/mindmap#/print/' + mindmap._id);
             return;
         }
         delete $scope.mindmap;

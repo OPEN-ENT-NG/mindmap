@@ -92,7 +92,7 @@ public class MindmapController extends MongoDbControllerHelper {
         eventStore.createAndStoreEvent(MindmapEvent.ACCESS.name(), request);
     }
 
-    @Get("/print")
+    @Get("/print/mindmap")//avoid route conflict
     @SecuredAction("mindmap.print")
     public void printView(HttpServerRequest request) {
         renderView(request, new JsonObject(), "print.html", null);
