@@ -25,7 +25,7 @@ ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServicePro
                     title: resource.name, 
                     cover: resource.thumbnail,
                     application: 'MindMap',
-                    pdfUri: `/mindmap#/print/${resource._id}`
+                    pdfUri: `/mindmap/print#/print/${resource._id}`
                 }
             }
         };

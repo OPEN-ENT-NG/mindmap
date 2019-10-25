@@ -92,6 +92,12 @@ public class MindmapController extends MongoDbControllerHelper {
         eventStore.createAndStoreEvent(MindmapEvent.ACCESS.name(), request);
     }
 
+    @Get("/print")
+    @SecuredAction("mindmap.print")
+    public void printView(HttpServerRequest request) {
+        renderView(request, new JsonObject(), "print.html", null);
+    }
+
     @Override
     @Get("/list/all")
     @ApiDoc("Allows to list all mindmaps")

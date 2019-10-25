@@ -140,7 +140,11 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
 
         })
     };
-    $scope.printMindmap = function(mindmap) {
+    $scope.printMindmap = function(mindmap, redirect=true) {
+        if(redirect){
+            window.open('/mindmap/print#/print/' + mindmap._id);
+            return;
+        }
         delete $scope.mindmap;
         delete $scope.selectedMindmap;
         $scope.notFound = false;
@@ -163,7 +167,6 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
 
             $scope.mindmap.readOnly = (!$scope.mindmap.myRights.contrib);
             template.open('mindmap', 'mindmap-print');
-            window.location.hash = '/print/' + $scope.mindmap._id;
         });
 
         this.svgLoaded = () => {
@@ -420,7 +423,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 });
                 if (m) {
                     $scope.notFound = "false";
-                    $scope.printMindmap(m);
+                    $scope.printMindmap(m, false);
                 } else {
                     $scope.notFound = "true";
                     $scope.openMainPage();
