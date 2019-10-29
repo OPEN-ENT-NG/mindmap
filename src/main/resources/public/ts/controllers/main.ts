@@ -170,11 +170,13 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         });
 
         this.svgLoaded = () => {
-            $scope.svg = $sce.trustAsHtml($('#workspaceContainer')[0].innerHTML);
+            const svg = $('#workspaceContainer');
+            svg.find("svg").removeAttr("preserveAspectRatio").attr("preserveAspectRatio", "true")
+            $scope.svg = $sce.trustAsHtml(svg[0].innerHTML);
             $('#mindmap-editor')[0].remove();
             setTimeout(() => {
                 window.print()
-            }, 1000)
+            }, 3000)
         };
 
     };
