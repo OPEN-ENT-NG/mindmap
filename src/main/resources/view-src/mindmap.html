@@ -81,7 +81,9 @@
 
         <div ng-if="printMode">
             <section id="mindmap-content">
-                <container template="mindmap" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+                <container template="mindmap" class="flexible navigation block"
+                           ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"
+                ></container>
             </section>
         </div>
         <div ng-if="notFound">
