@@ -10776,6 +10776,7 @@ mindplot.widget.IMenu = new Class({
                     $notify($msg("SAVE_COMPLETE"))
                 }
                 l.setRequireChange(false)
+                l._designer.onSaveSuccess && l._designer.onSaveSuccess(l);
             },
             onError: function(a) {
                 if (m) {

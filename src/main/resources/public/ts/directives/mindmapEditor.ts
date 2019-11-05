@@ -1,4 +1,4 @@
-import { ng } from 'entcore';
+import { ng, INavigationGuard, navigationGuardService } from 'entcore';
 
 declare let designer: any;
 declare let $moo: any;
@@ -9,9 +9,18 @@ declare let buildDesigner: any;
 declare let toolbarNotifier: any;
 declare let $notify: any;
 
+class MindmapChangeGuard implements INavigationGuard {
+	reference: number = 0;
+	undoSteps: number = 0;
+	reset(): void {
+		this.reference = this.undoSteps;
+	}
+	canNavigate(): boolean {
+		return this.reference == this.undoSteps;
+	}
+}
 
-export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout', function($timeout) {
-
+export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout', function ($timeout) {
 	return {
 		scope: {
 			mindmap: '=',
@@ -21,10 +30,12 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 		restrict: 'E',
 		replace: true,
 		templateUrl: '/mindmap/public/template/directives/mindmap-editor.html',
-		link: function(scope, element, attrs) {
-
-            // Destroy the wisemapping properly
-			element.on('$destroy', function() {
+		link: function (scope, element, attrs) {	
+			const guard = new MindmapChangeGuard();
+			navigationGuardService.registerGuard(guard);
+			// Destroy the wisemapping properly
+			element.on('$destroy', function () {
+				navigationGuardService.unregisterGuard(guard);
 				if (designer) {
 					designer.destroy();
 				}
@@ -34,7 +45,7 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 			});
 
 			// Wait for all requirements to be loaded
-			$timeout(function() {
+			$timeout(function () {
 				var mindmap;
 				var mapId = scope.mindmap;
 
@@ -47,7 +58,9 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 
 				mindplot.EventBus.instance = new mindplot.EventBus();
 				var designer = buildDesigner(options);
-
+				designer.$events.modelUpdate.push((e) => {
+					guard.undoSteps = e.undoSteps;
+				})
 				toolbarNotifier = new mindplot.widget.ToolbarNotifier();
 				$notify = toolbarNotifier.logMessage.bind(toolbarNotifier);
 
@@ -60,7 +73,9 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 				} else {
 					mindmap = persistence.load(mapId.name, mapId.map);
 				}
-
+				designer.onSaveSuccess = (e)=>{
+					guard.reset();
+				}
 				designer.loadMap(mindmap);
 				scope.svgLoaded();
 			});
