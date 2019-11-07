@@ -32,10 +32,10 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 		templateUrl: '/mindmap/public/template/directives/mindmap-editor.html',
 		link: function (scope, element, attrs) {	
 			const guard = new MindmapChangeGuard();
-			navigationGuardService.registerGuard(guard);
+			navigationGuardService.registerIndependantGuard(guard);
 			// Destroy the wisemapping properly
 			element.on('$destroy', function () {
-				navigationGuardService.unregisterGuard(guard);
+				navigationGuardService.unregisterIndependantGuard(guard);
 				if (designer) {
 					designer.destroy();
 				}
