@@ -17,8 +17,8 @@ declare let saveAs: (data, name, opts?) => void;
  * @param model the mindmap model.
  */
 
-export const MindmapController = ng.controller('MindmapController', ['$scope', 'model', 'route', '$timeout', '$sce',
-    ($scope, model, route, $timeout, $sce) => {
+export const MindmapController = ng.controller('MindmapController', ['$scope', 'model', 'route', '$timeout', '$sce', '$location',
+    ($scope, model, route, $timeout, $sce, $location) => {
 
     $scope.printMode = false;
     $scope.template = template;
@@ -47,7 +47,9 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         template.open('mindmap', 'mindmap-create');
 
     };
-
+    $scope.goto = function ( path ) {
+        $location.path( path );
+    };
     /**
      * Allows to save the current edited mindmap in the scope. After saving the
      * current mindmap this method closes the edit view too.
