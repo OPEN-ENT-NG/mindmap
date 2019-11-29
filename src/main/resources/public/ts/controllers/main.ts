@@ -140,6 +140,47 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
 
         })
     };
+    $scope.printPngMindmap = function(mindmap, redirect=true){
+        if(redirect){
+            window.open('/mindmap/print/mindmap#/print/png/' + mindmap._id);
+            return;
+        }
+        delete $scope.mindmap;
+        delete $scope.selectedMindmap;
+        $scope.notFound = false;
+        $scope.printMode = true;
+        $scope.printModePng = true;
+
+        template.close('main');
+        template.close('mindmap');
+        template.close('mindmap-list');
+
+        // Need to wait before opening a mindmap
+        $timeout(function() {
+            $scope.mindmaps.forEach(function(m) {
+                m.showButtons = false;
+            });
+            $scope.editorId = $scope.editorId + 1;
+            $scope.mindmap = $scope.selectedMindmap = mindmap;
+            mapAdapter.adapt($scope);
+            $scope.action = 'mindmap-open';
+
+            $scope.mindmap.readOnly = (!$scope.mindmap.myRights.contrib);
+            template.open('mindmap', 'mindmap-print-png');
+        });
+
+        this.svgLoaded = async () => {
+                const svg = $('#workspaceContainer');
+                const response = await http.post("/mindmap/export/png",{
+                    svgXml:svg[0].innerHTML
+                });
+                $('#mindmap-editor')[0].remove();
+                const imageData = response.data.image;
+                $("img#printpng").attr("src","data:image/png;base64,"+ imageData);
+                setTimeout(()=>window.print(), 1000)
+        };
+
+    }
     $scope.printMindmap = function(mindmap, redirect=true) {
         if(redirect){
             window.open('/mindmap/print/mindmap#/print/' + mindmap._id);
@@ -426,6 +467,21 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 if (m) {
                     $scope.notFound = "false";
                     $scope.printMindmap(m, false);
+                } else {
+                    $scope.notFound = "true";
+                    $scope.openMainPage();
+                }
+            });
+
+        },
+        printPngMindmap: async (params) => {
+            model.mindmaps.sync(function() {
+                var m = _.find(model.mindmaps.all, function(mindmap){
+                    return mindmap._id === params.mindmapId;
+                });
+                if (m) {
+                    $scope.notFound = "false";
+                    $scope.printPngMindmap(m, false);
                 } else {
                     $scope.notFound = "true";
                     $scope.openMainPage();

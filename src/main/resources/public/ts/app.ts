@@ -25,7 +25,7 @@ ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServicePro
                     title: resource.name, 
                     cover: resource.thumbnail,
                     application: 'MindMap',
-                    pdfUri: `/mindmap/print/mindmap#/print/${resource._id}`
+                    pdfUri: `/mindmap/print/mindmap#/print/png/${resource._id}`
                 }
             }
         };
@@ -52,6 +52,9 @@ routes.define(($routeProvider) => {
         })
         .when('/print/:mindmapId', {
             action: 'printMindmap'
+        })
+        .when('/print/png/:mindmapId', {
+            action: 'printPngMindmap'
         })
         .otherwise({
             action: 'listMindmap'

@@ -85,7 +85,7 @@
                     <i18n>bpr.publish</i18n>
                 </button>
             </resource-right>
-            <button ng-if="mindmaps.selection().length === 1" ng-click="printMindmap(mindmaps.selection()[0], $event)">
+            <button ng-if="mindmaps.selection().length === 1" ng-click="printPngMindmap(mindmaps.selection()[0], $event)">
                 <i18n>print</i18n>
             </button>
             <resource-right name="manage" resource="mindmaps.selection()" class="cell">
