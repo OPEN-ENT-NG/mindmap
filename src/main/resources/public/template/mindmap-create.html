@@ -1,5 +1,5 @@
 <article class="row">
-    <form name="form">
+    <form name="form" guard-root>
         <div class="rigid-grid row">
             <div class="two cell clip height-two">
                 <div class="absolute" loading-panel="upload-mindmap-thumbnail">
@@ -12,16 +12,16 @@
                     <div class="row">
                         <hr class="row" />
                     </div>
-                    <textarea ng-model="mindmap.description" class="twelve cell" i18n-placeholder="mindmap.description" />
+                    <textarea ng-model="mindmap.description" class="twelve cell" i18n-placeholder="mindmap.description" input-guard/>
                     <div class="row">
                         <hr class="row" />
                     </div>
                 </div>
                 <div class="row">
-                    <button ng-click="saveMindmap()" class="right-magnet" ng-disabled="form.$invalid">
+                    <button reset-guard="saveMindmap()" class="right-magnet" ng-disabled="form.$invalid">
                         <i18n>save</i18n>
                     </button>
-                    <input type="button" class="button right-magnet cancel" ng-click="cancelMindmapEdit()" i18n-value="cancel">
+                    <input type="button" class="button right-magnet cancel" navigation-trigger="cancelMindmapEdit()" i18n-value="cancel">
                 </div>
             </div>
         </div>
