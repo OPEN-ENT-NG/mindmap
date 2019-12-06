@@ -31,6 +31,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
     $scope.exportInProgress = false;
     $scope.action = 'mindmap-list';
     $scope.notFound = false;
+    $scope.forceToClose = false;
 
     // By default open the mindmap list
     template.open('mindmap', 'mindmap-list');
@@ -55,6 +56,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
      * current mindmap this method closes the edit view too.
      */
     $scope.saveMindmap = function() {
+        $scope.forceToClose = true;
         $scope.master = angular.copy($scope.mindmap);
         $scope.master.save(function() {
             $scope.mindmaps.sync(function() {
@@ -318,6 +320,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         $scope.action = 'mindmap-list';
         template.open('mindmap', 'mindmap-list');
         $scope.$apply();
+        $scope.forceToClose = false;
     }
 
     /**
