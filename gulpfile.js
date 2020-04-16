@@ -60,7 +60,7 @@ function getModName(fileContent){
 gulp.task('watch', () => {
     var springboard = argv.springboard;
 if(!springboard){
-    springboard = '../springboard-open-ent/';
+    springboard = '../recette/';
 }
 if(springboard[springboard.length - 1] !== '/'){
     springboard += '/';
