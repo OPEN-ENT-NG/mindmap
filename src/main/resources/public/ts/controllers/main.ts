@@ -120,7 +120,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
      */
     $scope.getMindmapThumbnail = function(mindmap){
         if(!mindmap.thumbnail || mindmap.thumbnail === ''){
-            return '/img/illustrations/image-default.svg';
+            return '/img/illustrations/mindmap.svg';
         }
         return mindmap.thumbnail + '?thumbnail=120x120';
     };
