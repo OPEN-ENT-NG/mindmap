@@ -10,17 +10,11 @@ export class Mindmaps extends Selection<Mindmap> {
         super([]);
     };
 
-    sync (callback) {
-        http.get('/mindmap/list/all').then((mindmaps) => {
-
-            this.all = [];
-            _.forEach(mindmaps.data, (mindmap) => {
-                this.all.push(Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
-            });
-
-            if(typeof callback === 'function'){
-                callback();
-            }
+    async sync () {
+        let mindmaps = await http.get('/mindmap/list/all');
+        this.all = [];
+        _.forEach(mindmaps.data, (mindmap) => {
+            this.all.push(Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
         });
     };
 

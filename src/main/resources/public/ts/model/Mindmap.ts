@@ -31,59 +31,38 @@ export class Mindmap implements Selectable, Shareable {
     /**
      * Allows to save the mindmap. If the mindmap is new and does not have any id set,
      * this method calls the create method otherwise it calls the update method.
-     * @param callback a function to call after saving.
      */
-    save(callback) {
+    async save() {
         if (this._id) {
-            this.update(callback);
+            await this.update();
         } else {
-            this.create(callback);
+            await this.create();
         }
     };
 
     /**
-     * Allows to crea
-     *
-     *
-     * te a new mindmap. This method calls the REST web service to
+     * Allows to create a new mindmap. This method calls the REST web service to
      * persist data.
-     * @param callback a function to call after create.
      */
-    create(callback) {
-        http.post('/mindmap', this.toJSON()).then(function () {
-            if (typeof callback === 'function') {
-                callback();
-            }
-        });
+    async create() {
+        await http.post('/mindmap', this.toJSON());
     };
 
     /**
      * Allows to update the mindmap. This method calls the REST web service to persist
      * data.
-     * @param callback a function to call after create.
      */
-    update(callback) {
-        http.put('/mindmap/' + this._id, this.toJSON()).then(function () {
-            if (typeof callback === 'function') {
-                callback();
-            }
-        });
+    async update() {
+        await http.put('/mindmap/' + this._id, this.toJSON());
     };
 
     /**
      * Allows to delete the mindmap. This method calls the REST web service to delete
      * data.
-     * @param callback a function to call after delete.
      */
-    delete(callback) {
-        var that = this;
-        http.delete('/mindmap/' + this._id, { data: this.toJSON() })
-            .then(() => {
-                (model as any).mindmaps.remove(that);
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            });
+    async delete() {
+        await http.delete('/mindmap/' + this._id, { data: this.toJSON() });
+        (model as any).mindmaps.remove(this);
     };
 
     /**

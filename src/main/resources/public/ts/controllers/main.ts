@@ -55,37 +55,38 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
      * Allows to save the current edited mindmap in the scope. After saving the
      * current mindmap this method closes the edit view too.
      */
-    $scope.saveMindmap = function() {
+    $scope.saveMindmap = async function() {
         $scope.forceToClose = true;
         $scope.master = angular.copy($scope.mindmap);
-        $scope.master.save(function() {
-            $scope.mindmaps.sync(function() {
-                 $scope.updateSearchBar();
-                 $scope.cancelMindmapEdit();
-            });
-        });
+        await $scope.master.save();
+        //await $scope.mindmaps.sync(); // done by updateSearchBar() below
+        $scope.updateSearchBar();
+        $scope.cancelMindmapEdit();
     };
 
 
     /**
      * Update the search bar according server mindmaps
      */
-    $scope.updateSearchBar = function() {
-        model.mindmaps.sync(function() {
-            $scope.searchbar.mindmaps = $scope.mindmaps.all.map(function(mindmap) {
-                return {
-                    title : mindmap.name,
-                    _id : mindmap._id,
-                    toString : function() {
-                                    return this.title;
-                               }
+    $scope.updateSearchBar = async function(mustApplyScope: boolean = false) {
+        await model.mindmaps.sync();
+        $scope.searchbar.mindmaps = $scope.mindmaps.all.map(function(mindmap) {
+            return {
+                title : mindmap.name,
+                _id : mindmap._id,
+                toString : function() {
+                    return this.title;
                 }
-            });
+            }
         });
+        if( mustApplyScope ) {
+            // Wait a tick and apply the modified scope;
+            setTimeout( () => { $scope.$apply() }, 0);
+        }
     }
 
     // Update search bar
-    $scope.updateSearchBar();
+    $scope.updateSearchBar( true );
 
 
     /**
@@ -99,11 +100,10 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
     /**
      * Save the current mindmap in database
      */
-    $scope.saveMap = function() {
+    $scope.saveMap = async function() {
         $scope.master = angular.copy($scope.mindmap);
-        $scope.master.save(function() {
-            $scope.mindmaps.sync();
-        });
+        await $scope.master.save();
+        $scope.mindmaps.sync();
     };
 
     /**
@@ -412,11 +412,10 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
      * Allows to remove the current mindmap in the scope.
      */
     $scope.removeMindmap = function() {
-        _.map($scope.mindmaps.selection(), function(mindmap){
-            mindmap.delete(function() {
-                $scope.updateSearchBar();
-                $scope.$apply();
-            });
+        _.map($scope.mindmaps.selection(), async function(mindmap){
+            await mindmap.delete();
+            $scope.updateSearchBar();
+            $scope.$apply();
         });
 
         delete $scope.mindmap;
@@ -447,52 +446,46 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
          * Retrieve a mindmap from its database id and open it in a wisemapping editor
          */
         viewMindmap: async (params) => {
-            model.mindmaps.sync(function() {
-                var m = _.find(model.mindmaps.all, function(mindmap){
-                    return mindmap._id === params.mindmapId;
-                });
-                if (m) {
-                    $scope.notFound = "false";
-                    $scope.openMindmap(m);
-                } else {
-                    $scope.notFound = "true";
-                    $scope.openMainPage();
-                }
+            await model.mindmaps.sync();
+            var m = _.find(model.mindmaps.all, function(mindmap){
+                return mindmap._id === params.mindmapId;
             });
-
+            if (m) {
+                $scope.notFound = "false";
+                $scope.openMindmap(m);
+            } else {
+                $scope.notFound = "true";
+                $scope.openMainPage();
+            }
         },
         /**
          * Retrieve a mindmap from its database id and open it in a wisemapping editor
          */
         printMindmap: async (params) => {
-            model.mindmaps.sync(function() {
-                var m = _.find(model.mindmaps.all, function(mindmap){
-                    return mindmap._id === params.mindmapId;
-                });
-                if (m) {
-                    $scope.notFound = "false";
-                    $scope.printMindmap(m, false);
-                } else {
-                    $scope.notFound = "true";
-                    $scope.openMainPage();
-                }
+            await model.mindmaps.sync();
+            var m = _.find(model.mindmaps.all, function(mindmap){
+                return mindmap._id === params.mindmapId;
             });
-
+            if (m) {
+                $scope.notFound = "false";
+                $scope.printMindmap(m, false);
+            } else {
+                $scope.notFound = "true";
+                $scope.openMainPage();
+            }
         },
         printPngMindmap: async (params) => {
-            model.mindmaps.sync(function() {
-                var m = _.find(model.mindmaps.all, function(mindmap){
-                    return mindmap._id === params.mindmapId;
-                });
-                if (m) {
-                    $scope.notFound = "false";
-                    $scope.printPngMindmap(m, false);
-                } else {
-                    $scope.notFound = "true";
-                    $scope.openMainPage();
-                }
+            await model.mindmaps.sync();
+            var m = _.find(model.mindmaps.all, function(mindmap){
+                return mindmap._id === params.mindmapId;
             });
-
+            if (m) {
+                $scope.notFound = "false";
+                $scope.printPngMindmap(m, false);
+            } else {
+                $scope.notFound = "true";
+                $scope.openMainPage();
+            }
         },
 
         /**

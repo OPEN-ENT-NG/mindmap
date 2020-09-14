@@ -33,12 +33,10 @@ ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServicePro
 }]));
 
 /**
- * Allows to create a model and load the list of mindmaps from the backend.
+ * Allows to create a model.
  */
 model.build = function () {
-
     this.mindmaps = new Mindmaps();
-    this.mindmaps.sync();
 };
 
 
