@@ -32,6 +32,17 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
     $scope.action = 'mindmap-list';
     $scope.notFound = false;
     $scope.forceToClose = false;
+    var _isLoading = false;
+    $scope.isLoading = function(optionalVal) {
+        if( typeof optionalVal === "undefined" ) return _isLoading;
+        if( optionalVal!=_isLoading ) {
+            _isLoading = optionalVal;
+            $scope.$apply();
+        }
+    };
+    $scope.showEmptyScreen = function(){
+        return !$scope.isLoading() && $scope.mindmaps && $scope.mindmaps.all && $scope.mindmaps.all.length===0;
+    }
 
     // By default open the mindmap list
     template.open('mindmap', 'mindmap-list');
@@ -68,7 +79,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
     /**
      * Update the search bar according server mindmaps
      */
-    $scope.updateSearchBar = async function(mustApplyScope: boolean = false) {
+    $scope.updateSearchBar = async function() {
+        $scope.isLoading( true );
         await model.mindmaps.sync();
         $scope.searchbar.mindmaps = $scope.mindmaps.all.map(function(mindmap) {
             return {
@@ -79,14 +91,11 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 }
             }
         });
-        if( mustApplyScope ) {
-            // Wait a tick and apply the modified scope;
-            setTimeout( () => { $scope.$apply() }, 0);
-        }
+        $scope.isLoading( false );
     }
 
-    // Update search bar
-    $scope.updateSearchBar( true );
+    // Update search bar after 1 tick (we cannot block the creation of the controller)
+    setTimeout( () => {$scope.updateSearchBar();}, 0);
 
 
     /**

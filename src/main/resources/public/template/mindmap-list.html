@@ -1,3 +1,5 @@
+<div ng-if="isLoading()" class="twelve cell"><h1 class="centered"><i class="loading"></i></h1></div>
+
 <div class="twelve cell" workflow="mindmap.list">
     <div class="row rigid-grid">
         <!-- Search bar -->
@@ -11,7 +13,7 @@
         </div>
     </div>
     <!-- 1D et 2D Création -->
-    <div class="emptyscreen" ng-if="!mindmaps.all.length" workflow="mindmap.create">
+    <div class="emptyscreen" ng-if="showEmptyScreen()" workflow="mindmap.create">
         <h2 class="emptyscreen-header"><i18n>empty.mindmap.creation.title</i18n></h2>
         <img class="emptyscreen-image__mini" src="/mindmap/public/img/empty-mindmap.svg">
         <p class="emptyscreen-footer">
@@ -22,7 +24,7 @@
         </a>
     </div>
     <!-- 1D et 2D Consultation -->
-    <div class="emptyscreen" ng-if="!mindmaps.all.length" workflow-not="mindmap.create">
+    <div class="emptyscreen" ng-if="showEmptyScreen()" workflow-not="mindmap.create">
         <h2 class="emptyscreen-header"><i18n>empty.mindmap.consultation.title</i18n></h2>
         <img class="emptyscreen-image__mini" src="/mindmap/public/img/empty-mindmap.svg">
         <p class="emptyscreen-footer">
