@@ -32,3 +32,5 @@ rev-manifest.json
 /build
 /bin
 node_modules/
+gradle/
+gradlew*
