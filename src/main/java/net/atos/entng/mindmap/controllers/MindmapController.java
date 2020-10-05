@@ -21,15 +21,20 @@ package net.atos.entng.mindmap.controllers;
 
 import java.util.Map;
 
+import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.I18n;
+import fr.wseduc.webutils.http.Renders;
 import net.atos.entng.mindmap.Mindmap;
 import net.atos.entng.mindmap.service.MindmapService;
 import net.atos.entng.mindmap.service.impl.MindmapServiceImpl;
 
+import org.entcore.common.controller.ControllerHelper;
+import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.http.filter.OwnerOnly;
 import org.entcore.common.http.filter.ResourceFilter;
+import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -55,22 +60,19 @@ import fr.wseduc.webutils.request.RequestUtils;
  * @author AtoS
  */
 public class MindmapController extends MongoDbControllerHelper {
-
+    static final String RESOURCE_NAME = "mindmap";
     /**
      * Mindmap service
      */
     private final MindmapService mindmapService;
+    private EventHelper eventHelper;
 
-    private EventStore eventStore;
-
-    private enum MindmapEvent {
-        ACCESS
-    }
 
     @Override
     public void init(Vertx vertx, JsonObject config, RouteMatcher rm, Map<String, fr.wseduc.webutils.security.SecuredAction> securedActions) {
         super.init(vertx, config, rm, securedActions);
-        eventStore = EventStoreFactory.getFactory().getEventStore(Mindmap.class.getSimpleName());
+        final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(Mindmap.class.getSimpleName());
+        this.eventHelper = new EventHelper(eventStore);
     }
 
     /**
@@ -89,7 +91,7 @@ public class MindmapController extends MongoDbControllerHelper {
         renderView(request);
 
         // Create event "access to application Mindmap" and store it, for module "statistics"
-        eventStore.createAndStoreEvent(MindmapEvent.ACCESS.name(), request);
+        eventHelper.onAccess(request);
     }
 
     @Get("/print/mindmap")//avoid route conflict
@@ -111,12 +113,12 @@ public class MindmapController extends MongoDbControllerHelper {
     @ApiDoc("Allows to create a new mindmap")
     @SecuredAction("mindmap.create")
     public void create(final HttpServerRequest request) {
-        RequestUtils.bodyToJson(request, pathPrefix + "mindmap", new Handler<JsonObject>() {
-
-            @Override
-            public void handle(JsonObject event) {
-                MindmapController.super.create(request);
-            }
+        RequestUtils.bodyToJson(request, pathPrefix + "mindmap", object -> {
+            super.create(request, r -> {
+                if(r.succeeded()){
+                    eventHelper.onCreateResource(request, RESOURCE_NAME);
+                }
+            });
         });
     }
 
