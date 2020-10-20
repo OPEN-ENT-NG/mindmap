@@ -40,9 +40,9 @@
                 <div class="bottom">
                     <div class="content">
                         <div class="cell" ng-click="openMindmap(m)">
-                            <strong>[[m.name]]</strong>
-                            <br />[[m.owner.displayName]]
-                            <br />[[formatDate(m.modified)]]
+                            <strong class="ressource-name" tooltip="[[m.name]]">[[m.name]]</strong>
+                            <span class="owner">[[m.owner.displayName]]</span>
+                            <span class="date">[[formatDate(m.modified)]]</span>
                         </div>
                     </div>
                 </div>
