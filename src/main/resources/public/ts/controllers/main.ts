@@ -154,6 +154,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         })
     };
     $scope.printPngMindmap = function(mindmap, redirect=true){
+        console.log("fct");
         if(redirect){
             window.open('/mindmap/print/mindmap#/print/png/' + mindmap._id);
             return;
@@ -190,6 +191,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 $('#mindmap-editor')[0].remove();
                 const imageData = response.data.image;
                 $("img#printpng").attr("src","data:image/png;base64,"+ imageData);
+                $("body").attr("style", "");
                 setTimeout(()=>window.print(), 1000)
         };
 
