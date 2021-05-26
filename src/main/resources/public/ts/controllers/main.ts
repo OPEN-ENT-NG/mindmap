@@ -178,7 +178,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $scope.mindmap = $scope.selectedMindmap = mindmap;
             mapAdapter.adapt($scope);
             $scope.action = 'mindmap-open';
-
+            $("body").attr("style", "");
             $scope.mindmap.readOnly = (!$scope.mindmap.myRights.contrib);
             template.open('mindmap', 'mindmap-print-png');
         });
