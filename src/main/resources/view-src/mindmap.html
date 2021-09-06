@@ -3,6 +3,7 @@
     <head>
         <title>{{#i18n}}mindmap.title{{/i18n}}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/mindmap/public/dist/entcore/ng-app.js" id="context" type="text/javascript"></script>
         <script src="/mindmap/public/dist/application.js" type="text/javascript"></script>
 
@@ -22,7 +23,7 @@
             <infotip name="mindmap-no-mobile" class="warning zero-desktop">
                 <strong><i18n>warning.no.mobile</i18n></strong>
             </infotip>
-            <div class="row">    
+            <div class="row">
                 <div class="twelve cell">
                     <div class="seven cell">
                         <side-panel class="zero-mobile" ng-if="selectedMindmap">
@@ -34,7 +35,7 @@
                                 <span navigation-trigger="goto('/')"><a href="/mindmap"><i18n>mindmap.title</i18n></a></span> <span subtitle ng-if="selectedMindmap.name && selectedMindmap.name.trim().length > 0"> >  [[mindmap.name]]</span>
                             </h1>
 						</app-title>
-                    </div>                   
+                    </div>
                     <div class="contextual-buttons five cell">
                         <button workflow="mindmap.create" ng-if="(!mindmap || !mindmap._id) && mindmaps.all.length" navigation-trigger="newMindmap()" class="cell right-magnet">
                             <i18n>mindmap.new</i18n>
