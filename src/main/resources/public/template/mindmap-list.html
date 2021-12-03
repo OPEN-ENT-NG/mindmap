@@ -1,67 +1,80 @@
 <div ng-if="isLoading()" class="twelve cell"><h1 class="centered"><i class="loading"></i></h1></div>
 
 <div class="twelve cell" workflow="mindmap.list">
-    <div class="row rigid-grid">
+    <div class="row top-spacing-twice">
         <!-- Search bar -->
-        <div class="four cell" ng-if="mindmaps.all.length">
-            <autocomplete
-                    workflow="mindmap.list"
-                    options="searchbar.mindmaps"
-                    ng-change="openPageFromSearchbar(selectedMindmap._id)"
-                    ng-model="selectedMindmap">
-            </autocomplete>
-        </div>
-    </div>
-    <!-- 1D et 2D Création -->
-    <div class="emptyscreen" ng-if="showEmptyScreen()" workflow="mindmap.create">
-        <h2 class="emptyscreen-header"><i18n>empty.mindmap.creation.title</i18n></h2>
-        <img class="emptyscreen-image__mini" src="/mindmap/public/img/empty-mindmap.svg">
-        <p class="emptyscreen-footer">
-            <i18n>empty.mindmap.creation</i18n>
-        </p>
-        <a class="button" workflow="mindmap.create" ng-if="!mindmap || !mindmap._id" ng-click="newMindmap()">
-            <i18n>mindmap.new</i18n>
-        </a>
-    </div>
-    <!-- 1D et 2D Consultation -->
-    <div class="emptyscreen" ng-if="showEmptyScreen()" workflow-not="mindmap.create">
-        <h2 class="emptyscreen-header"><i18n>empty.mindmap.consultation.title</i18n></h2>
-        <img class="emptyscreen-image__mini" src="/mindmap/public/img/empty-mindmap.svg">
-        <p class="emptyscreen-footer">
-            <i18n>empty.mindmap.consultation</i18n>
-        </p>
-    </div>
-    <div class="fallen dominos">
-        <div class="item" ng-repeat="m in mindmaps.all">
-            <section class="domino cyan">
-                <div class="top" ng-click="openMindmap(m)">
-                    <img class="absolute" skin-src="[[getMindmapThumbnail(m)]]" />
-                </div>
-                <div class="bottom">
-                    <div class="content">
-                        <div class="cell" ng-click="openMindmap(m)">
-                            <strong class="ressource-name" tooltip="[[m.name]]">[[m.name]]</strong>
-                            <span class="owner">[[m.owner.displayName]]</span>
-                            <span class="date">[[formatDate(m.modified)]]</span>
-                        </div>
-                    </div>
-                </div>
-                <span ng-show="canManageMindmap(m)">
-                    <check-tool ng-model="m.selected" ng-click="$event.stopPropagation()" ></check-tool>
-                </span>
-            </section>
+        <div class="four cell">
+
+            <nav class="vertical mobile-navigation side-nav" side-nav style="height: auto;">
+                <folder-tree tree-props="folderTreeRoot"></folder-tree>
+                <a class="classic-link" ng-click="display.createFolder = true">
+                    <i18n><span class="no-style ng-scope">mindmap.folder.create</span></i18n>
+                </a>
+            </nav>
+
         </div>
 
+        <directive-folder-list folders="folders.all"
+                               mindmaps-item="mindmapsItem.mindmapsAll"
+                               on-folder-tree-root="folderTreeDirective"
+                               on-open-folder="openFolderByView"
+                               on-update-folder="updateFolder"
+                               on-update-mindmap="updateMindmap"
+                               on-open-mindmap="openMindmap"
+                               on-delete-folder="deleteFolder"
+                               on-delete-mindmap="deleteMindmap"
+                               on-new-mindmap="newMindmap"
+                               on-move-folder="moveFolder"
+                               tree-move-folder="displayTreeMoveFolder"
+                               on-move-mindmap="moveMindmap"
+                               selected-folders-id="selectedFoldersId">
+        </directive-folder-list>
     </div>
+
+
+    <lightbox show="display.createFolder" on-close="display.createFolder = false;" class="ng-isolate-scope">
+
+        <div class="content">
+            <div class="twelve cell">
+                <h2 class="ng-scope">
+                    <i18n><span class="no-style ng-scope">mindmap.folder.create</span></i18n>
+                </h2>
+                <div class="row ng-scope">
+                    <label class="three cell">
+                        <i18n><span class="no-style ng-scope">mindmap.folder.title</span></i18n>
+                    </label>
+                    <input class="nine cell ng-pristine ng-untouched ng-valid ng-empty" type="text"
+                           ng-model="folderTitle">
+                </div>
+                <div class="row ng-scope">
+                    <button ng-click="createFolder(folderTitle); display.createFolder = false;"
+                            ng-disabled="!folderTitle"
+                            class="right-magnet" disabled="disabled">
+                        <i18n><span class="no-style ng-scope">mindmap.folder.buttonCreate</span></i18n>
+                    </button>
+                    <button class="cancel right-magnet" ng-click="display.createFolder = false;">
+                        <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span></i18n>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </lightbox>
+
 
     <!-- Allows to display a confirm dialog before deleting a mindmap -->
     <div ng-if="display.confirmDeleteMindmap">
         <lightbox show="display.confirmDeleteMindmap" on-close="cancelRemoveMindmap()">
-            <p><i18n>mindmap.delete.confirm</i18n></p>
+            <p>
+                <i18n>mindmap.delete.confirm</i18n>
+            </p>
             <p ng-repeat="mindmap in mindmaps.selection()">[[mindmap.name]]</p>
             <div class="row">
-                <button class="right-magnet" ng-click="removeMindmap()"><i18n>remove</i18n></button>
-                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveMindmap()" />
+                <button class="right-magnet" ng-click="removeMindmap()">
+                    <i18n>remove</i18n>
+                </button>
+                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveMindmap()"/>
             </div>
         </lightbox>
     </div>
@@ -74,20 +87,24 @@
     </div>
 </div>
 
-<section class="toggle-buttons" ng-class="{ hide: mindmaps.selection().length === 0 }">
+
+<section class="toggle-buttons" ng-class="{  hide: mindmaps.selection().length === 0}">
     <div class="toggle">
         <div class="row">
             <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button ng-if="mindmaps.selection().length === 1" ng-click="editMindmap(mindmaps.selection()[0], $event)">
+                <button ng-if="mindmaps.selection().length === 1"
+                        ng-click="editMindmap(mindmaps.selection()[0], $event)">
                     <i18n>properties</i18n>
                 </button>
             </resource-right>
             <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button workflow="mindmap.publish" ng-if="mindmaps.selection().length === 1" library-resource="mindmaps.selection()[0]">
+                <button workflow="mindmap.publish" ng-if="mindmaps.selection().length === 1"
+                        library-resource="mindmaps.selection()[0]">
                     <i18n>bpr.publish</i18n>
                 </button>
             </resource-right>
-            <button ng-if="mindmaps.selection().length === 1" ng-click="printPngMindmap(mindmaps.selection()[0], $event)">
+            <button ng-if="mindmaps.selection().length === 1"
+                    ng-click="printPngMindmap(mindmaps.selection()[0], $event)">
                 <i18n>print</i18n>
             </button>
             <resource-right name="manage" resource="mindmaps.selection()" class="cell">
@@ -103,3 +120,5 @@
         </div>
     </div>
 </section>
+</section>
+

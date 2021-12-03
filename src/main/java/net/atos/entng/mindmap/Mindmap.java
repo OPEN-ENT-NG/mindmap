@@ -19,19 +19,23 @@
 
 package net.atos.entng.mindmap;
 
+
+import net.atos.entng.mindmap.controllers.FolderController;
 import net.atos.entng.mindmap.controllers.MindmapController;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
 import net.atos.entng.mindmap.service.impl.MindmapRepositoryEvents;
-
 import net.atos.entng.mindmap.service.impl.MindmapSearchingEvents;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
+
 import org.entcore.common.service.impl.MongoDbSearchService;
+
 
 /**
  * Server to manage mindmaps. This class is the entry point of the Vert.x module.
+ *
  * @author AtoS
  */
 public class Mindmap extends BaseServer {
@@ -40,6 +44,13 @@ public class Mindmap extends BaseServer {
      * Constant to define the MongoDB collection to use with this module.
      */
     public static final String MINDMAP_COLLECTION = "mindmap";
+    public static final String FOLDER_COLLECTION = "mindmap.folder";
+
+    public static final String CREATE_FOLDER = "mindmap.folder.create";
+    public static final String UPDATE_FOLDER = "mindmap.folder.update";
+    public static final String DELETE_FOLDER = "mindmap.folder.delete";
+    public static final String SOFT_DELETE_FOLDER = "mindmap.folder.softDelete";
+    public static final String GET_FOLDER_CHILDREN = "mindmap.folder.getFolderChildren";
 
     /**
      * Entry point of the Vert.x module
@@ -48,16 +59,21 @@ public class Mindmap extends BaseServer {
     public void start() throws Exception {
         super.start();
 
+
         setRepositoryEvents(new MindmapRepositoryEvents(vertx));
 
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(MINDMAP_COLLECTION);
+
+        MongoDbConf confFolder = MongoDbConf.getInstance();
+        confFolder.setCollection(FOLDER_COLLECTION);
 
         setDefaultResourceFilter(new ShareAndOwner());
         if (config.getBoolean("searching-event", true)) {
             setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
         }
         addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION));
+        addController(new FolderController(vertx.eventBus(), FOLDER_COLLECTION));
 
         // Register verticle into the container
         getVertx().deployVerticle(MindmapPNGExporter.class.getName());

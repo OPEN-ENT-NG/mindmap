@@ -1,0 +1,297 @@
+<section class="eight cell twelve-mobile">
+    <div class="row">
+        <article class="icons-view ng-scope" ng-if="vm.folders.length != 0 || vm.mindmapsItem.length != 0">
+            <div class="fallen dominos" class="element mini-block-container">
+                <div ng-repeat="folder in vm.folders ">
+                    <explorer ng-model="folder.selected" on-open="vm.openFolder(folder)"
+                              class="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty">
+                        <a class="container" draggable="false">
+                            <i class="folder-large" dragstart="vm.drag(folder, $originalEvent)"
+                               dragdrop="vm.dropToFolder(folder, $originalEvent)"
+                               dropcondition="vm.dropCondition(folder)"></i>
+                        </a>
+
+                        <legend>
+                            <a>
+                                <span>[[folder.name]]</span>
+                            </a>
+                            <a class="author"><strong>[[folder.ownerName]]</strong></a>
+                        </legend>
+
+
+                    </explorer>
+                    <div ng-if="folder.selected">
+                        <section class="toggle-buttons">
+                            <div class="toggle">
+                                <div class="row">
+                                    <button class="cell" ng-click="vm.openFolder(folder)">
+                                        <i18n>mindmap.folder.manage.open</i18n>
+                                    </button>
+                                    <button class="cell" ng-click="display.updateFolder = true">
+
+                                        <i18n>mindmap.folder.manage.rename</i18n>
+                                    </button>
+                                    <button class="cell"
+                                            ng-click="display.moveFolder = true; vm.treeFolder(folder._id);">
+
+                                        <i18n>mindmap.folder.manage.move</i18n>
+                                    </button>
+                                    <button class="cell" ng-click="display.deleteFolder = true">
+
+                                        <i18n>mindmap.folder.manage.delete</i18n>
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+                        <lightbox show="display.updateFolder" on-close="display.updateFolder = false;"
+                                  class="ng-isolate-scope">
+                            <div class="content">
+                                <div class="twelve cell">
+                                    <h2 class="ng-scope">
+                                        <i18n><span class="no-style ng-scope">mindmap.folder.title.rename</span></i18n>
+                                    </h2>
+                                    <div class="row ng-scope">
+                                        <label class="three cell">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.title</span></i18n>
+                                        </label>
+                                        <input class="nine cell ng-pristine ng-untouched ng-valid ng-empty" type="text"
+                                               ng-model="folderTitle">
+                                    </div>
+                                    <div class="row ng-scope">
+                                        <button ng-click="vm.RenameFolder(folder._id,folderTitle); display.updateFolder = false;"
+                                                ng-disabled="!folderTitle"
+                                                class="right-magnet" disabled="disabled">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.rename</span>
+                                            </i18n>
+                                        </button>
+                                        <button class="cancel right-magnet" ng-click="display.updateFolder = false;">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                                            </i18n>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </lightbox>
+                        <lightbox show="display.moveFolder" class="ng-isolate-scope">
+
+                            <div class="content">
+                                <div class="twelve cell">
+                                    <h2 class="ng-scope">
+                                        <i18n><span class="no-style ng-scope"></span>mindmap.folder.title.move</i18n>
+                                    </h2>
+
+                                    <folder-tree tree-props="vm.onFolderTreeRoot"></folder-tree>
+
+                                    <div class="row ng-scope">
+                                        <button ng-click="vm.moveFolder(folder._id,folder.name); "
+                                                class="right-magnet">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.move</span>
+                                            </i18n>
+                                        </button>
+                                        <button class="cancel right-magnet" ng-click="display.moveFolder = false;">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                                            </i18n>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </lightbox>
+                        <lightbox show="display.deleteFolder" on-close="display.deleteFolder = false;"
+                                  class="ng-isolate-scope">
+
+                            <div class="content">
+                                <div class="twelve cell">
+                                    <h2 class="ng-scope">
+                                        <i18n><span class="no-style ng-scope">mindmap.folder.title.delete</span></i18n>
+                                    </h2>
+                                    <div class="row ng-scope">
+
+                                        <i18n><span class="no-style ng-scope">mindmap.folder.delete.confirm</span>
+                                        </i18n>
+
+                                    </div>
+                                    <div class="row ng-scope">
+                                        <button ng-click="vm.deleteFolder(folder._id); display.deleteFolder = false;"
+                                                class="right-magnet">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.delete</span>
+                                            </i18n>
+                                        </button>
+                                        <button class="cancel right-magnet" ng-click="display.deleteFolder = false;">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                                            </i18n>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </lightbox>
+                    </div>
+
+                </div>
+
+
+                <div class="" ng-repeat="mindmap in  vm.mindmapsItem ">
+                    <explorer ng-model="mindmap.selected" on-open="vm.openMindmap(mindmap)">
+                        <div class="container" draggable="false">
+
+
+                            <div class="top" dragstart="vm.drag(mindmap, $originalEvent)"
+                                 dragdrop="vm.dropToFolder(mindmap, $originalEvent)"
+                                 dropcondition="vm.dropCondition(mindmap)">
+                                <img class="absolute" skin-src="/img/illustrations/mindmap.svg"
+                                     src="https://cdn-preprod-ent77.opendigitaleducation.com/assets/themes/cg77/skins/default/../..//img/illustrations/mindmap.svg">
+                            </div>
+                        </div>
+                        <legend>
+                            <a>
+                                <span>[[mindmap.name]]</span>
+                            </a>
+                            <a class="author"><strong>[[mindmap.ownerName]]</strong></a>
+                        </legend>
+
+
+                    </explorer>
+                    <div ng-if="mindmap.selected">
+                        <section class="toggle-buttons">
+                            <div class="toggle">
+                                <div class="row">
+                                    <button class="cell" ng-click="vm.openMindmap(mindmap)">
+                                        <i18n>mindmap.folder.manage.open</i18n>
+                                    </button>
+                                    <button class="cell" ng-click="display.updateMindmap = true">
+                                        <i18n>mindmap.folder.manage.rename</i18n>
+                                    </button>
+                                    <button class="cell"
+                                            ng-click="display.moveMindmap = true; vm.treeFolder(folder._id);">
+                                        <i18n>mindmap.folder.manage.move</i18n>
+                                    </button>
+                                    <button class="cell" ng-click="display.deleteMindmap = true">
+                                        <i18n>mindmap.folder.manage.delete</i18n>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </section>
+                        <lightbox show="display.updateMindmap" on-close="display.updateMindmap = false;"
+                                  class="ng-isolate-scope">
+
+
+                            <div class="content">
+                                <div class="twelve cell">
+                                    <h2 class="ng-scope">
+                                        <i18n><span class="no-style ng-scope">mindmap.title.rename</span></i18n>
+                                    </h2>
+                                    <div class="row ng-scope">
+                                        <label class="three cell">
+                                            <i18n><span class="no-style ng-scope">mindmap.title.manage</span></i18n>
+                                        </label>
+                                        <input class="nine cell ng-pristine ng-untouched ng-valid ng-empty" type="text"
+                                               ng-model="mindmapTitle">
+                                    </div>
+                                    <div class="row ng-scope">
+                                        <button ng-click="vm.RenameMindmap(mindmap._id,mindmapTitle); display.updateMindmap = false;"
+                                                ng-disabled="!mindmapTitle"
+                                                class="right-magnet" disabled="disabled">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.rename</span>
+                                            </i18n>
+                                        </button>
+                                        <button class="cancel right-magnet" ng-click="display.updateMindmap = false;">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                                            </i18n>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </lightbox>
+                        <lightbox show="display.moveMindmap" class="ng-isolate-scope">
+
+                            <div class="content">
+                                <div class="twelve cell">
+                                    <h2 class="ng-scope">
+                                        <i18n><span class="no-style ng-scope">mindmap.title.move</span></i18n>
+                                    </h2>
+
+                                    <folder-tree tree-props="vm.onFolderTreeRoot"></folder-tree>
+
+                                    <div class="row ng-scope">
+                                        <button ng-click="vm.moveMindmap(mindmap._id,mindmap.name); "
+                                                class="right-magnet">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.move</span>
+                                            </i18n>
+                                        </button>
+                                        <button class="cancel right-magnet" ng-click="display.moveMindmap = false;">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                                            </i18n>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </lightbox>
+                        <lightbox show="display.deleteMindmap" on-close="display.deleteMindmap = false;"
+                                  class="ng-isolate-scope">
+
+
+                            <div class="content">
+                                <div class="twelve cell">
+                                    <h2 class="ng-scope">
+                                        <i18n><span class="no-style ng-scope">mindmap.title.delete</span></i18n>
+                                    </h2>
+                                    <div class="row ng-scope">
+
+                                        <i18n><span class="no-style ng-scope">mindmap.delete.confirm</span></i18n>
+
+                                    </div>
+                                    <div class="row ng-scope">
+                                        <button ng-click="vm.deleteMindmap(mindmap._id); display.deleteMindmap = false;"
+                                                class="right-magnet">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.delete</span>
+                                            </i18n>
+                                        </button>
+                                        <button class="cancel right-magnet" ng-click="display.deleteMindmap = false;">
+                                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                                            </i18n>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </lightbox>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+        <div class="emptyscreen ng-scope" ng-if="vm.folders.length == 0 && vm.mindmapsItem.length == 0">
+            <h2 class="emptyscreen-header">
+                <i18n><span class="no-style ng-scope">Faites germer les bonnes idées !</span></i18n>
+            </h2>
+            <img class="emptyscreen-image__mini" src="/mindmap/public/img/empty-mindmap.svg">
+            <p class="emptyscreen-footer">
+                <i18n><span class="no-style ng-scope">Fatigué de laisser filer vos idées de génie ? L'appli Carte mentale permet non seulement de les noter, mais aussi d'y relier toutes les réflexions qui en découlent ! À tester absolument.</span>
+                </i18n>
+            </p>
+            <a class="button ng-scope" ng-click="vm.newMindmap()">
+
+                <i18n><span class="no-style ng-scope">Créer une carte mentale</span></i18n>
+            </a>
+        </div>
+    </div>
+
+</section>
+
+
+
+
+
