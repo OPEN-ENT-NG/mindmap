@@ -5,6 +5,8 @@ import { Mindmaps } from './model';
 import * as controllers from './controllers';
 import * as directives from './directives';
 import { LibraryServiceProvider } from "entcore/types/src/ts/library/library.service";
+import * as services from './services';
+
 
 declare let module: any;
 
@@ -14,6 +16,10 @@ for (let controller in controllers) {
 
 for (let directive in directives) {
     ng.directives.push(directives[directive]);
+}
+
+for (let service in services) {
+    ng.services.push(services[service]);
 }
 
 ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServiceProvider: LibraryServiceProvider<Mindmap>) {
@@ -54,8 +60,11 @@ routes.define(($routeProvider) => {
         .when('/print/png/:mindmapId', {
             action: 'printPngMindmap'
         })
+        .when('/folder/:id',{
+            action:'viewFolder'
+        })
         .otherwise({
-            action: 'listMindmap'
+            action: 'main'
         });
 
 });

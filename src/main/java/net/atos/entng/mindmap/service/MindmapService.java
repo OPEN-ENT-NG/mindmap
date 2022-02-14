@@ -19,17 +19,24 @@
 
 package net.atos.entng.mindmap.service;
 
+import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import org.entcore.common.user.UserInfos;
+
+import java.util.List;
 
 /**
  * Service interface for mindmap module
+ *
  * @author Atos
  */
 public interface MindmapService {
 
     /**
      * Export a mindmap in PNG image
+     *
      * @param request Client HTTP request
      * @param message Request parameters
      */
@@ -37,9 +44,22 @@ public interface MindmapService {
 
     /**
      * Export a mindmap in SVG format
+     *
      * @param request Client HTTP request
      * @param message Request parameters
      */
     void exportSVG(HttpServerRequest request, JsonObject message);
+
+    Future<JsonArray> getChildren(String id, UserInfos user, boolean isInTrash);
+
+    Future<JsonObject> updateMindmapFolder(List<String> ids, JsonObject body, UserInfos user);
+
+    Future<JsonObject> updateMindmap(String id, JsonObject body, UserInfos user);
+
+    Future<JsonObject> deleteMindmap(String id, UserInfos user);
+
+    Future<JsonObject> deleteMindmapList(List<String> ids, UserInfos user);
+
+    Future<JsonArray> getTrashMindmap(UserInfos user);
 
 }

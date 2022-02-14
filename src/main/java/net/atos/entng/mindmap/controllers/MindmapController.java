@@ -21,20 +21,17 @@ package net.atos.entng.mindmap.controllers;
 
 import java.util.Map;
 
-import fr.wseduc.webutils.Either;
+import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.webutils.I18n;
-import fr.wseduc.webutils.http.Renders;
 import net.atos.entng.mindmap.Mindmap;
+import net.atos.entng.mindmap.core.constants.Field;
+import net.atos.entng.mindmap.security.mindmap.MindmapRight;
 import net.atos.entng.mindmap.service.MindmapService;
 import net.atos.entng.mindmap.service.impl.MindmapServiceImpl;
-
-import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
-import org.entcore.common.http.filter.OwnerOnly;
 import org.entcore.common.http.filter.ResourceFilter;
-import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -44,8 +41,6 @@ import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
 import io.vertx.core.json.JsonObject;
-
-
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Delete;
 import fr.wseduc.rs.Get;
@@ -57,6 +52,7 @@ import fr.wseduc.webutils.request.RequestUtils;
 
 /**
  * Controller to manage URL paths for mindmaps.
+ *
  * @author AtoS
  */
 public class MindmapController extends MongoDbControllerHelper {
@@ -77,12 +73,13 @@ public class MindmapController extends MongoDbControllerHelper {
 
     /**
      * Default constructor.
-     * @param eb VertX event bus
+     *
+     * @param eb         VertX event bus
      * @param collection MongoDB collection to request.
      */
     public MindmapController(EventBus eb, String collection) {
         super(collection);
-        this.mindmapService = new MindmapServiceImpl(eb);
+        this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance());
     }
 
     @Get("")
@@ -100,12 +97,25 @@ public class MindmapController extends MongoDbControllerHelper {
         renderView(request, new JsonObject(), "print.html", null);
     }
 
+
     @Override
     @Get("/list/all")
     @ApiDoc("Allows to list all mindmaps")
     @SecuredAction("mindmap.list")
     public void list(HttpServerRequest request) {
         super.list(request);
+    }
+
+    @Get("/:id/children")
+    @ResourceFilter(MindmapRight.class)
+    public void getMindmapChildren(HttpServerRequest request) {
+        String id = request.getParam(Field.ID);
+
+        UserUtils.getUserInfos(this.eb, request, user -> {
+            mindmapService.getChildren(id, user, false)
+                    .onSuccess(result -> renderJson(request, result))
+                    .onFailure(error -> badRequest(request));
+        });
     }
 
     @Override
@@ -115,7 +125,7 @@ public class MindmapController extends MongoDbControllerHelper {
     public void create(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + "mindmap", object -> {
             super.create(request, r -> {
-                if(r.succeeded()){
+                if (r.succeeded()) {
                     eventHelper.onCreateResource(request, RESOURCE_NAME);
                 }
             });
@@ -133,6 +143,7 @@ public class MindmapController extends MongoDbControllerHelper {
     @Override
     @Put("/:id")
     @ApiDoc("Allows to update a mindmap associated to the given identifier")
+    @ResourceFilter(MindmapRight.class)
     @SecuredAction(value = "mindmap.contrib", type = ActionType.RESOURCE)
     public void update(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + "mindmap", new Handler<JsonObject>() {
@@ -147,9 +158,15 @@ public class MindmapController extends MongoDbControllerHelper {
     @Override
     @Delete("/:id")
     @ApiDoc("Allows to delete a mindmap associated to the given identifier")
+    @ResourceFilter(MindmapRight.class)
     @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
     public void delete(HttpServerRequest request) {
-        super.delete(request);
+        String id = request.getParam(Field.ID);
+        UserUtils.getUserInfos(this.eb, request, user -> {
+            mindmapService.deleteMindmap(id, user)
+                    .onFailure(error -> badRequest(request))
+                    .onSuccess(result -> renderJson(request, result));
+        });
     }
 
     @Get("/publish")
@@ -217,7 +234,7 @@ public class MindmapController extends MongoDbControllerHelper {
             public void handle(final UserInfos user) {
                 if (user != null) {
                     final String id = request.params().get("id");
-                    if(id == null || id.trim().isEmpty()) {
+                    if (id == null || id.trim().isEmpty()) {
                         badRequest(request, "invalid.id");
                         return;
                     }
