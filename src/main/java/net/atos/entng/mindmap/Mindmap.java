@@ -65,8 +65,6 @@ public class Mindmap extends BaseServer {
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(MINDMAP_COLLECTION);
 
-        MongoDbConf confFolder = MongoDbConf.getInstance();
-        confFolder.setCollection(FOLDER_COLLECTION);
 
         setDefaultResourceFilter(new ShareAndOwner());
         if (config.getBoolean("searching-event", true)) {

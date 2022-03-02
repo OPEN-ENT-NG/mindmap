@@ -8,20 +8,24 @@
             </div>
             <div class="margin-two height-three">
                 <div class="twelve cell horizontal-spacing">
-                    <input type="text" ng-model="mindmap.name" class="twelve cell" i18n-placeholder="mindmap.name" required />
+                    <input type="text" ng-model="mindmap.name" class="twelve cell" i18n-placeholder="mindmap.name"
+                           required/>
                     <div class="row">
-                        <hr class="row" />
+                        <hr class="row"/>
                     </div>
-                    <textarea ng-model="mindmap.description" class="twelve cell" i18n-placeholder="mindmap.description" input-guard></textarea>
+                    <textarea ng-model="mindmap.description" class="twelve cell" i18n-placeholder="mindmap.description"
+                              input-guard></textarea>
                     <div class="row">
-                        <hr class="row" />
+                        <hr class="row"/>
                     </div>
                 </div>
                 <div class="row">
-                    <button reset-guard="createMindmap(mindmap.name,mindmap.description, mindmap.thumbnail)" class="right-magnet" ng-disabled="form.$invalid">
+                    <button reset-guard="updateMindmapFromForm(mindmap._id,mindmap.name,mindmap.folder_parent_id,mindmap.description, mindmap.thumbnail)"
+                            class="right-magnet" ng-disabled="form.$invalid">
                         <i18n>save</i18n>
                     </button>
-                    <input type="button" class="button right-magnet cancel" navigation-trigger="cancelMindmapEdit()" i18n-value="cancel">
+                    <input type="button" class="button right-magnet cancel" navigation-trigger="cancelMindmapEdit()"
+                           i18n-value="cancel">
                 </div>
             </div>
         </div>

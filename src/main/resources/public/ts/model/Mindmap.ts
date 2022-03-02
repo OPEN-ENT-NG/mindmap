@@ -1,14 +1,16 @@
 import {model, Rights, Shareable} from 'entcore';
 import http from 'axios';
 import {Mix, Selectable} from "entcore-toolkit";
+import {FolderItem} from "./FolderItem";
 
 /**
  * Model to create a mindmap.
  */
-export class Mindmap implements Selectable, Shareable {
+export class Mindmap extends FolderItem implements Selectable, Shareable {
     _id: any;
+    id: string
     name: any;
-    folder_parent_id: string;
+    folder_parent: {};
     description: any;
     thumbnail: any;
     map: any;
@@ -16,8 +18,11 @@ export class Mindmap implements Selectable, Shareable {
     selected: boolean;
     shared: any
     owner: any
+    type: string;
+    mindmap: Mindmap;
 
     constructor(mindmap?) {
+        super();
         this.rights = new Rights(this);
         this.rights.fromBehaviours();
 
@@ -25,6 +30,35 @@ export class Mindmap implements Selectable, Shareable {
             Mix.extend(this, mindmap);
         }
     };
+
+    setType(type: string): FolderItem {
+        this.type = type;
+        return this;
+    }
+
+
+    async save(): Promise<void> {
+        await this.update();
+    };
+
+    toJSONSave(): {} {
+        return {
+            name: this.name,
+            description: this.description,
+            thumbnail: this.thumbnail,
+            map: this.map,
+            folder_parent_id: this.folder_parent_id,
+            type: this.type,
+        };
+    };
+
+    setFromElement(elem: any): FolderItem {
+        this.id = elem._id;
+        this.name = elem.name;
+        this.folder_parent_id = elem.folder_parent_id;
+        this.type = elem.type;
+        return this;
+    }
 
 
     get myRights() {
@@ -53,7 +87,7 @@ export class Mindmap implements Selectable, Shareable {
      */
     async delete() {
         await http.delete('/mindmap/' + this._id, {data: this.toJSON()});
-        (model as any).mindmaps.remove(this);
+
     };
 
     /**
@@ -62,12 +96,21 @@ export class Mindmap implements Selectable, Shareable {
      */
     toJSON() {
         return {
+            _id: this._id,
             name: this.name,
-            description: this.description,
-            thumbnail: this.thumbnail,
-            map: this.map
+            folder_parent_id: this.folder_parent_id,
+            type: this.type
         };
     };
+
+    public toJson() {
+        return {
+            _id: this._id,
+            name: this.name,
+            folder_parent_id: this.folder_parent_id,
+            type: this.type
+        };
+    }
 };
 
 export class MindmapView {
@@ -86,13 +129,17 @@ export class MindmapView {
 export class MindmapFolder extends MindmapView {
     id: string;
     name: string;
-    folder_parent_id: string;
+    folder_parent: {};
+    description: string;
+    thumbnail: any;
 
 
-    constructor(name?, folder_parent_id?) {
+    constructor(name?, folder_parent?, description?,thumbnail?) {
         super();
         this.name = name;
-        this.folder_parent_id = folder_parent_id;
+        this.folder_parent = folder_parent;
+        this.description = description;
+        this.thumbnail = thumbnail;
     }
 }
 

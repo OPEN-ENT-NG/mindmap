@@ -6,22 +6,21 @@ import {FolderItem} from "../model/FolderItem";
 
 
 export interface FolderService {
-    getFolderChildren(folderId: string): Promise<FolderItem[]>;
+    getFolderChildren(folderId: string, isShare: Boolean, isMine: Boolean): Promise<FolderItem[]>;
 
 
     createFolder(folderBody: IFolder): Promise<AxiosResponse>;
 
     updateFolder(id: string, folderBody: IFolder): Promise<AxiosResponse>;
 
-    deleteFolder(id: string): Promise<AxiosResponse>;
+    deleteFolder(folderBody : {}): Promise<AxiosResponse>;
 
 }
 
 export const folderService: FolderService = {
-    getFolderChildren: async (folderId: string): Promise<FolderItem[]> => {
+    getFolderChildren: async (folderId: string, isShare: boolean, isMine: boolean): Promise<FolderItem[]> => {
         try {
-            let {data} = await http.get(`/mindmap/folders/${folderId}/children`);
-
+            let {data} = await http.get(`/mindmap/folders/${folderId}/children/share/${isShare}/mine/${isMine}`);
             return Mix.castArrayAs(FolderItem, data);
         } catch (err) {
             throw err;
@@ -32,12 +31,12 @@ export const folderService: FolderService = {
         return await http.post(`/mindmap/folder`, folderBody);
     },
 
-    updateFolder: async(id: string, folderBody: IFolder): Promise<AxiosResponse> => {
-        return await http.put(`/mindmap/folders/${id}`,folderBody);
+    updateFolder: async (id: string, folderBody: IFolder): Promise<AxiosResponse> => {
+        return await http.put(`/mindmap/folders/${id}`, folderBody);
     },
 
-    deleteFolder: async(id: string): Promise<AxiosResponse> =>{
-        return await http.delete(`/mindmap/folders/${id}`);
+    deleteFolder: async (folderBody : {}): Promise<AxiosResponse> => {
+        return await http.put(`/mindmap/folders/delete`, folderBody);
     },
 };
 

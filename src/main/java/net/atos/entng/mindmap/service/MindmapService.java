@@ -19,12 +19,16 @@
 
 package net.atos.entng.mindmap.service;
 
+import fr.wseduc.webutils.Either;
 import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.user.UserInfos;
 
+import javax.management.monitor.StringMonitor;
 import java.util.List;
 
 /**
@@ -50,16 +54,21 @@ public interface MindmapService {
      */
     void exportSVG(HttpServerRequest request, JsonObject message);
 
-    Future<JsonArray> getChildren(String id, UserInfos user, boolean isInTrash);
-
     Future<JsonObject> updateMindmapFolder(List<String> ids, JsonObject body, UserInfos user);
 
-    Future<JsonObject> updateMindmap(String id, JsonObject body, UserInfos user);
+    Future<JsonObject> updateMindmapFolderParent(String id, JsonObject body, UserInfos user);
 
     Future<JsonObject> deleteMindmap(String id, UserInfos user);
 
-    Future<JsonObject> deleteMindmapList(List<String> ids, UserInfos user);
+    Future<JsonObject> deleteMindmapFolderList(List<String> ids, UserInfos user);
 
     Future<JsonArray> getTrashMindmap(UserInfos user);
 
+    Future<JsonArray> listMindmap(String mindmapFolderParentId, UserInfos user, Boolean isShare, Boolean isMine);
+
+    Future<JsonObject> avoidDuplicatesUserId(String id, UserInfos user);
+
+    Future<JsonObject> moveSharedMindmapToRootFolder(List<String> ids, UserInfos user);
+
+    Future<JsonObject> deleteMindmapList(JsonObject body, UserInfos user);
 }

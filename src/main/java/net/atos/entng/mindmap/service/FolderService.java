@@ -18,11 +18,11 @@ public interface FolderService {
 
     Future<JsonObject> getFolder(String id);
 
-    Future<JsonObject> getNestedFolderChildrenIds(String id);
+    Future<JsonObject> getNestedFolderChildrenIds(List<String> ids);
 
-    Future<JsonObject> deleteFolder(String id, UserInfos user);
-
-    void allFolderMindmap(String id, UserInfos user, boolean isInTrash, Handler<Either<String, JsonArray>> handler);
+    Future<JsonObject> deleteFolder(JsonObject body, UserInfos user);
 
     Future<JsonObject> deleteFolderList(List<String> ids, UserInfos user);
+
+
 }

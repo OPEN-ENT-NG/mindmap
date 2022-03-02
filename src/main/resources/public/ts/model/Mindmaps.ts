@@ -12,7 +12,7 @@ export class Mindmaps extends Selection<Mindmap> {
     };
 
     async sync () {
-        let mindmaps = await http.get('/mindmap/null/children');
+        let mindmaps = await http.get('/mindmap/list/all');;
 
         this.all = [];
 

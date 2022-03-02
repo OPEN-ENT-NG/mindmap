@@ -1,5 +1,6 @@
 import {Mindmap} from "./Mindmap";
 import http from "axios";
+import {Rights, Shareable} from "entcore";
 
 export class FolderItemView {
     _id?: string;
@@ -11,6 +12,10 @@ export class FolderItemView {
         displayName?: string;
     }
     type?: string;
+    rights?: any;
+    shared?: any
+    thumbnail?: any;
+    selected?: boolean;
 }
 
 export interface IFolderItem extends FolderItemView {
@@ -25,19 +30,39 @@ export class FolderItem extends FolderItemView {
     mindmap: Mindmap;
     description: string;
     map: string;
-    thumbnail: string;
+    thumbnail: any;
+    selected: boolean;
+    rights: any;
+    shared: any;
+    owner: {
+        userId: string;
+        displayName: string;
+    }
 
     constructor(id?: string, name?: string, folder_parent_id?: string) {
         super();
         this.id = id;
         this.name = name;
         this.folder_parent_id = folder_parent_id;
+
     }
+
+
+    toJSON() {
+        return {
+            _id: this._id,
+            name: this.name,
+            folder_parent_id: this.folder_parent_id,
+            type: this.type
+        };
+    };
+
 
     setType(type: string): FolderItem {
         this.type = type;
         return this;
     }
+
 
     async save(): Promise<void> {
         await this.update();
@@ -73,4 +98,8 @@ export class FolderItem extends FolderItemView {
         this.type = elem.type;
         return this;
     }
+
+
+
+
 }

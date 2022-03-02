@@ -12,6 +12,11 @@ export interface MindmapService {
     deleteMindmap(id: string): Promise<AxiosResponse>;
 
     createMindmap(mindmaBody: MindmapFolder): Promise<AxiosResponse>;
+
+    changeMindmapFolder(id: string, mindmapBody: Mindmap): Promise<AxiosResponse>;
+
+    getMindmap(id: string): Promise<Mindmap>;
+
 }
 
 export const mindmapService: MindmapService = {
@@ -28,6 +33,10 @@ export const mindmapService: MindmapService = {
         return await http.put(`/mindmap/${id}`, mindmapBody);
     },
 
+    changeMindmapFolder: async (id: string, mindmapBody: Mindmap): Promise<AxiosResponse> => {
+        return await http.put(`/mindmap/move/${id}`, mindmapBody);
+    },
+
     deleteMindmap: async (id: string): Promise<AxiosResponse> => {
         return await http.delete(`/mindmap/${id}`);
     },
@@ -35,6 +44,16 @@ export const mindmapService: MindmapService = {
     createMindmap: async (mindmaBody: MindmapFolder): Promise<AxiosResponse> => {
         return await http.post(`/mindmap`, mindmaBody);
     },
+
+    getMindmap: async (id: string): Promise<Mindmap> => {
+        try{
+            let {data}  = await http.get(`/mindmap/${id}`);
+            return Mix.castAs(Mindmap, data);
+        }catch(err){
+            throw err;
+        }
+
+    }
 
 
 };

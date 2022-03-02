@@ -8,6 +8,9 @@
     },
     "folder_parent_id": {
       "type": ["string", "null"]
+    },
+    "ids": {
+      "type": "array"
     }
   },
   "required": [

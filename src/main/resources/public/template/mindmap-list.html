@@ -3,7 +3,7 @@
 <div class="twelve cell" workflow="mindmap.list">
     <div class="row top-spacing-twice">
         <!-- Search bar -->
-        <div class="four cell">
+        <div class="two cell">
 
             <nav class="vertical mobile-navigation side-nav" side-nav style="height: auto;">
                 <folder-tree tree-props="folderTreeRoot"></folder-tree>
@@ -13,26 +13,35 @@
             </nav>
 
         </div>
+        <directive-label-share name="nameLabel"
+                               on-sort="sortMindmap"
+                               is-checked="isCheckedLabelMy">
+        </directive-label-share>
+
+        <directive-label-share name="nameLabelShare"
+                               on-sort="sortShare"
+                               is-checked="isCheckedLabelShare">
+        </directive-label-share>
+
 
         <directive-folder-list folders="folders.all"
-                               mindmaps-item="mindmapsItem.mindmapsAll"
-                               on-folder-tree-root="folderTreeDirective"
+                               mindmaps-item="mindmapsItem.mindmapsRight"
                                on-open-folder="openFolderByView"
                                on-update-folder="updateFolder"
                                on-update-mindmap="updateMindmap"
                                on-open-mindmap="openMindmap"
-                               on-delete-folder="deleteFolder"
-                               on-delete-mindmap="deleteMindmap"
                                on-new-mindmap="newMindmap"
-                               on-move-folder="moveFolder"
-                               tree-move-folder="displayTreeMoveFolder"
-                               on-move-mindmap="moveMindmap"
-                               selected-folders-id="selectedFoldersId">
+                               on-change-mindmap-folder="changeMindmapFolder"
+                               on-get-mindmap-thumbnail="getMindmapThumbnail"
+                               on-select-folder="selectFolder"
+                               on-select-mindmap="selectMindmap"
+                               on-format-date="formatDate">
         </directive-folder-list>
     </div>
 
 
-    <lightbox show="display.createFolder" on-close="display.createFolder = false;" class="ng-isolate-scope">
+    <lightbox show="display.createFolder" on-close="display.createFolder = false;  folderTitle='';"
+              class="ng-isolate-scope">
 
         <div class="content">
             <div class="twelve cell">
@@ -47,12 +56,12 @@
                            ng-model="folderTitle">
                 </div>
                 <div class="row ng-scope">
-                    <button ng-click="createFolder(folderTitle); display.createFolder = false;"
+                    <button ng-click="createFolder(folderTitle); display.createFolder = false; folderTitle='';"
                             ng-disabled="!folderTitle"
                             class="right-magnet" disabled="disabled">
                         <i18n><span class="no-style ng-scope">mindmap.folder.buttonCreate</span></i18n>
                     </button>
-                    <button class="cancel right-magnet" ng-click="display.createFolder = false;">
+                    <button class="cancel right-magnet" ng-click="display.createFolder = false; folderTitle='';">
                         <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span></i18n>
                     </button>
                 </div>
@@ -69,7 +78,10 @@
             <p>
                 <i18n>mindmap.delete.confirm</i18n>
             </p>
-            <p ng-repeat="mindmap in mindmaps.selection()">[[mindmap.name]]</p>
+            <ul>
+                <li  ng-repeat="mindmap in  selectedMindmapTabs">[[mindmap.name]]</li>
+            </ul>
+
             <div class="row">
                 <button class="right-magnet" ng-click="removeMindmap()">
                     <i18n>remove</i18n>
@@ -82,43 +94,276 @@
     <!-- Allows to display the panel to manage share rights -->
     <div ng-if="display.showPanel">
         <lightbox show="display.showPanel" on-close="display.showPanel = false;">
-            <share-panel app-prefix="'mindmap'" resources="mindmap"></share-panel>
+            <share-panel app-prefix="'mindmap'" resources="mindmap">
+            </share-panel>
+        </lightbox>
+    </div>
+
+    <div ng-if="selectedFolderTabs != 0 || selectedMindmapTabs != 0 ">
+        <section class="toggle-buttons">
+            <div class="toggle">
+                <div class="row">
+                    <button ng-if="selectedFolderTabs.length === 1 && selectedMindmapTabs.length == 0" class="cell"
+                            ng-click="openFolderByView(selectedFolderTabs[0])">
+                        <i18n>mindmap.folder.manage.open</i18n>
+                    </button>
+                    <button ng-if="selectedFolderTabs.length === 1 && selectedMindmapTabs.length == 0" class="cell"
+                            ng-click="display.updateFolder = true; getOrignialValue(selectedFolderTabs[0].name);">
+
+                        <i18n>mindmap.folder.manage.rename</i18n>
+                    </button>
+                    <button ng-if="selectedFolderTabs.length === 1 && selectedMindmapTabs.length == 0" class="cell"
+                            ng-click="display.moveFolder = true; displayTreeMoveFolder(selectedFolderTabs[0]._id);">
+
+                        <i18n>mindmap.folder.manage.move</i18n>
+                    </button>
+                    <button ng-if="selectedMindmapTabs.length == 0" class="cell"
+                            ng-click="display.deleteFolder = true" show="selectedFolderTabs.length != 0">
+
+                        <i18n>mindmap.folder.manage.delete</i18n>
+                    </button>
+                    <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0" class="cell"
+                            ng-click="openMindmap(selectedMindmapTabs[0])">
+                        <i18n>mindmap.folder.manage.open</i18n>
+                    </button>
+                    <resource-right name="contrib" resource="selectedMindmapTabs[0]">
+                        <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0" class="cell"
+                                ng-click="display.updateMindmap = true;  getOrignialValue(selectedMindmapTabs[0].name);">
+                            <i18n>mindmap.folder.manage.rename</i18n>
+                        </button>
+                    </resource-right>
+                    <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0" class="cell"
+                            ng-click="display.moveMindmap = true; displayTreeMoveFolder(selectedFolderTabs[0]._id);">
+                        <i18n>mindmap.folder.manage.move</i18n>
+                    </button>
+                    <resource-right name="manage" resource="selectedMindmapTabs[0]">
+                        <button ng-if="selectedFolderTabs.length == 0 " class="cell"
+                                ng-click="display.confirmDeleteMindmap = true">
+                            <i18n>mindmap.folder.manage.delete</i18n>
+                        </button>
+                    </resource-right>
+                    <resource-right name="contrib" resource="selectedMindmapTabs[0]">
+                        <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
+                                ng-click="editMindmap(selectedMindmapTabs[0], $event)">
+                            <i18n>properties</i18n>
+                        </button>
+                    </resource-right>
+                    <resource-right name="manage" resource="selectedMindmapTabs[0]" class="cell">
+                        <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
+                                library-resource="selectedMindmapTabs[0]">
+                            <i18n>bpr.publish</i18n>
+                        </button>
+                    </resource-right>
+                    <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
+                            ng-click="printPngMindmap(selectedMindmapTabs[0], $event)">
+                        <i18n>print</i18n>
+                    </button>
+                    <resource-right name="manage" resource="selectedMindmapTabs" class="cell">
+                        <button ng-if="selectedFolderTabs.length == 0"
+                                ng-click="shareMindmap(selectedMindmapTabs, $event)">
+                            <i18n>share</i18n>
+                        </button>
+                    </resource-right>
+                    <resource-right name="manage" resource="selectedMindmapTabs" class="cell">
+                        <button ng-if="selectedFolderTabs.length != 0 && selectedMindmapTabs.length != 0"
+                                ng-click="display.deleteFolderMindmap = true">
+                            <i18n>mindmap.folder.manage.delete</i18n>
+                        </button>
+                    </resource-right>
+
+                </div>
+            </div>
+
+        </section>
+
+
+        <lightbox show="display.updateMindmap"
+                  on-close="display.updateMindmap = false; cancelNameMindmap(selectedMindmapTabs[0]);">
+
+
+            <div class="content">
+                <div class="twelve cell">
+                    <h2 class="ng-scope">
+                        <i18n><span class="no-style ng-scope">mindmap.title.rename</span></i18n>
+                    </h2>
+                    <div class="row ng-scope">
+                        <label class="three cell">
+                            <i18n><span class="no-style ng-scope">mindmap.title.manage</span></i18n>
+                        </label>
+                        <input class="nine cell ng-pristine ng-untouched ng-valid ng-empty" type="text"
+                               value="selectedMindmapTabs[0].name" ng-model="selectedMindmapTabs[0].name">
+                    </div>
+                    <div class="row ng-scope">
+                        <button ng-click="renameMindmap(selectedMindmapTabs[0]._id,selectedMindmapTabs[0].name); display.updateMindmap = false;"
+                                ng-disabled="!selectedMindmapTabs[0].name"
+                                class="right-magnet" disabled="disabled">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.rename</span>
+                            </i18n>
+                        </button>
+                        <button class="cancel right-magnet"
+                                ng-click="cancelNameMindmap(selectedMindmapTabs[0]); display.updateMindmap = false;">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                            </i18n>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </lightbox>
+        <lightbox show="display.moveMindmap" on-close="display.moveMindmap=false; ">
+            <div class="content">
+                <div class="twelve cell">
+                    <h2 class="ng-scope">
+                        <i18n><span class="no-style ng-scope">mindmap.title.move</span></i18n>
+                    </h2>
+
+                    <folder-tree tree-props="folderTreeDirective"></folder-tree>
+
+                    <div class="row ng-scope">
+                        <button ng-click="moveMindmap(selectedMindmapTabs[0]._id,selectedMindmapTabs[0].name); display.moveMindmap=false;"
+                                class="right-magnet">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.move</span>
+                            </i18n>
+                        </button>
+                        <button class="cancel right-magnet" ng-click="display.moveMindmap = false;">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                            </i18n>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </lightbox>
+
+
+    </div>
+    <div>
+        <lightbox show="display.updateFolder"
+                  on-close="display.updateFolder = false; cancelNameFolder(selectedFolderTabs[0]);">
+            <div class="content">
+                <div class="twelve cell">
+                    <h2 class="ng-scope">
+                        <i18n><span class="no-style ng-scope">mindmap.folder.title.rename</span></i18n>
+                    </h2>
+                    <div class="row ng-scope">
+                        <label class="three cell">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.title</span></i18n>
+                        </label>
+                        <input class="nine cell ng-pristine ng-untouched ng-valid ng-empty" type="text"
+                               value="selectedFolderTabs[0].name" ng-model="selectedFolderTabs[0].name">
+                    </div>
+                    <div class="row ng-scope">
+                        <button ng-click="renameFolder(selectedFolderTabs[0]._id,selectedFolderTabs[0].name); display.updateFolder = false;"
+                                ng-disabled="!selectedFolderTabs[0].name"
+                                class="right-magnet" disabled="disabled">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.rename</span>
+                            </i18n>
+                        </button>
+                        <button class="cancel right-magnet"
+                                ng-click="display.updateFolder = false; cancelNameFolder(selectedFolderTabs[0]);">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                            </i18n>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </lightbox>
+        <lightbox show="display.moveFolder" on-close="display.moveFolder = false;">
+
+            <div class="content">
+                <div class="twelve cell">
+                    <h2 class="ng-scope">
+                        <i18n><span class="no-style ng-scope"></span>mindmap.folder.title.move</i18n>
+                    </h2>
+
+
+                    <folder-tree tree-props="folderTreeDirective"></folder-tree>
+
+                    <div class="row ng-scope">
+                        <button ng-click="moveFolder(selectedFolderTabs[0]._id,selectedFolderTabs[0].name); display.moveFolder = false;"
+                                class="right-magnet">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.move</span>
+                            </i18n>
+                        </button>
+                        <button class="cancel right-magnet" ng-click="display.moveFolder = false;">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                            </i18n>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </lightbox>
+        <lightbox show="display.deleteFolder" on-close="display.deleteFolder = false;">
+            <div class="content">
+                <div class="twelve cell">
+                    <h2 class="ng-scope">
+                        <i18n><span class="no-style ng-scope">mindmap.folder.title.delete</span></i18n>
+                    </h2>
+
+                    <div class="row ng-scope">
+
+                        <i18n><span class="no-style ng-scope">mindmap.folder.delete.confirm</span>
+                        </i18n>
+
+
+                    </div>
+                    <ul>
+                        <li ng-repeat="folder in  selectedFolderTabs">[[folder.name]]</li>
+                    </ul>
+                    <div class="row ng-scope">
+                        <button ng-click="deleteFolder(selectedFolderTabs); display.deleteFolder = false;"
+                                class="right-magnet">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.delete</span>
+                            </i18n>
+                        </button>
+                        <button class="cancel right-magnet" ng-click="display.deleteFolder = false;">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                            </i18n>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </lightbox>
+        <lightbox show="display.deleteFolderMindmap" on-close="display.deleteFolderMindmap = false;">
+            <div class="content">
+                <div class="twelve cell">
+                    <h2 class="ng-scope">
+                        <i18n><span class="no-style ng-scope">mindmaps.folders.title.delete</span></i18n>
+                    </h2>
+
+                    <div class="row ng-scope">
+
+                        <i18n><span class="no-style ng-scope">mindmaps.folders.delete.confirm</span>
+                        </i18n>
+
+                    </div>
+                    <ul>
+                        <li ng-repeat="folder in  selectedFolderTabs">[[folder.name]]</li>
+                        <li  ng-repeat="mindmap in  selectedMindmapTabs">[[mindmap.name]]</li>
+                    </ul>
+                    <div class="row ng-scope">
+                        <button ng-click="deleteFoldersAndMindmaps(selectedFolderTabs); display.deleteFolderMindmap = false;"
+                                class="right-magnet">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.manage.delete</span>
+                            </i18n>
+                        </button>
+                        <button class="cancel right-magnet" ng-click="display.deleteFolderMindmap = false;">
+                            <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
+                            </i18n>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
         </lightbox>
     </div>
 </div>
-
-
-<section class="toggle-buttons" ng-class="{  hide: mindmaps.selection().length === 0}">
-    <div class="toggle">
-        <div class="row">
-            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button ng-if="mindmaps.selection().length === 1"
-                        ng-click="editMindmap(mindmaps.selection()[0], $event)">
-                    <i18n>properties</i18n>
-                </button>
-            </resource-right>
-            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button workflow="mindmap.publish" ng-if="mindmaps.selection().length === 1"
-                        library-resource="mindmaps.selection()[0]">
-                    <i18n>bpr.publish</i18n>
-                </button>
-            </resource-right>
-            <button ng-if="mindmaps.selection().length === 1"
-                    ng-click="printPngMindmap(mindmaps.selection()[0], $event)">
-                <i18n>print</i18n>
-            </button>
-            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button ng-click="shareMindmap(mindmaps.selection(), $event)">
-                    <i18n>share</i18n>
-                </button>
-            </resource-right>
-            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button ng-click="display.confirmDeleteMindmap = true">
-                    <i18n>remove</i18n>
-                </button>
-            </resource-right>
-        </div>
-    </div>
-</section>
 </section>
 

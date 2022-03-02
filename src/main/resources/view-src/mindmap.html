@@ -34,14 +34,14 @@
                 <app-title>
                     <h1>
                         <i class="mindmap"></i>
-                        <span ng-click="goto('/')"><a href="/mindmap"><i18n>mindmap.title</i18n></a></span>
-                        <span subtitle ng-if="selectedMindmap.name && selectedMindmap.name.trim().length > 0"> >  [[mindmap.name]]</span>
+                        <span navigation-trigger="goto('')"><a href="/mindmap"><i18n>mindmap.title</i18n></a></span>
+                        <span subtitle ng-if="selectedMindmap.name && selectedMindmap.name.trim().length > 0"> > [[mindmap.name]]</span>
                     </h1>
                 </app-title>
             </div>
             <div class="contextual-buttons five cell">
-                <button workflow="mindmap.create" ng-if="mindmapsItem.mindmapsAll.length || folders.all.length"
-                        ng-click="newMindmap()" class="cell right-magnet">
+                <button workflow="mindmap.create" ng-if="(!mindmap || !mindmap._id) && (mindmapsItem.mindmapsAll.length || folders.all.length)"
+                        navigation-trigger="newMindmap()" class="cell right-magnet">
                     <i18n>mindmap.new</i18n>
                 </button>
                 <button workflow="mindmap.view"
@@ -49,7 +49,7 @@
                         class="cell right-magnet" ng-click="exportMindmap()" ng-disabled="exportInProgress">
                     <i18n>mindmap.export</i18n>
                 </button>
-                <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' " id="save" class="cell right-magnet">
+                <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' && mindmap.myRights.contrib" id="save" class="cell right-magnet">
                     <i18n>mindmap.save</i18n>
                 </button>
             </div>

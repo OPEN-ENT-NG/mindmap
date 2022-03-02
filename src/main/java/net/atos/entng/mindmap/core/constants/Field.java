@@ -3,6 +3,8 @@ package net.atos.entng.mindmap.core.constants;
 public class Field {
 
     public static final String NULL = "null";
+    public static final String SHARED = "shared";
+    public static final String TRUE = "true";
 
     /***
      * FOLDER ET MINDMAP
@@ -17,6 +19,9 @@ public class Field {
     public static final String OWNER = "owner";
     public static final String USER_ID = "userId";
     public static final String DISPLAY_NAME = "displayName";
+    public static final String FOLDER_PARENT ="folder_parent";
+    public static final String GROUP_ID = "groupId";
+
 
     /***
      * FOLDER
@@ -30,6 +35,8 @@ public class Field {
      */
     public static final String MINDMAP = "MINDMAP";
     public static final String COLLECTION_MINDMAP = "mindmap";
+    public static final String IS_SHARE = "isShare";
+    public static final String IS_MINE = "isMine";
 
     /***
      * MONGO_DB
@@ -51,6 +58,10 @@ public class Field {
     public static final String PIPELINE = "pipeline";
     public static final String EXISTS = "exists";
     public static final String STATUS = "status";
+    public static final String OR = "or";
+    public static final String IN = "in";
+    public static final String NE = "ne";
+    public static final String AND = "and";
 
 
 }

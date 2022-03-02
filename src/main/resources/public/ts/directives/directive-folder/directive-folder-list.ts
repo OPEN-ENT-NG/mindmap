@@ -1,7 +1,8 @@
-import {$, ng,} from "entcore";
+import {$, currentLanguage, ng,moment} from "entcore";
 import {ROOTS} from "../../core/const/roots";
-import {Folder, FolderItem, Mindmap, MindmapFolder} from "../../model";
+import {Folder, FolderItem, Mindmap, MindmapFolder, Mindmaps} from "../../model";
 import {FOLDER_ITEM_TYPE} from "../../core/const/type";
+import {Moment} from "moment";
 
 interface IViewModel {
     $onInit();
@@ -22,19 +23,7 @@ interface IViewModel {
 
     onUpdateFolder(): void;
 
-    RenameFolder(id: string, name: string): void;
-
-    deleteFolder(id: string): void;
-
-    deleteMindmap(id: string): void;
-
-    RenameMindmap(id: string, name: string): void;
-
     onUpdateMindmap(): void;
-
-    onDeleteFolder(): void;
-
-    onDeleteMindmap(): void;
 
     onOpenMindmap(): void;
 
@@ -44,24 +33,35 @@ interface IViewModel {
 
     onNewMindmap(): void;
 
-    moveFolder(id: string, name: string): void;
+    onChangeMindmapFolder(): void;
 
-    onMoveFolder(): void;
+    getMindmapThumbnail(mindmap): string;
 
-    treeMoveFolder();
+    selectFolder():void;
 
-    treeFolder(id: string);
+    onSelectFolder():void;
 
-    onMoveMindmap(): void;
+    selectMindmap():void;
 
-    moveMindmap(id: string, name: string): void;
+    onSelectMindmap():void;
+
+    onFormatDate();
+
+    formatDate(dateMindmap);
 
     id: string;
     name: string;
     folderParentId: string;
     ownerId: string;
     folders: FolderItem[];
-    mindmapsItem: FolderItem[];
+    mindmapsItem: Mindmap[];
+    mindmap:{
+        _id:string;
+        name:string;
+        type:string;
+        selected:boolean;
+    };
+
 
 }
 
@@ -75,15 +75,14 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
             onUpdateFolder: '&',
             onUpdateMindmap: '&',
             onOpenMindmap: '&',
-            onDeleteFolder: '&',
-            onDeleteMindmap: '&',
             onNewMindmap: '=',
-            onFolderTreeRoot: '=',
-            onMoveFolder: '&',
             id: '=',
-            treeMoveFolder: '&',
-            onMoveMindmap: '&',
-            selectedFoldersId: '=',
+            onChangeMindmapFolder: '&',
+            onMindmapIsSelected:'&',
+            onSelectFolder:'=',
+            onSelectMindmap:'=',
+            onFormatDate:'=',
+
         },
 
         restrict: 'E',
@@ -95,7 +94,6 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
         controller: function () {
             const vm: IViewModel = <IViewModel>this;
             vm.$onInit = async () => {
-
             };
 
             vm.$onDestroy = async () => {
@@ -106,38 +104,27 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
         link: function ($scope) {
             const vm: IViewModel = $scope.vm;
 
-            vm.treeFolder = (id: string) => {
-                $scope.$eval(vm.treeMoveFolder)(id);
+            vm.formatDate = function(dateObject){
+                return moment(dateObject.$date).lang(currentLanguage).calendar();
             }
 
-            vm.moveMindmap = (id: string, name: string): void => {
-                $scope.$eval(vm.onMoveMindmap)(id, name);
-            };
+            vm.selectFolder = function () : void{
+                $scope.$eval(vm.onSelectFolder);
+            }
 
-            vm.moveFolder = (id: string, name: string): void => {
-                $scope.$eval(vm.onMoveFolder)(id, name);
+            vm.selectMindmap = function () : void{
+                $scope.$eval(vm.onSelectMindmap);
+            }
+
+            vm.getMindmapThumbnail = (mindmap: Mindmap): string => {
+                if (!mindmap.thumbnail || mindmap.thumbnail === '') {
+                    return '/img/illustrations/mindmap.svg';
+                }
+                return mindmap.thumbnail + '?thumbnail=120x120';
             }
 
             vm.newMindmap = (): void => {
                 $scope.$eval(vm.onNewMindmap);
-            }
-
-            vm.deleteFolder = (id: string): void => {
-                $scope.$eval(vm.onDeleteFolder)(id);
-            }
-
-            vm.deleteMindmap = (id: string): void => {
-                $scope.$eval(vm.onDeleteMindmap)(id);
-            }
-
-            vm.RenameMindmap = (id: string, name: string): void => {
-                let body = new MindmapFolder(name);
-                $scope.$eval(vm.onUpdateMindmap)(id, body);
-            }
-
-            vm.RenameFolder = (id: string, name: string): void => {
-                let body = new Folder(name);
-                $scope.$eval(vm.onUpdateFolder)(id, body);
             }
 
             vm.openFolder = (folder: FolderItem): void => {
@@ -149,7 +136,7 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
             }
 
 
-            vm.drag = function (item: FolderItem, $originalEvent): void {
+            vm.drag = function (item: FolderItem | Mindmap, $originalEvent): void {
                 try {
                     $originalEvent.dataTransfer.setData('application/json', JSON.stringify(item));
                 } catch (e) {
@@ -181,16 +168,24 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
                 let originId: string = originalItem._id;
                 let targetId: string = targetItem._id;
 
-                if (originalItem.type == FOLDER_ITEM_TYPE.MINDMAP) {
-                    let mindmapBody: MindmapFolder = new MindmapFolder(originalItem.name.toString(), targetId);
-                    $scope.$eval(vm.onUpdateMindmap)(originId, mindmapBody);
+                if (originalItem.type === FOLDER_ITEM_TYPE.MINDMAP) {
+                    let userId: string = "userId";
+                    let folder_parent_id: string = targetId
+                    let folder_parent = {userId, folder_parent_id}
+                    let mindmapBody: MindmapFolder = new MindmapFolder(originalItem.name.toString(), folder_parent);
+                    $scope.$eval(vm.onChangeMindmapFolder)(originId, mindmapBody);
 
                 } else {
                     let folderBody: Folder = new Folder(originalItem.name.toString(), targetId);
                     $scope.$eval(vm.onUpdateFolder)(originId, folderBody);
                 }
 
+
+
+
+
             };
+
 
 
         }

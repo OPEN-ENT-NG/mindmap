@@ -1,8 +1,11 @@
 import {Mix} from "entcore-toolkit";
-import {workspace} from "entcore";
+import {Behaviours, workspace} from "entcore";
 import models = workspace.v2.models;
 import {FolderItem} from "./FolderItem";
 import {FOLDER_ITEM_TYPE} from "../core/const/type";
+import {Mindmap} from "./Mindmap";
+import {Mindmaps} from "./Mindmaps";
+import forEach = require("core-js/fn/array/for-each");
 
 export class FolderView {
     _id?: string;
@@ -14,10 +17,12 @@ export class FolderView {
         displayName?: string;
     }
     type?: string;
+    selected?: boolean;
 }
 
 export interface IFolder extends FolderView {
     name: string;
+    ids?: string[];
 }
 
 export class Folder extends FolderView {
@@ -25,6 +30,11 @@ export class Folder extends FolderView {
     name: string;
     folder_parent_id: string;
     type?: string;
+    owner: {
+        userId: string;
+        displayName: string;
+    }
+    selected?: boolean;
 
 
     constructor(name?, folder_parent_id?) {
@@ -37,6 +47,7 @@ export class Folder extends FolderView {
 export class Folders {
     all: FolderItem[];
     mindmapsAll: FolderItem[];
+    mindmapsRight: Mindmap[];
     pageCount: number;
     id: string;
     name: string;
@@ -47,12 +58,24 @@ export class Folders {
     sharedFormsFolder?: Folder;
     archivedFormsFolder?: Folder;
     children: FolderItem[];
+    selected: boolean;
+    owner: {
+        userId: string;
+        displayName: string;
+    }
 
     constructor(folderTab: FolderItem[], mindmapsTab: FolderItem[]) {
         this.all = folderTab.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.FOLDER);
-        this.mindmapsAll = mindmapsTab.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.MINDMAP);
+        this.mindmapsAll = mindmapsTab.filter((mindmap: Mindmap) => mindmap.type == FOLDER_ITEM_TYPE.MINDMAP);
         this.trees = [];
+        this.mindmapsRight = this.mindmapsAll.map((mindmap: Mindmap) => Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
+        forEach(this.all,(folder)=>{
+            if(folder.selected){
+            this.selected = true;
+            }
+        })
     }
+
 
 
     mapToChildrenTrees = (): models.Element[] => {
@@ -69,6 +92,7 @@ export class Folders {
 
     setMindmaps = (mindmaps: FolderItem[]): void => {
         this.mindmapsAll = mindmaps.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.MINDMAP);
+        this.mindmapsRight = this.mindmapsAll.map((mindmap: Mindmap) => Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
     }
 
     findTree = (currentFolders: models.Element[], id: string): models.Element => {
@@ -91,5 +115,9 @@ export class Folders {
 
     mapFromChildrenTree = (children: models.Element[]): FolderItem[] => {
         return children.map((child: models.Element) => new FolderItem().setFromElement(child));
+    }
+
+    selection() {
+        return this.selected;
     }
 }

@@ -38,17 +38,18 @@ public class FolderController extends MongoDbControllerHelper {
     }
 
 
-    @Get("/folders/:id/children")
+    @Get("/folders/:id/children/share/:isShare/mine/:isMine")
     @ApiDoc("Get all folders and mindmaps")
     @SuppressWarnings("unchecked")
     public void getFolderChildren(HttpServerRequest request) {
 
         String id = request.getParam(Field.ID);
-
+        Boolean isShare = Boolean.parseBoolean(request.getParam(Field.IS_SHARE));
+        Boolean isMine = Boolean.parseBoolean(request.getParam(Field.IS_MINE));
 
         UserUtils.getUserInfos(this.eb, request, user -> {
             Future<JsonArray> folders = folderService.getFoldersChildren(id, user, false);
-            Future<JsonArray> mindmaps = mindmapService.getChildren(id, user, false);
+            Future<JsonArray> mindmaps = mindmapService.listMindmap(id, user, isShare, isMine);
             CompositeFuture.all(mindmaps, folders).onSuccess(res -> {
                                 ((List<JsonObject>) mindmaps.result().getList()).forEach(mindmap -> {
                                     mindmap.put(Field.TYPE, Field.MINDMAP);
@@ -94,19 +95,16 @@ public class FolderController extends MongoDbControllerHelper {
 
     }
 
-    @Delete("folders/:id")
+    @Put("folders/delete")
     @ApiDoc("delete folder by id")
     @ResourceFilter(FolderRight.class)
-    @SecuredAction(value = "", type = ActionType.RESOURCE)
-    @Trace(Actions.FOLDER_DELETE)
     public void deleteFolder(HttpServerRequest request) {
-        String id = request.getParam(Field.ID);
         UserUtils.getUserInfos(this.eb, request, user -> {
-            folderService.getFolder(id)
-                    .compose(res -> folderService.deleteFolder(id, user))
-                    .onFailure(error -> badRequest(request))
-                    .onSuccess(result -> renderJson(request, result));
-
+            RequestUtils.bodyToJson(request, pathPrefix + "folder", body -> {
+                folderService.deleteFolder(body, user)
+                        .onFailure(error -> badRequest(request))
+                        .onSuccess(result -> renderJson(request, result));
+            });
         });
     }
 
