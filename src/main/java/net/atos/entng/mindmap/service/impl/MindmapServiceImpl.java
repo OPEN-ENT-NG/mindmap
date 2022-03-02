@@ -23,10 +23,13 @@ import com.mongodb.QueryBuilder;
 import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
 import fr.wseduc.mongodb.MongoUpdateBuilder;
+import fr.wseduc.webutils.Either;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
+import net.atos.entng.mindmap.Mindmap;
 import net.atos.entng.mindmap.core.constants.Field;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
@@ -46,6 +49,7 @@ import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.user.UserInfos;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the mindmap service.
@@ -104,24 +108,66 @@ public class MindmapServiceImpl implements MindmapService {
     }
 
     @Override
-    public Future<JsonArray> getChildren(String id, UserInfos user, boolean isInTrash) {
+    public Future<JsonArray> listMindmap(String mindmapFolderParentId, UserInfos user, String isShare, String isMine) {
         Promise<JsonArray> promise = Promise.promise();
-
+        JsonObject userIsMdindOwner = new JsonObject().put(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId());
+        JsonObject isSharedMindmap = new JsonObject().put(String.format("%s.%s", Field.SHARED, Field.USER_ID), user.getUserId());
+        JsonObject sharedContainsUserGroupIds = new JsonObject().put(String.format("%s.%s", Field.SHARED, Field.GROUP_ID),
+                new JsonObject().put(String.format("$%s", Field.IN), user.getGroupsIds()));
         JsonObject query = new JsonObject();
-        if (id.equals(Field.NULL)) {
-            query.putNull(Field.FOLDER_PARENT_ID);
+        JsonArray json = new JsonArray();
+        if (isShare.equals(Field.TRUE)) {
+            json.add(isSharedMindmap);
+            json.add(sharedContainsUserGroupIds);
+        } else if (isMine.equals(Field.TRUE)) {
+            json.add(userIsMdindOwner);
         } else {
-            query.put(Field.FOLDER_PARENT_ID, id);
+            json.add(isSharedMindmap);
+            json.add(sharedContainsUserGroupIds);
+            json.add(userIsMdindOwner);
         }
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId());
-        if (Boolean.FALSE.equals(isInTrash)) {
-            query.putNull(Field.DELETED_AT);
+
+        query.put(String.format("$%s", Field.OR), json);
+
+        JsonObject queryResult = new JsonObject();
+        if (mindmapFolderParentId.equals(Field.NULL)) {
+            JsonObject folderParentIsNull = new JsonObject().putNull(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID));
+            JsonObject folderParentIsEmpty = new JsonObject().put(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID), new JsonObject().put(String.format("$%s", Field.EXISTS), false));
+            JsonObject folderParentUserIsNotUser = new JsonObject().put(String.format("%s.%s", Field.FOLDER_PARENT, Field.USER_ID), new JsonObject().put(String.format("$%s", Field.NE), user.getUserId()));
+            JsonObject folderParentUser = new JsonObject().put(String.format("%s.%s", Field.FOLDER_PARENT, Field.USER_ID), user.getUserId());
+            JsonObject folderParentFolderId = new JsonObject().putNull(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID));
+
+
+            queryResult.put(String.format("$%s", Field.OR), new JsonArray()
+                    .add(folderParentIsNull)
+                    .add(folderParentIsEmpty)
+                    .add(folderParentUserIsNotUser)
+                    .add(new JsonObject().put(String.format("$%s", Field.AND), new JsonArray().add(folderParentUser).add(folderParentFolderId)))
+            );
         } else {
-            query.put(Field.DELETED_AT, new JsonObject().put(String.format("$%s", Field.EXISTS), 1));
+            queryResult.put(String.format("%s.%s", Field.FOLDER_PARENT, Field.USER_ID), user.getUserId()).put(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID), mindmapFolderParentId);
         }
+        query.put(String.format("$%s", Field.AND), new JsonArray()
+                .add(queryResult));
+
         mongoDb.find(Field.COLLECTION_MINDMAP, query, MongoDbResult.validResultsHandler(PromiseHelper.handlerJsonArray(promise)));
+
         return promise.future();
     }
+
+    @Override
+    public Future<JsonObject> updateMindmapShared(List<String> ids, UserInfos user) {
+        Promise<JsonObject> promise = Promise.promise();
+
+        QueryBuilder query = QueryBuilder.start();
+        query.put(String.format("%s.%s", Field.SHARED, Field.USER_ID)).is(user.getUserId());
+        query.put(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID)).in(ids);
+        MongoUpdateBuilder modifier = new MongoUpdateBuilder();
+        modifier.pull(Field.FOLDER_PARENT, new JsonObject().put(Field.USER_ID, user.getUserId()));
+        mongoDb.update(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), modifier.build(), false, ids.size() > 1, MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
+        return promise.future();
+    }
+
 
     @Override
     public Future<JsonObject> updateMindmapFolder(List<String> ids, JsonObject body, UserInfos user) {
@@ -142,16 +188,30 @@ public class MindmapServiceImpl implements MindmapService {
     }
 
     @Override
-    public Future<JsonObject> updateMindmap(String id, JsonObject body, UserInfos user) {
+    public Future<JsonObject> pullUpdateMindmap(String id, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
 
-        QueryBuilder query = QueryBuilder.start(Field._ID).is(id);
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
-
+        JsonObject query = new JsonObject();
+        query.put("_id", id);
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
-        for (String attr : body.fieldNames()) {
-            modifier.set(attr, body.getValue(attr));
+        modifier.pull(Field.FOLDER_PARENT, new JsonObject().put(Field.USER_ID, user.getUserId()));
+        mongoDb.update(Field.COLLECTION_MINDMAP, query, modifier.build(), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
+
+        return promise.future();
+    }
+
+    @Override
+    public Future<JsonObject> updateMindmap(String id, JsonObject body, UserInfos user) {
+        Promise<JsonObject> promise = Promise.promise();
+        QueryBuilder query = QueryBuilder.start(Field._ID).is(id);
+        MongoUpdateBuilder modifier = new MongoUpdateBuilder();
+        String res = body.getJsonObject(Field.FOLDER_PARENT).getValue(Field.FOLDER_PARENT_ID).toString();
+        if (res.equals(Field.NULL)) {
+            modifier.push(Field.FOLDER_PARENT, new JsonObject().put(Field.USER_ID, user.getUserId()).putNull(Field.FOLDER_PARENT_ID));
+        } else {
+            modifier.push(Field.FOLDER_PARENT, new JsonObject().put(Field.USER_ID, user.getUserId()).put(Field.FOLDER_PARENT_ID, res));
         }
+
 
         mongoDb.update(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), modifier.build(), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
 
@@ -175,8 +235,9 @@ public class MindmapServiceImpl implements MindmapService {
     public Future<JsonObject> deleteMindmapList(List<String> ids, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
 
-        QueryBuilder query = QueryBuilder.start(Field._ID).in(ids);
+        QueryBuilder query = QueryBuilder.start();
         query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
+        query.put(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID)).in(ids);
 
 
         mongoDb.delete(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));

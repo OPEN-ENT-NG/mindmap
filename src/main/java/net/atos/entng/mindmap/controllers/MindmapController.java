@@ -25,13 +25,11 @@ import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.webutils.I18n;
 import net.atos.entng.mindmap.Mindmap;
 import net.atos.entng.mindmap.core.constants.Field;
-import net.atos.entng.mindmap.security.mindmap.MindmapRight;
 import net.atos.entng.mindmap.service.MindmapService;
 import net.atos.entng.mindmap.service.impl.MindmapServiceImpl;
 import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
-import org.entcore.common.http.filter.ResourceFilter;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -106,17 +104,6 @@ public class MindmapController extends MongoDbControllerHelper {
         super.list(request);
     }
 
-    @Get("/:id/children")
-    @ResourceFilter(MindmapRight.class)
-    public void getMindmapChildren(HttpServerRequest request) {
-        String id = request.getParam(Field.ID);
-
-        UserUtils.getUserInfos(this.eb, request, user -> {
-            mindmapService.getChildren(id, user, false)
-                    .onSuccess(result -> renderJson(request, result))
-                    .onFailure(error -> badRequest(request));
-        });
-    }
 
     @Override
     @Post("")
@@ -140,14 +127,13 @@ public class MindmapController extends MongoDbControllerHelper {
         super.retrieve(request);
     }
 
+
     @Override
     @Put("/:id")
     @ApiDoc("Allows to update a mindmap associated to the given identifier")
-    @ResourceFilter(MindmapRight.class)
     @SecuredAction(value = "mindmap.contrib", type = ActionType.RESOURCE)
     public void update(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + "mindmap", new Handler<JsonObject>() {
-
             @Override
             public void handle(JsonObject event) {
                 MindmapController.super.update(request);
@@ -155,10 +141,26 @@ public class MindmapController extends MongoDbControllerHelper {
         });
     }
 
+
+    @Put("move/:id")
+    @ApiDoc("Allows to change folder_parent_id for a mindmap share or not")
+    @SecuredAction(value = "mindmap.read", type = ActionType.RESOURCE)
+    public void changeMindmapFolder(final HttpServerRequest request) {
+        String id = request.getParam(Field.ID);
+        UserUtils.getUserInfos(this.eb, request, user -> {
+            RequestUtils.bodyToJson(request, pathPrefix + "mindmap", body -> {
+                mindmapService.pullUpdateMindmap(id, user)
+                        .compose(deleteMindmapRes -> mindmapService.updateMindmap(id, body, user))
+                        .onFailure(error -> badRequest(request))
+                        .onSuccess(result -> renderJson(request, result));
+            });
+        });
+
+    }
+
     @Override
     @Delete("/:id")
     @ApiDoc("Allows to delete a mindmap associated to the given identifier")
-    @ResourceFilter(MindmapRight.class)
     @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
     public void delete(HttpServerRequest request) {
         String id = request.getParam(Field.ID);

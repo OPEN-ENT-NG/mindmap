@@ -1,8 +1,10 @@
 import {Mix} from "entcore-toolkit";
-import {workspace} from "entcore";
+import {Behaviours, workspace} from "entcore";
 import models = workspace.v2.models;
 import {FolderItem} from "./FolderItem";
 import {FOLDER_ITEM_TYPE} from "../core/const/type";
+import {Mindmap} from "./Mindmap";
+import {Mindmaps} from "./Mindmaps";
 
 export class FolderView {
     _id?: string;
@@ -25,6 +27,10 @@ export class Folder extends FolderView {
     name: string;
     folder_parent_id: string;
     type?: string;
+    owner: {
+        userId: string;
+        displayName: string;
+    }
 
 
     constructor(name?, folder_parent_id?) {
@@ -37,6 +43,7 @@ export class Folder extends FolderView {
 export class Folders {
     all: FolderItem[];
     mindmapsAll: FolderItem[];
+    mindmapsRight : Mindmaps[];
     pageCount: number;
     id: string;
     name: string;
@@ -47,11 +54,19 @@ export class Folders {
     sharedFormsFolder?: Folder;
     archivedFormsFolder?: Folder;
     children: FolderItem[];
+    owner: {
+        userId: string;
+        displayName: string;
+    }
 
     constructor(folderTab: FolderItem[], mindmapsTab: FolderItem[]) {
         this.all = folderTab.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.FOLDER);
-        this.mindmapsAll = mindmapsTab.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.MINDMAP);
+        this.mindmapsAll = mindmapsTab.filter((folder: Mindmap) => folder.type == FOLDER_ITEM_TYPE.MINDMAP);
         this.trees = [];
+        this.mindmapsRight = this.mindmapsAll.map((mindmap :Mindmap)=> Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
+        for(var mindmapRight of this.mindmapsAll) {
+
+        }
     }
 
 
@@ -69,6 +84,7 @@ export class Folders {
 
     setMindmaps = (mindmaps: FolderItem[]): void => {
         this.mindmapsAll = mindmaps.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.MINDMAP);
+        this.mindmapsRight = this.mindmapsAll.map((mindmap :Mindmap)=> Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
     }
 
     findTree = (currentFolders: models.Element[], id: string): models.Element => {

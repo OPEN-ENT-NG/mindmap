@@ -38,17 +38,18 @@ public class FolderController extends MongoDbControllerHelper {
     }
 
 
-    @Get("/folders/:id/children")
+    @Get("/folders/:id/children/:isShare/:isMine")
     @ApiDoc("Get all folders and mindmaps")
     @SuppressWarnings("unchecked")
     public void getFolderChildren(HttpServerRequest request) {
 
         String id = request.getParam(Field.ID);
-
+        String isShare = request.getParam(Field.IS_SHARE);
+        String isMine = request.getParam(Field.IS_MINE);
 
         UserUtils.getUserInfos(this.eb, request, user -> {
             Future<JsonArray> folders = folderService.getFoldersChildren(id, user, false);
-            Future<JsonArray> mindmaps = mindmapService.getChildren(id, user, false);
+            Future<JsonArray> mindmaps = mindmapService.listMindmap(id, user, isShare,isMine);
             CompositeFuture.all(mindmaps, folders).onSuccess(res -> {
                                 ((List<JsonObject>) mindmaps.result().getList()).forEach(mindmap -> {
                                     mindmap.put(Field.TYPE, Field.MINDMAP);

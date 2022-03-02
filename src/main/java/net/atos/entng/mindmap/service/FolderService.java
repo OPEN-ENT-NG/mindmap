@@ -22,7 +22,7 @@ public interface FolderService {
 
     Future<JsonObject> deleteFolder(String id, UserInfos user);
 
-    void allFolderMindmap(String id, UserInfos user, boolean isInTrash, Handler<Either<String, JsonArray>> handler);
-
     Future<JsonObject> deleteFolderList(List<String> ids, UserInfos user);
+
+
 }

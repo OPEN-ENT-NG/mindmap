@@ -1,6 +1,6 @@
 import {$, ng,} from "entcore";
 import {ROOTS} from "../../core/const/roots";
-import {Folder, FolderItem, Mindmap, MindmapFolder} from "../../model";
+import {Folder, FolderItem, Mindmap, MindmapFolder, Mindmaps} from "../../model";
 import {FOLDER_ITEM_TYPE} from "../../core/const/type";
 
 interface IViewModel {
@@ -56,12 +56,30 @@ interface IViewModel {
 
     moveMindmap(id: string, name: string): void;
 
+    editMindmap(mindmap: Mindmap, $event): void;
+
+    onEditMindmap(): void;
+
+    shareMindmap(mindmap: Mindmap, $event): void;
+
+    onShareMindmap(): void;
+
+    printPngMindmap(mindmap: Mindmap, $event): void;
+
+    onPrintPngMindmap(): void;
+
+    onChangeMindmapFolder(): void;
+
+
     id: string;
     name: string;
     folderParentId: string;
     ownerId: string;
     folders: FolderItem[];
-    mindmapsItem: FolderItem[];
+    mindmapsItem: Mindmap[];
+    display: {
+        showPanel: boolean;
+    }
 
 }
 
@@ -84,6 +102,10 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
             treeMoveFolder: '&',
             onMoveMindmap: '&',
             selectedFoldersId: '=',
+            onEditMindmap: '&',
+            onShareMindmap: '&',
+            onPrintPngMindmap: '&',
+            onChangeMindmapFolder: '&',
         },
 
         restrict: 'E',
@@ -105,6 +127,18 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
 
         link: function ($scope) {
             const vm: IViewModel = $scope.vm;
+
+            vm.printPngMindmap = (mindmap: Mindmap, $event): void => {
+                $scope.$eval(vm.onPrintPngMindmap)(mindmap, $event)
+            }
+
+            vm.shareMindmap = (mindmap: Mindmap, $event): void => {
+                $scope.$eval(vm.onShareMindmap)(mindmap, $event)
+            }
+
+            vm.editMindmap = (mindmap: Mindmap, $event): void => {
+                $scope.$eval(vm.onEditMindmap)(mindmap, $event);
+            }
 
             vm.treeFolder = (id: string) => {
                 $scope.$eval(vm.treeMoveFolder)(id);
@@ -149,7 +183,7 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
             }
 
 
-            vm.drag = function (item: FolderItem, $originalEvent): void {
+            vm.drag = function (item: FolderItem | Mindmap, $originalEvent): void {
                 try {
                     $originalEvent.dataTransfer.setData('application/json', JSON.stringify(item));
                 } catch (e) {
@@ -181,9 +215,12 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
                 let originId: string = originalItem._id;
                 let targetId: string = targetItem._id;
 
-                if (originalItem.type == FOLDER_ITEM_TYPE.MINDMAP) {
-                    let mindmapBody: MindmapFolder = new MindmapFolder(originalItem.name.toString(), targetId);
-                    $scope.$eval(vm.onUpdateMindmap)(originId, mindmapBody);
+                if (originalItem.type === FOLDER_ITEM_TYPE.MINDMAP) {
+                    var userId: string = "userId";
+                    var folder_parent_id: string = targetId
+                    var folder_parent = {userId, folder_parent_id}
+                    let mindmapBody: MindmapFolder = new MindmapFolder(originalItem.name.toString(), folder_parent);
+                    $scope.$eval(vm.onChangeMindmapFolder)(originId, mindmapBody);
 
                 } else {
                     let folderBody: Folder = new Folder(originalItem.name.toString(), targetId);

@@ -12,6 +12,9 @@ export interface MindmapService {
     deleteMindmap(id: string): Promise<AxiosResponse>;
 
     createMindmap(mindmaBody: MindmapFolder): Promise<AxiosResponse>;
+
+    changeMindmapFolder(id: string, mindmapBody: Mindmap): Promise<AxiosResponse>;
+
 }
 
 export const mindmapService: MindmapService = {
@@ -26,6 +29,10 @@ export const mindmapService: MindmapService = {
 
     updateMindmap: async (id: string, mindmapBody: Mindmap): Promise<AxiosResponse> => {
         return await http.put(`/mindmap/${id}`, mindmapBody);
+    },
+
+    changeMindmapFolder: async (id: string, mindmapBody: Mindmap): Promise<AxiosResponse> => {
+        return await http.put(`/mindmap/move/${id}`, mindmapBody);
     },
 
     deleteMindmap: async (id: string): Promise<AxiosResponse> => {

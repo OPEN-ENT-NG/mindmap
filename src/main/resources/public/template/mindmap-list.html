@@ -13,9 +13,19 @@
             </nav>
 
         </div>
+        <directive-label-share name="nameLabel"
+                               on-sort="sortMindmap"
+                               is-checked="isCheckedLabelMy">
+        </directive-label-share>
+
+        <directive-label-share name="nameLabelShare"
+                               on-sort="sortShare"
+                               is-checked="isCheckedLabelShare">
+        </directive-label-share>
+
 
         <directive-folder-list folders="folders.all"
-                               mindmaps-item="mindmapsItem.mindmapsAll"
+                               mindmaps-item="mindmapsItem.mindmapsRight"
                                on-folder-tree-root="folderTreeDirective"
                                on-open-folder="openFolderByView"
                                on-update-folder="updateFolder"
@@ -27,7 +37,11 @@
                                on-move-folder="moveFolder"
                                tree-move-folder="displayTreeMoveFolder"
                                on-move-mindmap="moveMindmap"
-                               selected-folders-id="selectedFoldersId">
+                               selected-folders-id="selectedFoldersId"
+                               on-edit-mindmap="editMindmap"
+                               on-share-mindmap="shareMindmap"
+                               on-print-png-mindmap="printPngMindmap"
+                               on-change-mindmap-folder="changeMindmapFolder">
         </directive-folder-list>
     </div>
 
@@ -82,43 +96,10 @@
     <!-- Allows to display the panel to manage share rights -->
     <div ng-if="display.showPanel">
         <lightbox show="display.showPanel" on-close="display.showPanel = false;">
-            <share-panel app-prefix="'mindmap'" resources="mindmap"></share-panel>
+            <share-panel app-prefix="'mindmap'" resources="mindmap" auto-close="true">
+            </share-panel>
         </lightbox>
     </div>
 </div>
-
-
-<section class="toggle-buttons" ng-class="{  hide: mindmaps.selection().length === 0}">
-    <div class="toggle">
-        <div class="row">
-            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button ng-if="mindmaps.selection().length === 1"
-                        ng-click="editMindmap(mindmaps.selection()[0], $event)">
-                    <i18n>properties</i18n>
-                </button>
-            </resource-right>
-            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button workflow="mindmap.publish" ng-if="mindmaps.selection().length === 1"
-                        library-resource="mindmaps.selection()[0]">
-                    <i18n>bpr.publish</i18n>
-                </button>
-            </resource-right>
-            <button ng-if="mindmaps.selection().length === 1"
-                    ng-click="printPngMindmap(mindmaps.selection()[0], $event)">
-                <i18n>print</i18n>
-            </button>
-            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button ng-click="shareMindmap(mindmaps.selection(), $event)">
-                    <i18n>share</i18n>
-                </button>
-            </resource-right>
-            <resource-right name="manage" resource="mindmaps.selection()" class="cell">
-                <button ng-click="display.confirmDeleteMindmap = true">
-                    <i18n>remove</i18n>
-                </button>
-            </resource-right>
-        </div>
-    </div>
-</section>
 </section>
 

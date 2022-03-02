@@ -22,6 +22,8 @@
   "mindmap.format.png": "Format PNG",
   "mindmap.format.svg": "Format SVG",
   "mindmap.or.page.notfound.or.unauthorized": "La carte mentale ou la page demandée n'existe pas, a été supprimée, ou vous n'avez pas les droits pour y accéder.",
+  "mindmap.checkbox.share": "Cartes mentales partagées avec moi",
+  "mindmap.checkbox.my": "Mes cartes mentales",
   "mindmap.folder.create": "Créer un dossier",
   "mindmap.folder.title": "Titre du dossier",
   "mindmap.folder.title.root": "Mes cartes mentales",

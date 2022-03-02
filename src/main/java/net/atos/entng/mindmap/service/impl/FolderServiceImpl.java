@@ -22,6 +22,7 @@ import io.vertx.core.logging.LoggerFactory;
 
 import net.atos.entng.mindmap.core.constants.Field;
 
+import net.atos.entng.mindmap.helper.MongoHelper;
 import net.atos.entng.mindmap.helper.PromiseHelper;
 import net.atos.entng.mindmap.service.FolderService;
 import net.atos.entng.mindmap.service.MindmapService;
@@ -35,7 +36,6 @@ import fr.wseduc.mongodb.MongoUpdateBuilder;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class FolderServiceImpl implements FolderService {
@@ -53,29 +53,7 @@ public class FolderServiceImpl implements FolderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderServiceImpl.class);
 
-    @Override
-    public void allFolderMindmap(String id, UserInfos user, boolean isInTrash, Handler<Either<String, JsonArray>> handler) {
-        Future<JsonArray> folders = getFoldersChildren(id, user, isInTrash);
-        Future<JsonArray> mindmaps = mindmapService.getChildren(id, user, isInTrash);
 
-        CompositeFuture.all(mindmaps, folders).setHandler(event -> {
-            if (event.failed()) {
-
-                String message = "" + event.cause();
-                LOGGER.error(message);
-                handler.handle(new Either.Left<>(message));
-            } else {
-                mindmaps.result().forEach(mindmap -> {
-                    ((JsonObject) mindmap).getValue(Field._ID);
-                    ((JsonObject) mindmap).getValue(Field.NAME);
-                    ((JsonObject) mindmap).getValue(Field.FOLDER_PARENT_ID);
-                    ((JsonObject) mindmap).getValue(String.format("%s.%s", Field.OWNER, Field.USER_ID));
-                    ((JsonObject) mindmap).getValue(String.format("%s.%s", Field.OWNER, Field.DISPLAY_NAME));
-                });
-                handler.handle(new Either.Right<>(folders.result().addAll(mindmaps.result())));
-            }
-        });
-    }
 
     @Override
     public Future<JsonArray> getFoldersChildren(String folderParentId, UserInfos user, boolean isInTrash) {
@@ -182,27 +160,32 @@ public class FolderServiceImpl implements FolderService {
         QueryBuilder query = QueryBuilder.start(Field._ID).is(id);
         query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
 
-        getFoldersChildren(id, user, false)
-                .onSuccess(folderChildrenResult -> {
-                    List<String> ids = ((List<JsonObject>) folderChildrenResult.getList()).stream().map(folder -> folder.getString(Field._ID)).collect(Collectors.toList());
-                    this.deleteFolderList(ids, user)
-                            .onSuccess(res -> {
-                                mindmapService.getChildren(id, user, false)
-                                        .onSuccess(resultat -> {
-                                            List<String> idsMindmap = ((List<JsonObject>) resultat.getList()).stream().map(mindmapChild -> mindmapChild.getString(Field._ID)).collect(Collectors.toList());
-                                            mindmapService.deleteMindmapList(idsMindmap, user)
-                                                    .onFailure(err -> promise.handle(Future.failedFuture(err)))
-                                                    .onSuccess(resu -> mongoDb.delete(Field.COLLECTION_MINDMAP_FOLDER, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise))));
-                                        });
-
-                            });
-
-                })
+        getNestedFolderChildrenIds(id)
                 .onFailure(err -> {
-                    String message = String.format("[Mindmap@%s::deleteFolder] Failed to delete the folder : %s", this.getClass().getSimpleName(), err.getMessage());
+                    String message = String.format("[Mindmap@%s::deleteFolder] Failed to get the folder : %s", this.getClass().getSimpleName(), err.getMessage());
                     log.error(message + err);
                     promise.fail(err.getMessage());
-                });
+                })
+                .onSuccess(nestedfolderChildrenResult -> MongoHelper.getResultCommand(nestedfolderChildrenResult)
+                        .compose(commandResult -> {
+                            List<String> folderIds = commandResult.getJsonObject(0).getJsonArray(Field.FOLDER_CHILD_IDS, new JsonArray()).getList();
+                            folderIds.add(commandResult.getJsonObject(0).getString(Field._ID));
+                            Future<JsonObject> deleteFolder = this.deleteFolderList(folderIds, user);
+                            Future<JsonObject> updateMindmap = mindmapService.deleteMindmapList(folderIds, user);
+                            Future<JsonObject> deleteMindap = mindmapService.updateMindmapShared(folderIds, user);
+                            return CompositeFuture.all(deleteFolder, updateMindmap, deleteMindap)
+                                    .onFailure(err -> promise.handle(CompositeFuture.factory.failedFuture(err)))
+                                    .onSuccess(resDelete -> mongoDb.delete(Field.COLLECTION_MINDMAP_FOLDER, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise))));
+                        })
+                        .onFailure(err -> {
+                            String message = String.format("[Mindmap@%s::deleteFolder] Failed to get result of the command : %s", this.getClass().getSimpleName(), err.getMessage());
+                            log.error(message);
+                            promise.fail(err.getMessage());
+
+                        })
+                        .onSuccess(resu -> promise.handle(CompositeFuture.factory.succeededFuture())));
+
+
         return promise.future();
     }
 

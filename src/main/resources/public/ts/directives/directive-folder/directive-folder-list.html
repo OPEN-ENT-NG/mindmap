@@ -27,23 +27,23 @@
                                     <button class="cell" ng-click="vm.openFolder(folder)">
                                         <i18n>mindmap.folder.manage.open</i18n>
                                     </button>
-                                    <button class="cell" ng-click="display.updateFolder = true">
+                                    <button class="cell" ng-click="vm.display.updateFolder = true">
 
                                         <i18n>mindmap.folder.manage.rename</i18n>
                                     </button>
                                     <button class="cell"
-                                            ng-click="display.moveFolder = true; vm.treeFolder(folder._id);">
+                                            ng-click="vm.display.moveFolder = true; vm.treeFolder(folder._id);">
 
                                         <i18n>mindmap.folder.manage.move</i18n>
                                     </button>
-                                    <button class="cell" ng-click="display.deleteFolder = true">
+                                    <button class="cell" ng-click="vm.display.deleteFolder = true">
 
                                         <i18n>mindmap.folder.manage.delete</i18n>
                                     </button>
                                 </div>
                             </div>
                         </section>
-                        <lightbox show="display.updateFolder" on-close="display.updateFolder = false;"
+                        <lightbox show="vm.display.updateFolder" on-close="vm.display.updateFolder = false;"
                                   class="ng-isolate-scope">
                             <div class="content">
                                 <div class="twelve cell">
@@ -58,7 +58,7 @@
                                                ng-model="folderTitle">
                                     </div>
                                     <div class="row ng-scope">
-                                        <button ng-click="vm.RenameFolder(folder._id,folderTitle); display.updateFolder = false;"
+                                        <button ng-click="vm.RenameFolder(folder._id,folderTitle); vm.display.updateFolder = false;"
                                                 ng-disabled="!folderTitle"
                                                 class="right-magnet" disabled="disabled">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.manage.rename</span>
@@ -74,7 +74,7 @@
                             </div>
 
                         </lightbox>
-                        <lightbox show="display.moveFolder" class="ng-isolate-scope">
+                        <lightbox show="vm.display.moveFolder" class="ng-isolate-scope">
 
                             <div class="content">
                                 <div class="twelve cell">
@@ -90,7 +90,7 @@
                                             <i18n><span class="no-style ng-scope">mindmap.folder.manage.move</span>
                                             </i18n>
                                         </button>
-                                        <button class="cancel right-magnet" ng-click="display.moveFolder = false;">
+                                        <button class="cancel right-magnet" ng-click="vm.display.moveFolder = false;">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
                                             </i18n>
                                         </button>
@@ -100,7 +100,7 @@
                             </div>
 
                         </lightbox>
-                        <lightbox show="display.deleteFolder" on-close="display.deleteFolder = false;"
+                        <lightbox show="vm.display.deleteFolder" on-close="vm.display.deleteFolder = false;"
                                   class="ng-isolate-scope">
 
                             <div class="content">
@@ -115,12 +115,12 @@
 
                                     </div>
                                     <div class="row ng-scope">
-                                        <button ng-click="vm.deleteFolder(folder._id); display.deleteFolder = false;"
+                                        <button ng-click="vm.deleteFolder(folder._id); vm.display.deleteFolder = false;"
                                                 class="right-magnet">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.manage.delete</span>
                                             </i18n>
                                         </button>
-                                        <button class="cancel right-magnet" ng-click="display.deleteFolder = false;">
+                                        <button class="cancel right-magnet" ng-click="vm.display.deleteFolder = false;">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
                                             </i18n>
                                         </button>
@@ -163,21 +163,42 @@
                                     <button class="cell" ng-click="vm.openMindmap(mindmap)">
                                         <i18n>mindmap.folder.manage.open</i18n>
                                     </button>
-                                    <button class="cell" ng-click="display.updateMindmap = true">
-                                        <i18n>mindmap.folder.manage.rename</i18n>
-                                    </button>
+                                    <resource-right name="contrib" resource="mindmap">
+                                        <button class="cell" ng-click="vm.display.updateMindmap = true">
+                                            <i18n>mindmap.folder.manage.rename</i18n>
+                                        </button>
+                                    </resource-right>
                                     <button class="cell"
-                                            ng-click="display.moveMindmap = true; vm.treeFolder(folder._id);">
+                                            ng-click="vm.display.moveMindmap = true; vm.treeFolder(folder._id);">
                                         <i18n>mindmap.folder.manage.move</i18n>
                                     </button>
-                                    <button class="cell" ng-click="display.deleteMindmap = true">
-                                        <i18n>mindmap.folder.manage.delete</i18n>
+                                    <resource-right name="manage" resource="mindmap">
+                                        <button class="cell" ng-click="vm.display.deleteMindmap = true">
+                                            <i18n>mindmap.folder.manage.delete</i18n>
+                                        </button>
+                                    </resource-right>
+                                    <resource-right name="contrib" resource="mindmap">
+                                        <button
+                                                ng-click="vm.editMindmap(mindmap, $event)">
+                                            <i18n>properties</i18n>
+                                        </button>
+                                    </resource-right>
+                                    <button
+                                            library-resource="mindmap">
+                                        <i18n>bpr.publish</i18n>
+                                    </button>
+                                    <button
+                                            ng-click="vm.printPngMindmap(mindmap, $event)">
+                                        <i18n>print</i18n>
+                                    </button>
+                                    <button ng-click="vm.shareMindmap(mindmap, $event)">
+                                        <i18n>share</i18n>
                                     </button>
                                 </div>
                             </div>
 
                         </section>
-                        <lightbox show="display.updateMindmap" on-close="display.updateMindmap = false;"
+                        <lightbox show="vm.display.updateMindmap" on-close="vm.display.updateMindmap = false;"
                                   class="ng-isolate-scope">
 
 
@@ -194,13 +215,14 @@
                                                ng-model="mindmapTitle">
                                     </div>
                                     <div class="row ng-scope">
-                                        <button ng-click="vm.RenameMindmap(mindmap._id,mindmapTitle); display.updateMindmap = false;"
+                                        <button ng-click="vm.RenameMindmap(mindmap._id,mindmapTitle); vm.display.updateMindmap = false;"
                                                 ng-disabled="!mindmapTitle"
                                                 class="right-magnet" disabled="disabled">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.manage.rename</span>
                                             </i18n>
                                         </button>
-                                        <button class="cancel right-magnet" ng-click="display.updateMindmap = false;">
+                                        <button class="cancel right-magnet"
+                                                ng-click="vm.display.updateMindmap = false;">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
                                             </i18n>
                                         </button>
@@ -210,7 +232,7 @@
                             </div>
 
                         </lightbox>
-                        <lightbox show="display.moveMindmap" class="ng-isolate-scope">
+                        <lightbox show="vm.display.moveMindmap" class="ng-isolate-scope">
 
                             <div class="content">
                                 <div class="twelve cell">
@@ -226,7 +248,7 @@
                                             <i18n><span class="no-style ng-scope">mindmap.folder.manage.move</span>
                                             </i18n>
                                         </button>
-                                        <button class="cancel right-magnet" ng-click="display.moveMindmap = false;">
+                                        <button class="cancel right-magnet" ng-click="vm.display.moveMindmap = false;">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
                                             </i18n>
                                         </button>
@@ -236,7 +258,7 @@
                             </div>
 
                         </lightbox>
-                        <lightbox show="display.deleteMindmap" on-close="display.deleteMindmap = false;"
+                        <lightbox show="vm.display.deleteMindmap" on-close="vm.display.deleteMindmap = false;"
                                   class="ng-isolate-scope">
 
 
@@ -251,12 +273,13 @@
 
                                     </div>
                                     <div class="row ng-scope">
-                                        <button ng-click="vm.deleteMindmap(mindmap._id); display.deleteMindmap = false;"
+                                        <button ng-click="vm.deleteMindmap(mindmap._id); vm.display.deleteMindmap = false;"
                                                 class="right-magnet">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.manage.delete</span>
                                             </i18n>
                                         </button>
-                                        <button class="cancel right-magnet" ng-click="display.deleteMindmap = false;">
+                                        <button class="cancel right-magnet"
+                                                ng-click="vm.display.deleteMindmap = false;">
                                             <i18n><span class="no-style ng-scope">mindmap.folder.buttonCancel</span>
                                             </i18n>
                                         </button>
@@ -264,13 +287,14 @@
                                 </div>
 
                             </div>
-
                         </lightbox>
+
                     </div>
 
                 </div>
 
             </div>
+
 
         </article>
         <div class="emptyscreen ng-scope" ng-if="vm.folders.length == 0 && vm.mindmapsItem.length == 0">
@@ -288,6 +312,7 @@
             </a>
         </div>
     </div>
+
 
 </section>
 
