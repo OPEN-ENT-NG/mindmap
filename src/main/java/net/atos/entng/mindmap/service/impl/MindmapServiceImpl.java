@@ -116,18 +116,18 @@ public class MindmapServiceImpl implements MindmapService {
                 new JsonObject().put(String.format("$%s", Field.IN), user.getGroupsIds()));
         JsonObject query = new JsonObject();
         JsonArray json = new JsonArray();
-        if (isShare.equals(Boolean.TRUE)) {
+        if (Boolean.TRUE.equals(isShare)) {
             json.add(isSharedMindmap);
             json.add(sharedContainsUserGroupIds);
         }
-        if (isMine.equals(Boolean.TRUE)) {
+        if (Boolean.TRUE.equals(isMine)) {
             json.add(userIsMdindOwner);
         }
 
         query.put(String.format("$%s", Field.OR), json);
 
         JsonObject queryResult = new JsonObject();
-        if (mindmapFolderParentId.equals(Field.NULL)) {
+        if (Field.NULL.equals(mindmapFolderParentId)) {
             JsonObject folderParentIsNull = new JsonObject().putNull(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID));
             JsonObject folderParentIsEmpty = new JsonObject().put(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID), new JsonObject().put(String.format("$%s", Field.EXISTS), false));
             JsonObject folderParentUserIdNotExist = new JsonObject().put(String.format("%s.%s", Field.FOLDER_PARENT, Field.USER_ID), new JsonObject().put(String.format("$%s", Field.NE), user.getUserId()));
@@ -185,7 +185,7 @@ public class MindmapServiceImpl implements MindmapService {
     }
 
     @Override
-    public Future<JsonObject> removeMindmapUserId(String id, UserInfos user) {
+    public Future<JsonObject> avoidDuplicatesUserId(String id, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
 
         JsonObject query = new JsonObject();

@@ -1,4 +1,4 @@
-import {ng, angular, moment, _, template, Behaviours, toasts, workspace, idiom} from 'entcore';
+import {ng, angular, moment, _, template, Behaviours, toasts, workspace, idiom as lang} from 'entcore';
 import http from 'axios';
 import {FolderItem, Folders, Mindmap, MindmapFolder} from '../model';
 import {Folder} from '../model';
@@ -45,8 +45,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         $scope.selectedFoldersId = FOLDER_ITEM.ID_NULL;
         $scope.selectedFoldersIdMove = null;
         (window as any).LAZY_MODE = false;
-        $scope.nameLabel = idiom.translate('mindmap.checkbox.my')
-        $scope.nameLabelShare = idiom.translate('mindmap.checkbox.share')
+        $scope.nameLabel = lang.translate('mindmap.checkbox.my')
+        $scope.nameLabelShare = lang.translate('mindmap.checkbox.share')
         $scope.isCheckedLabelMy = true;
         $scope.isCheckedLabelShare = true;
         $scope.sortMindmap = async (isChecked: boolean): Promise<void> => {
@@ -88,7 +88,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
          * Create Folder for the root and add in the scope
          */
         $scope.setFolderRoot = function (): void {
-            let folder: FolderItem = new FolderItem(FOLDER_ITEM.ID_ROOT, idiom.translate('mindmap.folder.title.root')).setType(FOLDER_ITEM_TYPE.FOLDER);
+            let folder: FolderItem = new FolderItem(FOLDER_ITEM.ID_ROOT, lang.translate('mindmap.folder.title.root')).setType(FOLDER_ITEM_TYPE.FOLDER);
             let folderTab: FolderItem[] = [folder];
             $scope.foldersRoot = new Folders(folderTab, []);
         }
@@ -97,7 +97,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
          * Create Folder for the root and add in the scope in the tree of moveFolder
          */
         $scope.setFolderRootForMove = function (): void {
-            let folder: FolderItem = new FolderItem(FOLDER_ITEM.ID_ROOT, idiom.translate('mindmap.folder.title.root')).setType(FOLDER_ITEM_TYPE.FOLDER);
+            let folder: FolderItem = new FolderItem(FOLDER_ITEM.ID_ROOT, lang.translate('mindmap.folder.title.root')).setType(FOLDER_ITEM_TYPE.FOLDER);
             let folderTab: FolderItem[] = [folder];
             $scope.foldersRootMove = new Folders(folderTab, []);
         }
@@ -270,19 +270,19 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             }
         }
 
-        $scope.openFolderById = async function (id: string, share: boolean, isMine: boolean): Promise<void> {
+        $scope.openFolderById = async function (id: string, isShare: boolean, isMine: boolean): Promise<void> {
             template.open('mindmap', 'mindmap-list');
             $timeout(function () {
                 $('body').trigger('whereami.update');
             }, 100)
-            if (!share) {
-                share = false;
+            if (!isShare) {
+                isShare = false;
             }
             if (!isMine) {
                 isMine = false;
             }
 
-            $scope.setFolderItem = await folderService.getFolderChildren(id, share, isMine)
+            $scope.setFolderItem = await folderService.getFolderChildren(id, isShare, isMine)
             $scope.folders.setFolders($scope.setFolderItem);
             $scope.mindmapsItem.setMindmaps($scope.setFolderItem);
             if (id !== $scope.selectedFoldersId) {
@@ -291,12 +291,10 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         };
 
         $scope.IsShare = async (id: string): Promise<void> => {
-            if (!$scope.isCheckedLabelMy) {
-                await $scope.openFolderById(id, true, false);
-            } else if (!$scope.isCheckedLabelShare) {
-                await $scope.openFolderById(id, false, true);
-            } else {
+            if (!$scope.isCheckedLabelMy && !$scope.isCheckedLabelShare) {
                 await $scope.openFolderById(id, true, true);
+            } else {
+                await $scope.openFolderById(id, $scope.isCheckedLabelShare, $scope.isCheckedLabelMy);
             }
         }
 
@@ -313,10 +311,10 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         $scope.updateFolder = async (id: string, unFolder: Folder): Promise<void> => {
             try {
                 await folderService.updateFolder(id, unFolder);
-                toasts.confirm(idiom.translate('mindmap.folder.update.done'));
+                toasts.confirm(lang.translate('mindmap.folder.update.done'));
                 await $scope.reloadView();
             } catch (e) {
-                toasts.warning(idiom.translate('mindmap.folder.update.fail'));
+                toasts.warning(lang.translate('mindmap.folder.update.fail'));
                 throw(e);
             }
         };
@@ -331,11 +329,11 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         $scope.updateMindmap = async (id: string, mindmap: Mindmap): Promise<void> => {
             try {
                 await mindmapService.updateMindmap(id, mindmap);
-                toasts.confirm(idiom.translate('mindmap.update.done'));
+                toasts.confirm(lang.translate('mindmap.update.done'));
                 template.open('mindmap', 'mindmap-list');
                 await $scope.IsShare($scope.selectedFoldersId);
             } catch (e) {
-                toasts.warning(idiom.translate("mindmap.update.fail"));
+                toasts.warning(lang.translate("mindmap.update.fail"));
                 throw(e);
             }
         };
@@ -343,11 +341,11 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         $scope.changeMindmapFolder = async (id: string, mindmap: Mindmap): Promise<void> => {
             try {
                 await mindmapService.changeMindmapFolder(id, mindmap);
-                toasts.confirm(idiom.translate('mindmap.update.done'));
+                toasts.confirm(lang.translate('mindmap.update.done'));
                 template.open('mindmap', 'mindmap-list');
                 await $scope.IsShare($scope.selectedFoldersId);
             } catch (e) {
-                toasts.warning(idiom.translate("mindmap.update.fail"));
+                toasts.warning(lang.translate("mindmap.update.fail"));
                 throw (e)
             }
         }
@@ -362,10 +360,10 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             try {
                 await folderService.createFolder(folder);
                 $scope.display.createFolder = false;
-                toasts.confirm(idiom.translate('mindmap.folder.create.done'));
+                toasts.confirm(lang.translate('mindmap.folder.create.done'));
                 await $scope.reloadView();
             } catch (e) {
-                toasts.warning(idiom.translate('mindmap.folder.create.fail'));
+                toasts.warning(lang.translate('mindmap.folder.create.fail'));
                 throw (e);
 
             }
@@ -374,11 +372,11 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         $scope.deleteFolder = async (id: string): Promise<void> => {
             try {
                 await folderService.deleteFolder(id);
-                toasts.confirm(idiom.translate('mindmap.folder.delete.done'));
+                toasts.confirm(lang.translate('mindmap.folder.delete.done'));
                 $scope.reloadView();
 
             } catch (e) {
-                toasts.warning(idiom.translate('mindmap.folder.delete.fail'));
+                toasts.warning(lang.translate('mindmap.folder.delete.fail'));
                 throw(e);
             }
         };
@@ -386,11 +384,11 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         $scope.deleteMindmap = async (id: string): Promise<void> => {
             try {
                 await mindmapService.deleteMindmap(id);
-                toasts.confirm(idiom.translate('mindmap.delete.done'));
+                toasts.confirm(lang.translate('mindmap.delete.done'));
                 template.open('mindmap', 'mindmap-list');
                 await $scope.IsShare($scope.selectedFoldersId);
             } catch (e) {
-                toasts.warning(idiom.translate('mindmap.delete.fail'));
+                toasts.warning(lang.translate('mindmap.delete.fail'));
                 throw(e);
             }
 
@@ -449,11 +447,11 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             try {
                 await mindmapService.createMindmap(mindmap);
                 $scope.cancelMindmapEdit();
-                toasts.confirm(idiom.translate("mindmap.create.done"));
+                toasts.confirm(lang.translate("mindmap.create.done"));
                 template.open('mindmap', 'mindmap-list');
                 await $scope.IsShare($scope.selectedFoldersId);
             } catch (e) {
-                toasts.warning(idiom.translate('mindmap.create.fail'));
+                toasts.warning(lang.translate('mindmap.create.fail'));
                 throw(e);
             }
         };

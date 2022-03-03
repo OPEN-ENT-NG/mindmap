@@ -149,7 +149,7 @@ public class MindmapController extends MongoDbControllerHelper {
         String id = request.getParam(Field.ID);
         UserUtils.getUserInfos(this.eb, request, user -> {
             RequestUtils.bodyToJson(request, pathPrefix + "mindmap", body -> {
-                mindmapService.removeMindmapUserId(id, user)
+                mindmapService.avoidDuplicatesUserId(id, user)
                         .compose(deleteMindmapRes -> mindmapService.updateMindmap(id, body, user))
                         .onFailure(error -> badRequest(request))
                         .onSuccess(result -> renderJson(request, result));

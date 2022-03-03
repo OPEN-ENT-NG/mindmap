@@ -44,12 +44,12 @@ public class FolderController extends MongoDbControllerHelper {
     public void getFolderChildren(HttpServerRequest request) {
 
         String id = request.getParam(Field.ID);
-        Boolean isSHareBool = Boolean.parseBoolean(request.getParam(Field.IS_SHARE));
-        Boolean isMineBool =  Boolean.parseBoolean(request.getParam(Field.IS_MINE));
+        Boolean isShare = Boolean.parseBoolean(request.getParam(Field.IS_SHARE));
+        Boolean isMine =  Boolean.parseBoolean(request.getParam(Field.IS_MINE));
 
         UserUtils.getUserInfos(this.eb, request, user -> {
             Future<JsonArray> folders = folderService.getFoldersChildren(id, user, false);
-            Future<JsonArray> mindmaps = mindmapService.listMindmap(id, user, isSHareBool, isMineBool);
+            Future<JsonArray> mindmaps = mindmapService.listMindmap(id, user, isShare, isMine);
             CompositeFuture.all(mindmaps, folders).onSuccess(res -> {
                                 ((List<JsonObject>) mindmaps.result().getList()).forEach(mindmap -> {
                                     mindmap.put(Field.TYPE, Field.MINDMAP);

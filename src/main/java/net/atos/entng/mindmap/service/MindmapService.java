@@ -65,7 +65,7 @@ public interface MindmapService {
 
     Future<JsonArray> listMindmap(String mindmapFolderParentId, UserInfos user, Boolean isShare, Boolean isMine);
 
-    Future<JsonObject> removeMindmapUserId(String id, UserInfos user);
+    Future<JsonObject> avoidDuplicatesUserId(String id, UserInfos user);
 
     Future<JsonObject> moveSharedMindmapToRootFolder(List<String> ids, UserInfos user);
 }

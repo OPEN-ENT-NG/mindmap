@@ -61,7 +61,7 @@ export class Folders {
 
     constructor(folderTab: FolderItem[], mindmapsTab: FolderItem[]) {
         this.all = folderTab.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.FOLDER);
-        this.mindmapsAll = mindmapsTab.filter((folder: Mindmap) => folder.type == FOLDER_ITEM_TYPE.MINDMAP);
+        this.mindmapsAll = mindmapsTab.filter((mindmap: Mindmap) => mindmap.type == FOLDER_ITEM_TYPE.MINDMAP);
         this.trees = [];
         this.mindmapsRight = this.mindmapsAll.map((mindmap: Mindmap) => Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
     }

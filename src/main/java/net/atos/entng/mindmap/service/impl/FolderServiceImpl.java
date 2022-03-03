@@ -158,12 +158,8 @@ public class FolderServiceImpl implements FolderService {
         query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
 
         getNestedFolderChildrenIds(id)
-                .onFailure(err -> {
-                    String message = String.format("[Mindmap@%s::deleteFolder] Failed to get the folder : %s", this.getClass().getSimpleName(), err.getMessage());
-                    log.error(message + err);
-                    promise.fail(err.getMessage());
-                })
-                .onSuccess(nestedfolderChildrenResult -> MongoHelper.getResultCommand(nestedfolderChildrenResult)
+
+                .compose(nestedfolderChildrenResult -> MongoHelper.getResultCommand(nestedfolderChildrenResult)
                         .compose(commandResult -> {
                             if(commandResult.getJsonObject(0).isEmpty()){
                                 promise.fail("MongoDb command fail");
@@ -182,8 +178,6 @@ public class FolderServiceImpl implements FolderService {
 
                         })
                         .onSuccess(resDelete -> mongoDb.delete(Field.COLLECTION_MINDMAP_FOLDER, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)))));
-
-
         return promise.future();
     }
 
