@@ -3,13 +3,11 @@ package net.atos.entng.mindmap.service.impl;
 import com.mongodb.QueryBuilder;
 import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
-import fr.wseduc.webutils.Either;
 
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 
 
-import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 
@@ -52,7 +50,6 @@ public class FolderServiceImpl implements FolderService {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderServiceImpl.class);
-
 
 
     @Override
@@ -168,14 +165,15 @@ public class FolderServiceImpl implements FolderService {
                 })
                 .onSuccess(nestedfolderChildrenResult -> MongoHelper.getResultCommand(nestedfolderChildrenResult)
                         .compose(commandResult -> {
+                            if(commandResult.getJsonObject(0).isEmpty()){
+                                promise.fail("MongoDb command fail");
+                            }
                             List<String> folderIds = commandResult.getJsonObject(0).getJsonArray(Field.FOLDER_CHILD_IDS, new JsonArray()).getList();
                             folderIds.add(commandResult.getJsonObject(0).getString(Field._ID));
                             Future<JsonObject> deleteFolder = this.deleteFolderList(folderIds, user);
                             Future<JsonObject> updateMindmap = mindmapService.deleteMindmapList(folderIds, user);
-                            Future<JsonObject> deleteMindap = mindmapService.updateMindmapShared(folderIds, user);
-                            return CompositeFuture.all(deleteFolder, updateMindmap, deleteMindap)
-                                    .onFailure(err -> promise.handle(CompositeFuture.factory.failedFuture(err)))
-                                    .onSuccess(resDelete -> mongoDb.delete(Field.COLLECTION_MINDMAP_FOLDER, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise))));
+                            Future<JsonObject> deleteMindap = mindmapService.moveSharedMindmapToRootFolder(folderIds, user);
+                            return CompositeFuture.all(deleteFolder, updateMindmap, deleteMindap);
                         })
                         .onFailure(err -> {
                             String message = String.format("[Mindmap@%s::deleteFolder] Failed to get result of the command : %s", this.getClass().getSimpleName(), err.getMessage());
@@ -183,7 +181,7 @@ public class FolderServiceImpl implements FolderService {
                             promise.fail(err.getMessage());
 
                         })
-                        .onSuccess(resu -> promise.handle(CompositeFuture.factory.succeededFuture())));
+                        .onSuccess(resDelete -> mongoDb.delete(Field.COLLECTION_MINDMAP_FOLDER, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)))));
 
 
         return promise.future();

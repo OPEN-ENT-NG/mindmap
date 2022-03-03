@@ -12,7 +12,7 @@ export class FolderItemView {
         displayName?: string;
     }
     type?: string;
-    rights? :any;
+    rights?: any;
     shared?: any
 }
 
@@ -20,7 +20,7 @@ export interface IFolderItem extends FolderItemView {
     name: string;
 }
 
-export class FolderItem extends FolderItemView{
+export class FolderItem extends FolderItemView {
     id: string;
     name: string;
     folder_parent_id: string;
@@ -29,7 +29,7 @@ export class FolderItem extends FolderItemView{
     description: string;
     map: string;
     thumbnail: string;
-    rights :any;
+    rights: any;
     shared: any;
     owner: {
         userId: string;
@@ -47,7 +47,7 @@ export class FolderItem extends FolderItemView{
 
     toJSON() {
         return {
-            _id : this._id,
+            _id: this._id,
             name: this.name,
             folder_parent_id: this.folder_parent_id,
             type: this.type
@@ -55,12 +55,10 @@ export class FolderItem extends FolderItemView{
     };
 
 
-
     setType(type: string): FolderItem {
         this.type = type;
         return this;
     }
-
 
 
     async save(): Promise<void> {

@@ -6,7 +6,7 @@ import {FolderItem} from "../model/FolderItem";
 
 
 export interface FolderService {
-    getFolderChildren(folderId: string, isShare: string, isMine: string): Promise<FolderItem[]>;
+    getFolderChildren(folderId: string, isShare: Boolean, isMine: Boolean): Promise<FolderItem[]>;
 
 
     createFolder(folderBody: IFolder): Promise<AxiosResponse>;
@@ -18,10 +18,9 @@ export interface FolderService {
 }
 
 export const folderService: FolderService = {
-    getFolderChildren: async (folderId: string, isShare: string, isMine: string): Promise<FolderItem[]> => {
+    getFolderChildren: async (folderId: string, isShare: boolean, isMine: boolean): Promise<FolderItem[]> => {
         try {
-            let {data} = await http.get(`/mindmap/folders/${folderId}/children/${isShare}/${isMine}`);
-
+            let {data} = await http.get(`/mindmap/folders/${folderId}/children/share/${isShare}/mine/${isMine}`);
             return Mix.castArrayAs(FolderItem, data);
         } catch (err) {
             throw err;

@@ -63,9 +63,9 @@ public interface MindmapService {
 
     Future<JsonArray> getTrashMindmap(UserInfos user);
 
-    Future<JsonArray> listMindmap(String mindmapFolderParentId, UserInfos user, String isShare, String isMine);
+    Future<JsonArray> listMindmap(String mindmapFolderParentId, UserInfos user, Boolean isShare, Boolean isMine);
 
-    Future<JsonObject> pullUpdateMindmap(String id, UserInfos user);
+    Future<JsonObject> removeMindmapUserId(String id, UserInfos user);
 
-    Future<JsonObject> updateMindmapShared(List<String> ids, UserInfos user);
+    Future<JsonObject> moveSharedMindmapToRootFolder(List<String> ids, UserInfos user);
 }

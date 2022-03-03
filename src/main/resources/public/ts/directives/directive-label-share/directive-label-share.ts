@@ -31,11 +31,11 @@ export const directiveLabelShare = ng.directive('directiveLabelShare', () => {
         controller: function () {
             const vm: IViewModel = <IViewModel>this;
             vm.$onInit = async () => {
-                vm.isChecked = false;
+                vm.isChecked = true;
             };
 
             vm.$onDestroy = async () => {
-                vm.isChecked = false;
+                vm.isChecked = true;
             };
         },
         link: function ($scope) {

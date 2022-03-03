@@ -43,7 +43,7 @@ export class Folder extends FolderView {
 export class Folders {
     all: FolderItem[];
     mindmapsAll: FolderItem[];
-    mindmapsRight : Mindmaps[];
+    mindmapsRight: Mindmaps[];
     pageCount: number;
     id: string;
     name: string;
@@ -63,10 +63,7 @@ export class Folders {
         this.all = folderTab.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.FOLDER);
         this.mindmapsAll = mindmapsTab.filter((folder: Mindmap) => folder.type == FOLDER_ITEM_TYPE.MINDMAP);
         this.trees = [];
-        this.mindmapsRight = this.mindmapsAll.map((mindmap :Mindmap)=> Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
-        for(var mindmapRight of this.mindmapsAll) {
-
-        }
+        this.mindmapsRight = this.mindmapsAll.map((mindmap: Mindmap) => Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
     }
 
 
@@ -84,7 +81,7 @@ export class Folders {
 
     setMindmaps = (mindmaps: FolderItem[]): void => {
         this.mindmapsAll = mindmaps.filter((folder: FolderItem) => folder.type == FOLDER_ITEM_TYPE.MINDMAP);
-        this.mindmapsRight = this.mindmapsAll.map((mindmap :Mindmap)=> Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
+        this.mindmapsRight = this.mindmapsAll.map((mindmap: Mindmap) => Behaviours.applicationsBehaviours.mindmap.resource(new Mindmap(mindmap)));
     }
 
     findTree = (currentFolders: models.Element[], id: string): models.Element => {

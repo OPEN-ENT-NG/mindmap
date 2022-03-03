@@ -216,9 +216,9 @@ export const directiveFolderList = ng.directive('directiveFolderList', () => {
                 let targetId: string = targetItem._id;
 
                 if (originalItem.type === FOLDER_ITEM_TYPE.MINDMAP) {
-                    var userId: string = "userId";
-                    var folder_parent_id: string = targetId
-                    var folder_parent = {userId, folder_parent_id}
+                    let userId: string = "userId";
+                    let folder_parent_id: string = targetId
+                    let folder_parent = {userId, folder_parent_id}
                     let mindmapBody: MindmapFolder = new MindmapFolder(originalItem.name.toString(), folder_parent);
                     $scope.$eval(vm.onChangeMindmapFolder)(originId, mindmapBody);
 

@@ -4,7 +4,7 @@
             <div class="fallen dominos" class="element mini-block-container">
                 <div ng-repeat="folder in vm.folders ">
                     <explorer ng-model="folder.selected" on-open="vm.openFolder(folder)"
-                              class="ng-pristine ng-untouched ng-valid ng-isolate-scope ng-not-empty">
+                              class="ng-pristine ng-untouched ng-valid ng-not-empty">
                         <a class="container" draggable="false">
                             <i class="folder-large" dragstart="vm.drag(folder, $originalEvent)"
                                dragdrop="vm.dropToFolder(folder, $originalEvent)"
@@ -43,8 +43,7 @@
                                 </div>
                             </div>
                         </section>
-                        <lightbox show="vm.display.updateFolder" on-close="vm.display.updateFolder = false;"
-                                  class="ng-isolate-scope">
+                        <lightbox show="vm.display.updateFolder" on-close="vm.display.updateFolder = false;">
                             <div class="content">
                                 <div class="twelve cell">
                                     <h2 class="ng-scope">
@@ -74,7 +73,7 @@
                             </div>
 
                         </lightbox>
-                        <lightbox show="vm.display.moveFolder" class="ng-isolate-scope">
+                        <lightbox show="vm.display.moveFolder">
 
                             <div class="content">
                                 <div class="twelve cell">
@@ -100,9 +99,7 @@
                             </div>
 
                         </lightbox>
-                        <lightbox show="vm.display.deleteFolder" on-close="vm.display.deleteFolder = false;"
-                                  class="ng-isolate-scope">
-
+                        <lightbox show="vm.display.deleteFolder" on-close="vm.display.deleteFolder = false;">
                             <div class="content">
                                 <div class="twelve cell">
                                     <h2 class="ng-scope">
@@ -198,8 +195,7 @@
                             </div>
 
                         </section>
-                        <lightbox show="vm.display.updateMindmap" on-close="vm.display.updateMindmap = false;"
-                                  class="ng-isolate-scope">
+                        <lightbox show="vm.display.updateMindmap" on-close="vm.display.updateMindmap = false;">
 
 
                             <div class="content">
@@ -232,7 +228,7 @@
                             </div>
 
                         </lightbox>
-                        <lightbox show="vm.display.moveMindmap" class="ng-isolate-scope">
+                        <lightbox show="vm.display.moveMindmap">
 
                             <div class="content">
                                 <div class="twelve cell">
