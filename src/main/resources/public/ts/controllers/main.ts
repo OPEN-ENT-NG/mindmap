@@ -76,11 +76,10 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         }
 
         $scope.setFolderChildrenMindmap = async (id: string, isShare: boolean, isMine: boolean): Promise<void> => {
-            let folder: FolderItem[] = await folderService.getFolderChildren(id, true, true);
-            let mindmap: FolderItem[] = await folderService.getFolderChildren(id, isShare, isMine);
-            $scope.folders = new Folders(folder, []);
-            $scope.mindmapsItem = new Folders([], mindmap);
-            $scope.foldersMove = new Folders(folder, []);
+            let folderItem: FolderItem[] = await Promise.all(await folderService.getFolderChildren(id, isShare, isMine));
+            $scope.folders = new Folders(folderItem, []);
+            $scope.mindmapsItem = new Folders([], folderItem);
+            $scope.foldersMove = new Folders(folderItem, []);
         };
 
 
@@ -275,12 +274,6 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $timeout(function () {
                 $('body').trigger('whereami.update');
             }, 100)
-            if (!isShare) {
-                isShare = false;
-            }
-            if (!isMine) {
-                isMine = false;
-            }
 
             $scope.setFolderItem = await folderService.getFolderChildren(id, isShare, isMine)
             $scope.folders.setFolders($scope.setFolderItem);
@@ -431,18 +424,16 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
 
         };
 
-        $scope.createMindmap = async function (name: string): Promise<void> {
-
+        $scope.createMindmap = async function (name: string, description: string): Promise<void> {
+            let userId: string = model.me.userId;
+            let folder_parent_id: string = $scope.selectedFoldersId;
             $scope.forceToClose = true;
             var mindmap: MindmapFolder;
             if ($scope.selectedFoldersId == FOLDER_ITEM.ID_NULL) {
-                mindmap = new MindmapFolder(name);
-            } else {
-                let userId: string = model.me.userId;
-                let folder_parent_id: string = $scope.selectedFoldersId;
-                let folder_parent = [{userId, folder_parent_id}];
-                mindmap = new MindmapFolder(name, folder_parent);
+                folder_parent_id = null;
             }
+            let folder_parent: {} = [{userId, folder_parent_id}];
+            mindmap = new MindmapFolder(name, folder_parent, description);
 
             try {
                 await mindmapService.createMindmap(mindmap);

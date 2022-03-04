@@ -6,11 +6,11 @@ import {FolderItem} from "./FolderItem";
 /**
  * Model to create a mindmap.
  */
-export class Mindmap extends FolderItem implements Selectable, Shareable{
+export class Mindmap extends FolderItem implements Selectable, Shareable {
     _id: any;
-    id:string
+    id: string
     name: any;
-    folder_parent:{};
+    folder_parent: {};
     description: any;
     thumbnail: any;
     map: any;
@@ -37,19 +37,18 @@ export class Mindmap extends FolderItem implements Selectable, Shareable{
     }
 
 
-
     async save(): Promise<void> {
         await this.update();
     };
 
-    toJSONSave(): Object {
+    toJSONSave(): {} {
         return {
             name: this.name,
             description: this.description,
             thumbnail: this.thumbnail,
             map: this.map,
-            folder_parent_id : this.folder_parent_id,
-            type : this.type,
+            folder_parent_id: this.folder_parent_id,
+            type: this.type,
         };
     };
 
@@ -95,9 +94,9 @@ export class Mindmap extends FolderItem implements Selectable, Shareable{
      * Allows to convert the current mindmap into a JSON format.
      * @return the current mindmap in JSON format.
      */
-     toJSON() {
+    toJSON() {
         return {
-            _id : this._id,
+            _id: this._id,
             name: this.name,
             folder_parent_id: this.folder_parent_id,
             type: this.type
@@ -106,7 +105,7 @@ export class Mindmap extends FolderItem implements Selectable, Shareable{
 
     public toJson() {
         return {
-            _id : this._id,
+            _id: this._id,
             name: this.name,
             folder_parent_id: this.folder_parent_id,
             type: this.type
@@ -131,7 +130,7 @@ export class MindmapFolder extends MindmapView {
     id: string;
     name: string;
     folder_parent: {};
-    description : string;
+    description: string;
     thumbnail: any;
 
 

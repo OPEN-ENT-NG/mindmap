@@ -55,7 +55,7 @@ public interface MindmapService {
 
     Future<JsonObject> updateMindmapFolder(List<String> ids, JsonObject body, UserInfos user);
 
-    Future<JsonObject> updateMindmap(String id, JsonObject body, UserInfos user);
+    Future<JsonObject> updateMindmapFolderParent(String id, JsonObject body, UserInfos user);
 
     Future<JsonObject> deleteMindmap(String id, UserInfos user);
 

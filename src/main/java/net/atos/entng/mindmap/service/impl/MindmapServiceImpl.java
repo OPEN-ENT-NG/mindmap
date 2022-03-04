@@ -198,7 +198,7 @@ public class MindmapServiceImpl implements MindmapService {
     }
 
     @Override
-    public Future<JsonObject> updateMindmap(String id, JsonObject body, UserInfos user) {
+    public Future<JsonObject> updateMindmapFolderParent(String id, JsonObject body, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
         QueryBuilder query = QueryBuilder.start(Field._ID).is(id);
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
