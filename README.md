@@ -1,8 +1,8 @@
 # À propos de l'application Carte Mentale
 
-* Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Conseil Régional Nord Pas de Calais - Picardie
+* Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Région Hauts-de-France (ex Picardie)
 * Développeur(s) : ATOS
-* Financeur(s) : Région Nord Pas de Calais-Picardie
+* Financeur(s) : Région Hauts-de-France (ex Picardie)
 * Description : Application de conception de carte mentale. L'application permet de construire en ligne une carte mentale, de la partager et de l'exporter. Elle est s'appuie sur une librairie issue de  http://www.wisemapping.com/.
 
 # Documentation technique
