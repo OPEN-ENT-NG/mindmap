@@ -8,6 +8,8 @@ declare let currentLanguage: any;
 declare let buildDesigner: any;
 declare let toolbarNotifier: any;
 declare let $notify: any;
+const AUTOSAVE_TIMER: number = 180000;
+const SELECTOR_JQUERY_BUTTON_SAVE: string = '#save';
 
 class MindmapChangeGuard implements INavigationGuard {
 	reference: number = 0;
@@ -20,6 +22,7 @@ class MindmapChangeGuard implements INavigationGuard {
 	}
 }
 
+
 export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout', function ($timeout) {
 	return {
 		scope: {
@@ -30,7 +33,8 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 		restrict: 'E',
 		replace: true,
 		templateUrl: '/mindmap/public/template/directives/mindmap-editor.html',
-		link: function (scope, element, attrs) {	
+		link: function (scope, element, attrs) {
+			const registerInterval: number = setInterval(() => $(SELECTOR_JQUERY_BUTTON_SAVE).click(), AUTOSAVE_TIMER);
 			const guard = new MindmapChangeGuard();
 			const guardId = navigationGuardService.registerIndependantGuard(guard);
 			// Destroy the wisemapping properly
@@ -42,6 +46,7 @@ export const mindmapEditorDirective = ng.directive('mindmapEditor', ['$timeout',
 				$moo(document).removeEvents("mousewheel");
 				$moo(document).removeEvents("keydown");
 				mindplot.EventBus.instance = null;
+				clearInterval(registerInterval);
 			});
 
 			// Wait for all requirements to be loaded
