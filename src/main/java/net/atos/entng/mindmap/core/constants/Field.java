@@ -5,6 +5,8 @@ public class Field {
     public static final String NULL = "null";
     public static final String SHARED = "shared";
     public static final String TRUE = "true";
+    public static final String CREATED = "created";
+    public static final String MODIFIED = "modified";
 
     /***
      * FOLDER ET MINDMAP
@@ -29,6 +31,7 @@ public class Field {
     public static final String FOLDER = "FOLDER";
     public static final String COLLECTION_MINDMAP_FOLDER = "mindmap.folder";
     public static final String OWNER_ID = "owner_id";
+    public static final String FOLDER_TARGET = "folderTarget";
 
     /***
      * MINDMAP
@@ -37,6 +40,9 @@ public class Field {
     public static final String COLLECTION_MINDMAP = "mindmap";
     public static final String IS_SHARE = "isShare";
     public static final String IS_MINE = "isMine";
+    public static final String DESCRIPTION = "description";
+    public static final String MAP = "map";
+    public static final String THUMBNAIL = "thumbnail";
 
     /***
      * MONGO_DB

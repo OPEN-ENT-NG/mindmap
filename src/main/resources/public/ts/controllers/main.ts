@@ -578,6 +578,24 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
 
         };
 
+        $scope.duplicateMindmap = async function (mindmap: FolderItem): Promise<void> {
+            let id: string = mindmap._id;
+            let folderParentId: string = $scope.selectedFoldersId;
+            try {
+                await mindmapService.duplicateMindmap(id, folderParentId);
+                notify.success(lang.translate("mindmap.duplicate.done"));
+                template.open('mindmap', 'mindmap-list');
+                await $scope.openFolderById($scope.selectedFoldersId, true, true);
+                $scope.selectedMindmapTabs = [];
+                $scope.selectedFolderTabs = [];
+                $scope.isCheckedLabelMy = true;
+                $scope.isCheckedLabelShare = true;
+            } catch (e) {
+                notify.error(lang.translate('mindmap.duplicate.fail'));
+                throw(e);
+            }
+        }
+
         /**
          * Allows to save the current edited mindmap in the scope. After saving the
          * current mindmap this method closes the edit view too.

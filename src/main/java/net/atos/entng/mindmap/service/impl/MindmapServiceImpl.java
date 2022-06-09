@@ -23,18 +23,16 @@ import com.mongodb.QueryBuilder;
 import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
 import fr.wseduc.mongodb.MongoUpdateBuilder;
-import fr.wseduc.webutils.Either;
+
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
-import net.atos.entng.mindmap.Mindmap;
 import net.atos.entng.mindmap.core.constants.Field;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
+import net.atos.entng.mindmap.model.MindmapModel;
 import net.atos.entng.mindmap.service.MindmapService;
-import net.atos.entng.mindmap.helper.MongoHelper;
 import net.atos.entng.mindmap.helper.PromiseHelper;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
@@ -43,14 +41,11 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-
 import fr.wseduc.webutils.http.Renders;
 import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.user.UserInfos;
-
-import java.io.UncheckedIOException;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 /**
  * Implementation of the mindmap service.
@@ -150,6 +145,25 @@ public class MindmapServiceImpl implements MindmapService {
 
         mongoDb.find(Field.COLLECTION_MINDMAP, query, MongoDbResult.validResultsHandler(PromiseHelper.handlerJsonArray(promise)));
 
+        return promise.future();
+    }
+
+    @Override
+    public Future<Void> createMindmap(JsonObject body) {
+        Promise<Void> promise = Promise.promise();
+        JsonObject now = MongoDb.now();
+        body.put(Field.CREATED, now);
+        body.put(Field.MODIFIED, now);
+        mongoDb.insert(Field.COLLECTION_MINDMAP, body, MongoDbResult.validResultHandler(event -> {
+            if (event.isRight()) {
+                promise.complete();
+            } else {
+                String message = String.format("[Mindmap@%s::getMindmap] Failed to create the mindmap: %s",
+                        this.getClass().getSimpleName(), event.left().getValue());
+                log.error(message);
+                promise.fail(event.left().getValue());
+            }
+        }));
         return promise.future();
     }
 
@@ -270,5 +284,43 @@ public class MindmapServiceImpl implements MindmapService {
         return promise.future();
     }
 
+    @Override
+    public Future<MindmapModel> getMindmap(String id) {
+        Promise<MindmapModel> promise = Promise.promise();
+        JsonObject query = new JsonObject().put(Field._ID, id);
+        mongoDb.findOne(Field.COLLECTION_MINDMAP, query, MongoDbResult.validResultHandler(event -> {
+            if (event.isRight()) {
+                promise.complete(new MindmapModel(event.right().getValue()));
+            } else {
+                String message = String.format("[Mindmap@%s::getMindmap] Failed to find the mindmap: %s",
+                        this.getClass().getSimpleName(), event.left().getValue());
+                log.error(message);
+                promise.fail(event.left().getValue());
+            }
+        }));
+        return promise.future();
+    }
+
+    @Override
+    public Future<JsonObject> duplicateMindmap(String id, String folderParentId, UserInfos user) {
+        Promise<JsonObject> promise = Promise.promise();
+        if (folderParentId.equals(Field.NULL)) {
+            folderParentId = null;
+        }
+        String finalFolderParentId = folderParentId;
+        getMindmap(id)
+                .compose(res -> {
+                    res.setFolderParent(user.getUserId(), finalFolderParentId);
+                    res.setOwner(user.getUserId(), user.getUsername());
+                    return createMindmap(res.toJSON());
+                })
+                .onSuccess(resCreate -> promise.complete())
+                .onFailure(error -> {
+                    String message = String.format("[Mindmap@%s::duplicateMindmap] Failed to duplicate the mindmap: %s",
+                            this.getClass().getSimpleName(), error.getMessage());
+                    log.error(message);
+                    promise.fail(error.getMessage());
+                });
+        return promise.future();
+    }
 }
-;
