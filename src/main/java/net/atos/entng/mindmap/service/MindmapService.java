@@ -26,6 +26,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import net.atos.entng.mindmap.model.MindmapModel;
 import org.entcore.common.user.UserInfos;
 
 import javax.management.monitor.StringMonitor;
@@ -71,4 +72,10 @@ public interface MindmapService {
     Future<JsonObject> moveSharedMindmapToRootFolder(List<String> ids, UserInfos user);
 
     Future<JsonObject> deleteMindmapList(JsonObject body, UserInfos user);
+
+    Future<JsonObject> duplicateMindmap(String id, String folderParentId, UserInfos user);
+
+    Future<MindmapModel> getMindmap(String id);
+
+    Future<Void> createMindmap(JsonObject body);
 }

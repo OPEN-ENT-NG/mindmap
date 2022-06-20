@@ -17,6 +17,8 @@ export interface MindmapService {
 
     getMindmap(id: string): Promise<Mindmap>;
 
+    duplicateMindmap(id: string,  folderParentId: string): Promise<AxiosResponse>;
+
 }
 
 export const mindmapService: MindmapService = {
@@ -52,7 +54,10 @@ export const mindmapService: MindmapService = {
         }catch(err){
             throw err;
         }
+    },
 
+    duplicateMindmap: async (id: string, folderParentId: string): Promise<AxiosResponse> => {
+        return http.post(`/mindmap/${id}/duplicate?folderTarget=${folderParentId}`);
     }
 
 

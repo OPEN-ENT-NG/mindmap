@@ -279,4 +279,17 @@ public class MindmapController extends MongoDbControllerHelper {
             }
         });
     }
+
+    @Post("/:id/duplicate")
+    @ApiDoc("Allows to duplicate a mindmap associated to the given identifier")
+    @SecuredAction(value = "mindmap.manager", type = ActionType.RESOURCE)
+    public void duplicateMindmap(final HttpServerRequest request) {
+        String id = request.getParam(Field.ID);
+        String folderParentId = request.params().get(Field.FOLDER_TARGET);
+        UserUtils.getUserInfos(this.eb, request, user ->
+                mindmapService.duplicateMindmap(id, folderParentId, user)
+                        .onFailure(error -> badRequest(request))
+                        .onSuccess(result -> renderJson(request, result))
+        );
+    }
 }

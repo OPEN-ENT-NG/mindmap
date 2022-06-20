@@ -16,7 +16,7 @@
             "type": "string"
         },
         "thumbnail": {
-            "type": "string"
+            "type": ["string", "null"]
         },
         "folder_parent": {
             "userId" : {
