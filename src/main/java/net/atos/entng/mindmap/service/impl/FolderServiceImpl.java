@@ -57,7 +57,7 @@ public class FolderServiceImpl implements FolderService {
     @Override
     public Future<JsonArray> getFoldersChildren(String folderParentId, UserInfos user, boolean isInTrash) {
         Promise<JsonArray> promise = Promise.promise();
-
+        JsonObject sort = new JsonObject().put(Field.MODIFIED,-1); // -1 for descending order
         JsonObject query = new JsonObject();
         if (folderParentId.equals(Field.NULL)) {
             query.putNull(Field.FOLDER_PARENT_ID);
@@ -65,7 +65,7 @@ public class FolderServiceImpl implements FolderService {
             query.put(Field.FOLDER_PARENT_ID, folderParentId);
         }
         query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId());
-        mongoDb.find(Field.COLLECTION_MINDMAP_FOLDER, query, MongoDbResult.validResultsHandler(PromiseHelper.handlerJsonArray(promise)));
+        mongoDb.find(Field.COLLECTION_MINDMAP_FOLDER, query, sort, null, MongoDbResult.validResultsHandler(PromiseHelper.handlerJsonArray(promise)));
         return promise.future();
     }
 
