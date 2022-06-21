@@ -106,6 +106,7 @@ public class MindmapServiceImpl implements MindmapService {
     @Override
     public Future<JsonArray> listMindmap(String mindmapFolderParentId, UserInfos user, Boolean isShare, Boolean isMine) {
         Promise<JsonArray> promise = Promise.promise();
+        JsonObject sort = new JsonObject().put(Field.MODIFIED,-1); // -1 for descending order
         JsonObject userIsMdindOwner = new JsonObject().put(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId());
         JsonObject isSharedMindmap = new JsonObject().put(String.format("%s.%s", Field.SHARED, Field.USER_ID), user.getUserId());
         JsonObject sharedContainsUserGroupIds = new JsonObject().put(String.format("%s.%s", Field.SHARED, Field.GROUP_ID),
@@ -143,7 +144,7 @@ public class MindmapServiceImpl implements MindmapService {
         query.put(String.format("$%s", Field.AND), new JsonArray()
                 .add(queryResult));
 
-        mongoDb.find(Field.COLLECTION_MINDMAP, query, MongoDbResult.validResultsHandler(PromiseHelper.handlerJsonArray(promise)));
+        mongoDb.find(Field.COLLECTION_MINDMAP, query, sort, null, MongoDbResult.validResultsHandler(PromiseHelper.handlerJsonArray(promise)));
 
         return promise.future();
     }
