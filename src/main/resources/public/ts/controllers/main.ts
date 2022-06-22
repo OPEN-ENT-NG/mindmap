@@ -49,8 +49,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         (window as any).LAZY_MODE = false;
         $scope.nameLabel = lang.translate('mindmap.checkbox.my')
         $scope.nameLabelShare = lang.translate('mindmap.checkbox.share')
-        $scope.isCheckedLabelMy = true;
-        $scope.isCheckedLabelShare = true;
+        $scope.isMyMindmap = true;
+        $scope.isShareMindmap = true;
         $scope.selectedMindmapTabs = [];
         $scope.selectedFolderTabs = [];
         $scope.orginialValue = "";
@@ -102,32 +102,32 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
 
 
         $scope.sortMindmap = async (isChecked: boolean): Promise<void> => {
-            if (!isChecked && !$scope.isCheckedLabelShare) {
-                $scope.isCheckedLabelShare = true;
+            if (!isChecked && !$scope.isShareMindmap) {
+                $scope.isShareMindmap = true;
 
             }
             if (!isChecked) {
-                $scope.isCheckedLabelMy = false;
+                $scope.isMyMindmap = false;
                 await $scope.openFolderById($scope.selectedFoldersId, true, false);
                 $scope.$apply();
             } else {
-                $scope.isCheckedLabelMy = true;
+                $scope.isMyMindmap = true;
                 await $scope.openFolderById($scope.selectedFoldersId, true, true);
                 $scope.$apply();
             }
 
         }
         $scope.sortShare = async (isChecked: boolean): Promise<void> => {
-            if (!isChecked && !$scope.isCheckedLabelMy) {
-                $scope.isCheckedLabelMy = true;
+            if (!isChecked && !$scope.isMyMindmap) {
+                $scope.isMyMindmap = true;
 
             }
             if (!isChecked) {
-                $scope.isCheckedLabelShare = false;
+                $scope.isShareMindmap = false;
                 await $scope.openFolderById($scope.selectedFoldersId, false, true);
                 $scope.$apply();
             } else {
-                $scope.isCheckedLabelShare = true;
+                $scope.isShareMindmap = true;
                 await $scope.openFolderById($scope.selectedFoldersId, true, true);
                 $scope.$apply();
             }
@@ -165,14 +165,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         }
 
         $scope.initFolder = async (): Promise<void> => {
-            if ($scope.isCheckedLabelMy == true) {
-                await $scope.setFolderChildrenMindmap(FOLDER_ITEM.ID_NULL, false, true);
-            } else if ($scope.isCheckedLabelShare == true) {
-                await $scope.setFolderChildrenMindmap(FOLDER_ITEM.ID_NULL, true, false);
-            } else {
-                await $scope.setFolderChildrenMindmap(FOLDER_ITEM.ID_NULL, true, true);
-            }
-
+            await $scope.setFolderChildrenMindmap(FOLDER_ITEM.ID_NULL, $scope.isShareMindmap, $scope.isMyMindmap);
             $scope.setFolderRoot();
             $scope.setFolderRootForMove();
             $scope.foldersRootMove.trees = $scope.foldersRootMove.mapToChildrenTrees();
@@ -222,7 +215,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                                 $scope.openedFolderIds = $scope.openedFolderIds.filter((openFolderId) => openFolderId != unelem._id);
                             })
                         } else {
-                            $scope.mindmapsItem.setMindmaps(await folderService.getFolderChildren(folder._id, $scope.isCheckedLabelShare, $scope.isCheckedLabelMy));
+                            $scope.mindmapsItem.setMindmaps(await folderService.getFolderChildren(folder._id, $scope.isShareMindmap, $scope.isMyMindmap));
                             $scope.folders.all = $scope.folders.mapFromChildrenTree(elem.children);
 
                             await $scope.IsShare(folder._id);
@@ -371,11 +364,11 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         };
 
         $scope.IsShare = async (id: string): Promise<void> => {
-            if (!$scope.isCheckedLabelMy && !$scope.isCheckedLabelShare) {
+            if (!$scope.isMyMindmap && !$scope.isShareMindmap) {
                 await $scope.openFolderById(id, true, true);
                 $scope.$apply();
             } else {
-                await $scope.openFolderById(id, $scope.isCheckedLabelShare, $scope.isCheckedLabelMy);
+                await $scope.openFolderById(id, $scope.isShareMindmap, $scope.isMyMindmap);
                 $scope.$apply();
             }
         }
@@ -474,7 +467,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 elem.children.forEach(unelem => {
                     $scope.openedFolderIds = $scope.openedFolderIds.filter((openFolderId) => openFolderId != unelem._id);
                 })
-                $scope.folders.setFolders(await folderService.getFolderChildren($scope.selectedFoldersId, $scope.isCheckedLabelShare, $scope.isCheckedLabelMy));
+                $scope.folders.setFolders(await folderService.getFolderChildren($scope.selectedFoldersId, $scope.isShareMindmap, $scope.isMyMindmap));
 
                 elem.children = $scope.folders.mapToChildrenTrees();
                 $scope.folders.setFakeFolder(elem.children);
@@ -539,8 +532,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
          * the "main" div.
          */
         $scope.newMindmap = function (): void {
-            $scope.isCheckedLabelMy = true;
-            $scope.isCheckedLabelShare = true;
+            $scope.isMyMindmap = true;
+            $scope.isShareMindmap = true;
             $scope.mindmap = new Mindmap();
             $scope.action = 'mindmap-create';
             template.open('mindmap', 'mindmap-create');
@@ -569,8 +562,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 await $scope.openFolderById($scope.selectedFoldersId, true, true);
                 $scope.selectedMindmapTabs = [];
                 $scope.selectedFolderTabs = [];
-                $scope.isCheckedLabelMy = true;
-                $scope.isCheckedLabelShare = true;
+                $scope.isMyMindmap = true;
+                $scope.isShareMindmap = true;
             } catch (e) {
                 notify.error(lang.translate('mindmap.create.fail'));
                 throw(e);
@@ -588,8 +581,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 await $scope.openFolderById($scope.selectedFoldersId, true, true);
                 $scope.selectedMindmapTabs = [];
                 $scope.selectedFolderTabs = [];
-                $scope.isCheckedLabelMy = true;
-                $scope.isCheckedLabelShare = true;
+                $scope.isMyMindmap = true;
+                $scope.isShareMindmap = true;
             } catch (e) {
                 notify.error(lang.translate('mindmap.duplicate.fail'));
                 throw(e);
@@ -630,7 +623,6 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             delete $scope.mindmap;
             delete $scope.selectedMindmap;
             $scope.notFound = false;
-
             template.close('main');
             template.close('mindmap');
 
@@ -985,16 +977,15 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 delete $scope.mindmap;
                 delete $scope.selectedMindmap;
                 template.close('main');
-                $scope.action = 'mindmap-list';
-                template.open('mindmap', 'mindmap-list');
-                ;
                 $scope.selectedMindmapTabs = [];
                 $scope.selectedFolderTabs = [];
-                $scope.isCheckedLabelMy = true;
-                $scope.isCheckedLabelShare = true;
+                $scope.isMyMindmap = true;
+                $scope.isShareMindmap = true;
                 $scope.openedFolderIds = [];
                 $scope.selectedFoldersId = FOLDER_ITEM.ID_NULL;
                 await $scope.initFolder();
+                $scope.action = 'mindmap-list';
+                template.open('mindmap', 'mindmap-list');
                 $scope.$apply();
             },
 
