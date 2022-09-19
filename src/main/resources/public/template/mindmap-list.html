@@ -155,7 +155,7 @@
                         </button>
                     </resource-right>
                     <resource-right name="manage" resource="selectedMindmapTabs[0]" class="cell">
-                        <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
+                        <button workflow="mindmap.publish" ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
                                 library-resource="selectedMindmapTabs[0]">
                             <i18n>bpr.publish</i18n>
                         </button>
