@@ -40,6 +40,7 @@ public class FolderController extends MongoDbControllerHelper {
 
     @Get("/folders/:id/children/share/:isShare/mine/:isMine")
     @ApiDoc("Get all folders and mindmaps")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     @SuppressWarnings("unchecked")
     public void getFolderChildren(HttpServerRequest request) {
 
