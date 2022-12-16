@@ -35,3 +35,4 @@ rev-manifest.json
 node_modules/
 gradle/
 gradlew*
+package-lock.json
