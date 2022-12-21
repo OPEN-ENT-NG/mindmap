@@ -48,7 +48,7 @@
   "mindmap.folder.update.fail": "Le dossier ne s'est pas mis à jour",
   "mindmap.create.done": "Carte mentale créée",
   "mindmap.create.fail": "Echec de la creation de la carte mentale",
-  "mindmap.duplicate.done": "Duplication réussi",
+  "mindmap.duplicate.done": "Duplication réussie",
   "mindmap.duplicate.fail": "Echec de la duplication",
   "mindmap.delete.done": "Carte mentale supprimée",
   "mindmap.delete.fail": "Echec de la supression de la carte mentale",
