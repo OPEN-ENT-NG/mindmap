@@ -936,14 +936,26 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             /**
              * Retrieve a mindmap from its database id and open it in a wisemapping editor
              */
-            viewMindmap: async (): Promise<void> => {
+            viewMindmap: async (params: {mindmapId: string}): Promise<void> => {
 
                 if ($scope.mindmap) {
-                    $scope.notFound = "false";
+                    $scope.notFound = false;
                     $scope.openMindmap($scope.mindmap);
                 } else {
-                    $scope.notFound = "true";
-                    $scope.openMainPage();
+                    try {
+                        let m: Mindmap = await mindmapService.getMindmap(params.mindmapId)
+                        let mindMapWithRight: Mindmap = Behaviours.applicationsBehaviours.mindmap.resource(m);
+                        if (mindMapWithRight) {
+                            $scope.notFound = false;
+                            $scope.openMindmap(mindMapWithRight);
+                        } else {
+                            $scope.notFound = true;
+                            $scope.openMainPage();
+                        }
+                    } catch (e) {
+                        $scope.notFound = true;
+                        $scope.openMainPage();
+                    }
                 }
             },
             /**
