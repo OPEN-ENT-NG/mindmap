@@ -99,77 +99,89 @@
         </lightbox>
     </div>
 
-    <div ng-if="selectedFolderTabs != 0 || selectedMindmapTabs != 0 ">
+    <div ng-if="selectedFolderTabs != 0 || selectedMindmapTabs != 0">
         <section class="toggle-buttons">
             <div class="toggle">
                 <div class="row">
+                    <!--FOLDER START-->
+                    <!--Open Folder, 1 folder selected, 0 mindmap selected-->
                     <button ng-if="selectedFolderTabs.length === 1 && selectedMindmapTabs.length == 0" class="cell"
                             ng-click="openFolderByView(selectedFolderTabs[0])">
                         <i18n>mindmap.folder.manage.open</i18n>
                     </button>
+                    <!--Rename Folder, 1 folder selected, 0 mindmap selected-->
                     <button ng-if="selectedFolderTabs.length === 1 && selectedMindmapTabs.length == 0" class="cell"
                             ng-click="display.updateFolder = true; getOrignialValue(selectedFolderTabs[0].name);">
 
                         <i18n>mindmap.folder.manage.rename</i18n>
                     </button>
+                    <!--Move Folder, 1 folder selected, 0 mindmap selected-->
                     <button ng-if="selectedFolderTabs.length === 1 && selectedMindmapTabs.length == 0" class="cell"
                             ng-click="display.moveFolder = true; displayTreeMoveFolder(selectedFolderTabs[0]._id);">
 
                         <i18n>mindmap.folder.manage.move</i18n>
                     </button>
+                    <!--Delete Folder, 0 minmap selected-->
                     <button ng-if="selectedMindmapTabs.length == 0" class="cell"
                             ng-click="display.deleteFolder = true" show="selectedFolderTabs.length != 0">
 
                         <i18n>mindmap.folder.manage.delete</i18n>
                     </button>
+                    <!--FOLDER END-->
+                    <!--MINDMAP START-->
+                    <!--Open mindmap, 0 folder selected, 1 mindmap selected-->
                     <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0" class="cell"
                             ng-click="openMindmap(selectedMindmapTabs[0])">
                         <i18n>mindmap.folder.manage.open</i18n>
                     </button>
-                    <resource-right name="contrib" resource="selectedMindmapTabs[0]">
-                        <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0" class="cell"
-                                ng-click="display.updateMindmap = true;  getOrignialValue(selectedMindmapTabs[0].name);">
-                            <i18n>mindmap.folder.manage.rename</i18n>
-                        </button>
-                    </resource-right>
+                    <!--Duplicate Mindmap, 0 folder selected, 1 mindmap selected, manage Right on mindmap selected-->
                     <resource-right name="manage" resource="selectedMindmapTabs[0]">
                         <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0" class="cell"
                                 ng-click="duplicateMindmap(selectedMindmapTabs[0])">
                             <i18n>mindmap.folder.manage.duplicate</i18n>
                         </button>
                     </resource-right>
+                    <!--Move mindmap, 0 folder selected, 1 mindmap selected-->
                     <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0" class="cell"
                             ng-click="display.moveMindmap = true; displayTreeMoveFolder(selectedFolderTabs[0]._id);">
                         <i18n>mindmap.folder.manage.move</i18n>
                     </button>
+                    <!--Delete mindmap, 0 folder selected, manage Right on first mindmap selected-->
                     <resource-right name="manage" resource="selectedMindmapTabs[0]">
                         <button ng-if="selectedFolderTabs.length == 0 " class="cell"
                                 ng-click="display.confirmDeleteMindmap = true">
                             <i18n>mindmap.folder.manage.delete</i18n>
                         </button>
                     </resource-right>
-                    <resource-right name="contrib" resource="selectedMindmapTabs[0]">
+                    <!--Mindmap Properties, 0 folder selected, 1 mindmap selected, manage Rights on first mindmap selected-->
+                    <resource-right name="manage" resource="selectedMindmapTabs[0]">
                         <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
                                 ng-click="editMindmap(selectedMindmapTabs[0], $event)">
                             <i18n>properties</i18n>
                         </button>
                     </resource-right>
+                    <!--Mindmap Publish, 0 folder selected, 1 mindmap selected, manage Rights on first mindmap selected, workflow publish-->
                     <resource-right name="manage" resource="selectedMindmapTabs[0]" class="cell">
                         <button workflow="mindmap.publish" ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
                                 library-resource="selectedMindmapTabs[0]">
                             <i18n>bpr.publish</i18n>
                         </button>
                     </resource-right>
+                    <!--Print mindmap, 0 folder selected, 1 mindmap selected-->
                     <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
                             ng-click="printPngMindmap(selectedMindmapTabs[0], $event)">
                         <i18n>print</i18n>
                     </button>
+                    <!--Share Mindmaps, 0 folder selected, manage right on all selected mindmaps-->
                     <resource-right name="manage" resource="selectedMindmapTabs" class="cell">
                         <button ng-if="selectedFolderTabs.length == 0"
                                 ng-click="shareMindmap(selectedMindmapTabs, $event)">
                             <i18n>share</i18n>
                         </button>
                     </resource-right>
+                    <!--MINDMAP END-->
+                    <!--MINDMAP & FOLDER START-->
+                    <!--Delete everything Selected, selected folder != 0, selected mindmap != 0,manage Rights on all selected mindmaps -->
                     <resource-right name="manage" resource="selectedMindmapTabs" class="cell">
                         <button ng-if="selectedFolderTabs.length != 0 && selectedMindmapTabs.length != 0"
                                 ng-click="display.deleteFolderMindmap = true">
@@ -177,6 +189,7 @@
                         </button>
                     </resource-right>
 
+                    <!--MINDMAP & FOLDER END-->
                 </div>
             </div>
 
