@@ -161,12 +161,10 @@
                         </button>
                     </resource-right>
                     <!--Mindmap Publish, 0 folder selected, 1 mindmap selected, manage Rights on first mindmap selected, workflow publish-->
-                    <resource-right name="manage" resource="selectedMindmapTabs[0]" class="cell">
-                        <button workflow="mindmap.publish" ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
-                                library-resource="selectedMindmapTabs[0]">
-                            <i18n>bpr.publish</i18n>
-                        </button>
-                    </resource-right>
+                    <button workflow="mindmap.publish" ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
+                            library-resource="selectedMindmapTabs[0]">
+                        <i18n>bpr.publish</i18n>
+                    </button>
                     <!--Print mindmap, 0 folder selected, 1 mindmap selected-->
                     <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
                             ng-click="printPngMindmap(selectedMindmapTabs[0], $event)">
