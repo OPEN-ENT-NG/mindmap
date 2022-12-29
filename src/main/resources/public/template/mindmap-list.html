@@ -146,8 +146,8 @@
                             ng-click="display.moveMindmap = true; displayTreeMoveFolder(selectedFolderTabs[0]._id);">
                         <i18n>mindmap.folder.manage.move</i18n>
                     </button>
-                    <!--Delete mindmap, 0 folder selected, manage Right on first mindmap selected-->
-                    <resource-right name="manage" resource="selectedMindmapTabs[0]">
+                    <!--Delete mindmap, 0 folder selected, manage Right on mindmaps selected-->
+                    <resource-right name="manage" resource="selectedMindmapTabs">
                         <button ng-if="selectedFolderTabs.length == 0 " class="cell"
                                 ng-click="display.confirmDeleteMindmap = true">
                             <i18n>mindmap.folder.manage.delete</i18n>
