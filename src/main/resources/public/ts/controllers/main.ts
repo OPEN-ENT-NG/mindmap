@@ -309,6 +309,12 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $scope.$apply();
         };
 
+        $scope.moveMindmaps = async function(maps) {
+            maps.forEach(map => {
+                $scope.moveMindmap(map._id, map.name);
+            })
+        }
+
         $scope.moveMindmap = async function (id: string, name: string): Promise<void> {
             let mindmap: MindmapFolder;
             if ($scope.selectedFoldersIdMove == FOLDER_ITEM.ID_NULL || !$scope.selectedFoldersIdMove) {
