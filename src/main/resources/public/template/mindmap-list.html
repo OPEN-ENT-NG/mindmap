@@ -161,7 +161,7 @@
                         </button>
                     </resource-right>
                     <!--Mindmap Publish, 0 folder selected, 1 mindmap selected, manage Rights on first mindmap selected, workflow publish-->
-                    <button workflow="mindmap.publish" ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
+                    <button workflow="mindmap.publish" ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0 && isMyMap(selectedMindmapTabs[0])"
                             library-resource="selectedMindmapTabs[0]">
                         <i18n>bpr.publish</i18n>
                     </button>
