@@ -309,6 +309,12 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $scope.$apply();
         };
 
+        $scope.moveMindmaps = async function(mindmaps: Mindmap[]) {
+            mindmaps.forEach((mindmap: Mindmap) => {
+                $scope.moveMindmap(mindmap._id, mindmap.name);
+            })
+        }
+
         $scope.moveMindmap = async function (id: string, name: string): Promise<void> {
             let mindmap: MindmapFolder;
             if ($scope.selectedFoldersIdMove == FOLDER_ITEM.ID_NULL || !$scope.selectedFoldersIdMove) {
@@ -680,6 +686,12 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
 
         }
 
+        $scope.printPngMindmaps = function (mindmaps: Mindmap[], redirect = true) {
+            mindmaps.forEach((mindmap: Mindmap) => {
+                $scope.printPngMindmap(mindmap, redirect);
+            })
+        };
+
         $scope.printMindmap = function (mindmap, redirect = true) {
             if (redirect) {
                 window.open('/mindmap/print/mindmap#/print/' + mindmap._id);
@@ -927,6 +939,15 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
             $scope.mindmap = mindmap
             $scope.display.showPanel = true;
             event.stopPropagation();
+        };
+
+        /**
+         * Verify if the selected mindmap is owned
+         * by the user logged in
+         * @param mindmap the selected mindmap
+         */
+        $scope.isMyMap = function (mindmap: Mindmap): Boolean {
+            return mindmap.owner.userId === model.me.userId;
         };
 
         /**

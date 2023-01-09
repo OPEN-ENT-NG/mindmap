@@ -142,7 +142,7 @@
                         </button>
                     </resource-right>
                     <!--Move mindmap, 0 folder selected, 1 mindmap selected-->
-                    <button ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0" class="cell"
+                    <button ng-if="selectedMindmapTabs.length > 0 && selectedFolderTabs.length == 0" class="cell"
                             ng-click="display.moveMindmap = true; displayTreeMoveFolder(selectedFolderTabs[0]._id);">
                         <i18n>mindmap.folder.manage.move</i18n>
                     </button>
@@ -161,7 +161,7 @@
                         </button>
                     </resource-right>
                     <!--Mindmap Publish, 0 folder selected, 1 mindmap selected, manage Rights on first mindmap selected, workflow publish-->
-                    <button workflow="mindmap.publish" ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0"
+                    <button workflow="mindmap.publish" ng-if="selectedMindmapTabs.length === 1 && selectedFolderTabs.length == 0 && isMyMap(selectedMindmapTabs[0])"
                             library-resource="selectedMindmapTabs[0]">
                         <i18n>bpr.publish</i18n>
                     </button>
@@ -238,7 +238,7 @@
                     <folder-tree tree-props="folderTreeDirective"></folder-tree>
 
                     <div class="row ng-scope">
-                        <button ng-click="moveMindmap(selectedMindmapTabs[0]._id,selectedMindmapTabs[0].name); display.moveMindmap=false;"
+                        <button ng-click="moveMindmaps(selectedMindmapTabs); display.moveMindmap=false;"
                                 class="right-magnet">
                             <i18n><span class="no-style ng-scope">mindmap.folder.manage.move</span>
                             </i18n>
