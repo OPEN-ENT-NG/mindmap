@@ -310,8 +310,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         };
 
         $scope.moveMindmaps = async function(mindmaps: Mindmap[]) {
-            mindmaps.forEach(map => {
-                $scope.moveMindmap(map._id, map.name);
+            mindmaps.forEach((mindmap: Mindmap) => {
+                $scope.moveMindmap(mindmap._id, mindmap.name);
             })
         }
 
@@ -687,8 +687,8 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
         }
 
         $scope.printPngMindmaps = function (mindmaps: Mindmap[], redirect = true) {
-            mindmaps.forEach(map => {
-                $scope.printPngMindmap(map, redirect);
+            mindmaps.forEach((mindmap: Mindmap) => {
+                $scope.printPngMindmap(mindmap, redirect);
             })
         };
 
