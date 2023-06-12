@@ -53,7 +53,7 @@
   "mindmap.delete.done": "Carte mentale supprimée",
   "mindmap.delete.fail": "Echec de la supression de la carte mentale",
   "mindmap.update.done": "Carte mentale mise à jour",
-  "mindmap.update.fail": "La carte mentale ne s'est pas mis à jour",
+  "mindmap.update.fail": "La carte mentale ne s'est pas mise à jour",
   "group.HeadTeacher": "Professeurs principaux de {0}.",
   "group.Direction": "Directeurs de {0}.",
   "group.Func": "Personnels de fonction {0}.",
