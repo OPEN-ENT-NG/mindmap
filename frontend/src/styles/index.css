@@ -1,0 +1,12 @@
+.mindplot-div-container {
+  position: relative;
+  height: 100vh !important;
+}
+
+.mindplot-div-container svg {
+  font-size: 24px;
+}
+
+#root {
+  height: 100%;
+}
