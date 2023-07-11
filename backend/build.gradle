@@ -185,28 +185,15 @@ artifacts {
 }
 
 task buildFrontend {
-  dependsOn 'installFrontend', 'copyDistToBackend', 'distToView'
+  dependsOn 'copyDistToBackend', 'distToView'
 
   doLast {
     println 'All frontend tasks completed'
   }
 }
 
-// Install & Build frontend application
-task installFrontend(type: Exec) {
-  workingDir = file('../frontend')
-  commandLine 'pnpm', 'install'
-  doLast {
-    exec {
-      workingDir = file('../frontend')
-      commandLine 'pnpm', 'run', 'build'
-    }
-  }
-}
-
 // Copy dist folder and mod file into resources/main
 task copyDistToBackend(type: Copy) {
-  dependsOn installFrontend
   from("../frontend/dist")
   from("../frontend/mod.json")
 
