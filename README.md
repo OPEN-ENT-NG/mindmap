@@ -1,16 +1,19 @@
 # À propos de l'application Carte Mentale
 
-* Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Conseil Région Hauts-de-France (ex Picardie)
-* Développeur(s) : ATOS, CGI, Open Digital Education
-* Financeur(s) : Région Hauts-de-France (ex Picardie)
-* Description : Application de conception de carte mentale. L'application permet de construire en ligne une carte mentale, de la partager et de l'exporter. Elle est s'appuie sur une librairie issue de  http://www.wisemapping.com/.
+- Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Conseil Région Hauts-de-France (ex Picardie)
+- Développeur(s) : ATOS, CGI, Open Digital Education
+- Financeur(s) : Région Hauts-de-France (ex Picardie)
+- Description : Application de conception de carte mentale. L'application permet de construire en ligne une carte mentale, de la partager et de l'exporter. Elle est s'appuie sur une librairie issue de http://www.wisemapping.com/.
 
 # Documentation technique
+
 ## Build
+
 <pre>
-    gulp build
-    gradle install 
+    yarn build
+    gradle install
 </pre>
+
 ## Construction
 
 <pre>
@@ -19,12 +22,12 @@
 
 ## Déployer dans ent-core
 
-
 ## Configuration
 
 Dans le fichier `/mindmap/deployment/mindmap/conf.json.template` :
 
 Déclarer l'application dans la liste :
+
 <pre>
 {
   "name": "net.atos~mindmap~0.2.0",
@@ -41,16 +44,17 @@ Déclarer l'application dans la liste :
     "app-registry.port" : 8012,
     "mode" : "${mode}",
     "entcore.port" : 8009
-     }
+  }
 }
 </pre>
 
 Associer une route d'entée à la configuration du module proxy intégré (`"name": "net.atos~mindmap~0.2.0"`) :
+
 <pre>
-	{
-		"location": "/mindmap",
-		"proxy_pass": "http://localhost:8666"
-	}
+{
+  "location": "/mindmap",
+  "proxy_pass": "http://localhost:8666"
+}
 </pre>
 
 # Présentation du module
@@ -64,7 +68,6 @@ Le droit de lecture, correspondant à qui peut consulter la carte mentale est é
 
 La Carte Mentale met en œuvre un comportement de recherche sur le nom et la description des cartes.
 
-
 ## Modèle de persistance
 
 Les données du module sont stockées dans une collection Mongo "mindmap".
@@ -73,14 +76,14 @@ Les données du module sont stockées dans une collection Mongo "mindmap".
 
 Le module serveur utilise un contrôleur de déclaration :
 
-* `MindmapController` : Point d'entrée à l'application, Routage des vues, sécurité globale et déclaration de l'ensemble des comportements relatifs aux cartes mentales (liste, création, modification, destruction, export et partage)
+- `MindmapController` : Point d'entrée à l'application, Routage des vues, sécurité globale et déclaration de l'ensemble des comportements relatifs aux cartes mentales (liste, création, modification, destruction, export et partage)
 
 Le contrôleur étend les classes du framework Ent-core exploitant les CrudServices de base.
 
 Le module serveur met en œuvre deux évènements issus du framework Ent-core :
 
-* `MindmapRepositoryEvents` : Logique de changement d'année scolaire
-* `MindmapSearchingEvents` : Logique de recherche
+- `MindmapRepositoryEvents` : Logique de changement d'année scolaire
+- `MindmapSearchingEvents` : Logique de recherche
 
 Un jsonschema permet de vérifier les données reçues par le serveur, il se trouve dans le dossier "src/main/resources/jsonschema".
 
@@ -88,8 +91,8 @@ Un jsonschema permet de vérifier les données reçues par le serveur, il se tro
 
 Le modèle Front-end manipule un objet model :
 
-* `Mindmaps` : Correspondant aux cartes mentales
+- `Mindmaps` : Correspondant aux cartes mentales
 
 Il y a une collection globale :
 
-* `model.mindmaps.all` qui contient l'ensemble des objets `mindmap` synchronisé depuis le serveur.
+- `model.mindmaps.all` qui contient l'ensemble des objets `mindmap` synchronisé depuis le serveur.
