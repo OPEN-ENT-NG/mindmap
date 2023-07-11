@@ -12,7 +12,7 @@ pipeline {
       stage('Build') {
         steps {
           checkout scm
-          sh './build.sh clean build publish'
+          sh 'cd backend && ./build.sh clean build publish'
         }
       }
     }
