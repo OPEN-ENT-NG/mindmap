@@ -41,9 +41,9 @@ function clean() {
 function build() {
   echo "Building..."
   if [ "$NO_DOCKER" = "true" ] ; then
-    gradle buildFrontend shadowJar install publishToMavenLocal
+    gradle shadowJar install publishToMavenLocal
   else
-    docker-compose run --rm -u "$USER_UID:$GROUP_GID" gradle gradle buildFrontend shadowJar install publishToMavenLocal
+    docker-compose run --rm -u "$USER_UID:$GROUP_GID" gradle gradle shadowJar install publishToMavenLocal
   fi
   echo "Build done!"
 }

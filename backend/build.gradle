@@ -199,19 +199,18 @@ task buildFrontend {
 // Copy dist folder and mod file into resources/main
 task copyDistToBackend(type: Copy) {
   from("../frontend/dist")
-  from("../frontend/mod.json")
 
-  destinationDir = file("src/main/resources")
+  destinationDir = file("build/resources/main")
 }
 
 // Move HTML files from dist folder to view folder
 task distToView(type: Copy) {
   dependsOn copyDistToBackend
-  from ("src/main/resources") 
+  from ("build/resources/main") 
   include '*.html'
-  into ("src/main/resources/view")
+  into ("build/resources/main/view")
   
   doLast {
-    delete fileTree(dir: "src/main/resources", include: '*.html')
+    delete fileTree(dir: "build/resources/main", include: '*.html')
   }
 }
