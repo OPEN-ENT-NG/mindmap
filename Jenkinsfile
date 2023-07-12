@@ -21,7 +21,7 @@ pipeline {
     stage('Backend') {
       steps {
         dir('backend') {
-          sh 'cp -R ../frontend/dist ./src/main/resources'
+          sh 'cp -R ../frontend/dist/* ./src/main/resources/'
           sh './build.sh clean build publish'
         }
       }
