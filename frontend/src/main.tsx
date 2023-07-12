@@ -66,7 +66,6 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <OdeClientProvider
       params={{
-        // @ts-ignore
         app: "mindmap",
       }}
     >
