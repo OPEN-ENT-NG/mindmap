@@ -6,7 +6,6 @@ pipeline {
       stage('Init frontend') {
         steps {
           dir('frontend')
-          checkout scm
           sh './build.sh clean init'
         }
       }
