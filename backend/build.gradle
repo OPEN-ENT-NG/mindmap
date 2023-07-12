@@ -201,17 +201,17 @@ task copyDistToBackend(type: Copy) {
   from("../frontend/dist")
   from("../frontend/mod.json")
 
-  destinationDir = file("${buildDir}/resources/main")
+  destinationDir = file("src/main/resources")
 }
 
 // Move HTML files from dist folder to view folder
 task distToView(type: Copy) {
   dependsOn copyDistToBackend
-  from ("${buildDir}/resources/main") 
+  from ("src/main/resources") 
   include '*.html'
-  into ("${buildDir}/resources/main/view")
+  into ("src/main/resources/view")
   
   doLast {
-    delete fileTree(dir: "${buildDir}/resources/main", include: '*.html')
+    delete fileTree(dir: "src/main/resources", include: '*.html')
   }
 }
