@@ -5,32 +5,28 @@ pipeline {
     stages {
       stage('Init frontend') {
         steps {
-          dir('frontend')
-          sh './build.sh clean init'
+          checkout scm
+          sh 'cd frontend && ./build.sh clean init'
         }
       }
       stage('Build frontend') {
         steps {
-          dir('frontend')
-          sh "./build.sh build"
+          sh "cd frontend && ./build.sh build"
         }
       }
       stage('Clean backend') {
         steps {
-          dir('backend')
-          sh './build.sh clean'
+          sh 'cd backend && ./build.sh clean'
         }
       }
       stage('Build backend') {
         steps {
-          dir('backend')
-          sh './build.sh build'
+          sh 'cd backend && ./build.sh build'
         }
       }
       stage('Publish') {
         steps {
-          dir('backend')
-          sh './build.sh publish'
+          sh 'cd backend && ./build.sh publish'
         }
       }
     }
