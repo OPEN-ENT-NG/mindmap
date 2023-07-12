@@ -36,7 +36,11 @@ configurations {
 }
 
 sourceSets {
-  main { compileClasspath += configurations.provided }
+    main { compileClasspath += configurations.provided }
+    test {
+        runtimeClasspath += configurations.compileOnly
+        resources.srcDirs = ["src/test/resources","src/main/resources"]
+    }
 }
 
 configurations.all {
@@ -203,11 +207,11 @@ task copyDistToBackend(type: Copy) {
 // Move HTML files from dist folder to view folder
 task distToView(type: Copy) {
   dependsOn copyDistToBackend
-  from ('build/resources/main') 
+  from ("${buildDir}/resources/main") 
   include '*.html'
-  into ('build/resources/main/view')
+  into ("${buildDir}/resources/main/view")
   
   doLast {
-    delete fileTree(dir: 'build/resources/main/', include: '*.html')
+    delete fileTree(dir: "${buildDir}/resources/main", include: '*.html')
   }
 }
