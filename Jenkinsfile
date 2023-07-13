@@ -21,7 +21,7 @@ pipeline {
           sh 'find ./src/main/resources -maxdepth 1 -type f -name "*.html" -delete'
           sh 'rm -rf ../frontend/dist'
           sh './build.sh clean build publish'
-          sh 'find ./src/main/resources -mindepth 1 -maxdepth 1 -type d ! -name "jsonschema" -exec rm -rf {} +'
+          sh 'find ./src/main/resources -mindepth 1 -type d -exec rm -rf {} +'
         }
       }
     }
