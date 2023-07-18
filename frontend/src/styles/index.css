@@ -10,3 +10,13 @@
 #root {
   height: 100%;
 }
+
+.MuiTooltip-popper .MuiTooltip-tooltip{
+  font-size: 11px;
+} 
+.MuiBox-root .MuiTypography-root{
+  font-size: 12px;
+}
+.MuiToolbar-root .MuiTypography-root{
+  font-size: 16px;
+}
