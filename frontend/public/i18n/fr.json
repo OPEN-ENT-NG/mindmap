@@ -11,6 +11,7 @@
   "mindmap.export.zoom": "Centrer et ajuster le zoom",
   "mindmap.export.minmap.tools": "Outil Mindmap",
   "mindmap.export.modal.title": "Exportez votre carte mentale",
+  "mindmap.export.failed": "Une erreur est survenue lors de l'export de la resource",
   "mindmap.back": "Retour",
   "mindmap.save": "Enregistrer",
   "mindmap.cancel": "Annuler",

@@ -83,7 +83,6 @@ export const Mindmap = () => {
         <ExportModal
           isOpen={openModal}
           mapName={data?.name}
-          mapId={params?.mapId}
           onCancel={onCancel}
         />
       )}
