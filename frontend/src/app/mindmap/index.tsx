@@ -1,17 +1,19 @@
 // @ts-ignore
+import { useState } from "react";
+
 import Editor from "@edifice-wisemapping/editor";
-import { AppHeader } from "@ode-react-ui/components";
+import { Button } from "@ode-react-ui/components";
 import { useOdeClient } from "@ode-react-ui/core";
 import { ID } from "ode-ts-client";
+import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
-import { AppAction } from "../components/AppAction";
 import {
   mapInfo,
   options,
   persistenceManager,
 } from "~/features/mindmap/configuration";
-
+import ExportModal from "~/shared/components/ExportModal";
 import "~/styles/index.css";
 
 export interface MindmapProps {
@@ -51,17 +53,18 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 
 export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
-  const { currentLanguage, currentApp } = useOdeClient();
+  const { t } = useTranslation();
+  const { currentLanguage } = useOdeClient();
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const params = useParams();
+
+  const onCancel = () => {
+    setOpenModal(false);
+  };
 
   return data?.map ? (
     <>
-      <AppHeader
-        app={currentApp}
-        resourceName={data?.name}
-        isLink
-        actions={<AppAction />}
-      />
+      <Button onClick={() => setOpenModal(true)}>{t("mindmap.export")}</Button>
       <div className="mindplot-div-container">
         <Editor
           // onLoad={initialization}
@@ -76,6 +79,14 @@ export const Mindmap = () => {
           )}
         />
       </div>
+      {openModal && (
+        <ExportModal
+          isOpen={openModal}
+          mapName={data?.name}
+          mapId={params?.mapId}
+          onCancel={onCancel}
+        />
+      )}
     </>
   ) : (
     <p>No mindmap found</p>
