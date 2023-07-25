@@ -1,9 +1,11 @@
 // @ts-ignore
-import Editor, { Designer } from "@edifice-wisemapping/editor";
+import Editor from "@edifice-wisemapping/editor";
+import { AppHeader } from "@ode-react-ui/components";
 import { useOdeClient } from "@ode-react-ui/core";
 import { ID } from "ode-ts-client";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
+import { AppAction } from "../components/AppAction";
 import {
   mapInfo,
   options,
@@ -49,11 +51,17 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 
 export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
-  const { currentLanguage } = useOdeClient();
+  const { currentLanguage, currentApp } = useOdeClient();
   const params = useParams();
 
   return data?.map ? (
     <>
+      <AppHeader
+        app={currentApp}
+        resourceName={data?.name}
+        isLink
+        actions={<AppAction />}
+      />
       <div className="mindplot-div-container">
         <Editor
           // onLoad={initialization}
