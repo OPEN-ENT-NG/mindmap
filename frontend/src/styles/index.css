@@ -11,12 +11,19 @@
   height: 100%;
 }
 
-.MuiTooltip-popper .MuiTooltip-tooltip{
+.MuiTooltip-popper .MuiTooltip-tooltip {
   font-size: 11px;
-} 
-.MuiBox-root .MuiTypography-root{
+}
+.MuiBox-root .MuiTypography-root {
   font-size: 12px;
 }
-.MuiToolbar-root .MuiTypography-root{
+.MuiToolbar-root .MuiTypography-root {
   font-size: 16px;
+}
+#exportModal {
+  z-index: 9999;
+}
+
+.form-div-center {
+  margin: 0px 20px 10px 20px;
 }
