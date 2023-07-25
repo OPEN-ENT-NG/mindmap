@@ -12,6 +12,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.mindmap.constants.Actions;
+import net.atos.entng.mindmap.explorer.MindmapExplorerPlugin;
 import net.atos.entng.mindmap.security.folder.*;
 import net.atos.entng.mindmap.service.FolderService;
 import net.atos.entng.mindmap.service.impl.FolderServiceImpl;
@@ -31,10 +32,10 @@ public class FolderController extends MongoDbControllerHelper {
     private final FolderService folderService;
     private final MindmapService mindmapService;
 
-    public FolderController(EventBus eb, String collection) {
+    public FolderController(EventBus eb, String collection, final MindmapExplorerPlugin plugin) {
         super(collection);
-        this.folderService = new FolderServiceImpl(eb, MongoDb.getInstance());
-        this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance());
+        this.folderService = new FolderServiceImpl(eb, MongoDb.getInstance(), plugin);
+        this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance(), plugin);
     }
 
 

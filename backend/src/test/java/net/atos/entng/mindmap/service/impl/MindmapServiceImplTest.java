@@ -1,26 +1,45 @@
 package net.atos.entng.mindmap.service.impl;
 
+import com.opendigitaleducation.explorer.tests.ExplorerTestHelper;
 import fr.wseduc.mongodb.MongoDb;
+import fr.wseduc.webutils.security.SecuredAction;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.MongoClient;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import net.atos.entng.mindmap.Mindmap;
+import net.atos.entng.mindmap.explorer.MindmapExplorerPlugin;
+import org.entcore.common.explorer.IExplorerPluginCommunication;
+import org.entcore.test.TestHelper;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.testcontainers.containers.MongoDBContainer;
+
+import java.util.Map;
 
 @RunWith(VertxUnitRunner.class)
 public class MindmapServiceImplTest {
+    private static final TestHelper test = TestHelper.helper();
+    @ClassRule
+    public static MongoDBContainer mongoDBContainer = test.database().createMongoContainer().withReuse(true);
+    @ClassRule
+    public static ExplorerTestHelper explorerTest = new ExplorerTestHelper(Mindmap.APPLICATION);
     private Vertx vertx;
     private MindmapServiceImpl mindmapService;
 
     @Before
-    public void setUp() {
+    public void setUp(final TestContext context) throws Exception {
         vertx = Vertx.vertx();
         MongoDb.getInstance().init(vertx.eventBus(), "net.atos.mindmap");
-
-        this.mindmapService = new MindmapServiceImpl(vertx.eventBus(), MongoDb.getInstance());
+        final Map<String, SecuredAction> securedActions = test.share().getSecuredActions(context);
+        final IExplorerPluginCommunication communication = explorerTest.getCommunication();
+        final MongoClient mongoClient = test.database().createMongoClient(mongoDBContainer);
+        final MindmapExplorerPlugin mindmapPlugin = new MindmapExplorerPlugin(communication, mongoClient, securedActions);
+        this.mindmapService = new MindmapServiceImpl(vertx.eventBus(), MongoDb.getInstance(), mindmapPlugin);
     }
 
     @Test
