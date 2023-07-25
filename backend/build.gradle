@@ -47,6 +47,10 @@ configurations.all {
   resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
+configurations.testRuntime {
+  exclude 'group': 'io.gatling'
+}
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -60,15 +64,18 @@ compileTestJava {
     targetCompatibility = project.targetCompatibility
 }
 dependencies {
-  implementation "junit:junit:$junitVersion"
   compileOnly "io.vertx:vertx-core:$vertxVersion"
   compile "org.entcore:common:$entCoreVersion"
   compile "org.apache.xmlgraphics:batik-codec:$apacheBatikVersion"
-  testCompile "org.entcore:tests:$entCoreVersion"
-  testCompile 'io.gatling.highcharts:gatling-charts-highcharts:2.2.2'
-  testCompile "io.vertx:vertx-unit:$vertxVersion"
-  testCompile "junit:junit:$junitVersion"
   testCompile "org.mockito:mockito-core:$mockitoVersion"
+  testCompile "io.vertx:vertx-unit:$vertxVersion"
+  testCompile "io.vertx:vertx-codegen:$vertxVersion"
+  testCompile "junit:junit:$junitVersion"
+  testCompile "org.entcore:test:$entCoreVersion:fat"
+  testCompile "org.entcore:tests:$entCoreVersion"
+  testCompile "com.opendigitaleducation:explorer:$explorerVersion:fat"
+  testCompile "com.opendigitaleducation:explorer:$explorerVersion:tests"
+  testCompile 'io.gatling.highcharts:gatling-charts-highcharts:2.2.2'
 }
 
 jar {

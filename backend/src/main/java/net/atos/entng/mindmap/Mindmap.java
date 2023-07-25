@@ -22,15 +22,22 @@ package net.atos.entng.mindmap;
 
 import net.atos.entng.mindmap.controllers.FolderController;
 import net.atos.entng.mindmap.controllers.MindmapController;
+import net.atos.entng.mindmap.explorer.MindmapExplorerPlugin;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
 import net.atos.entng.mindmap.service.impl.MindmapRepositoryEvents;
 import net.atos.entng.mindmap.service.impl.MindmapSearchingEvents;
+import org.entcore.common.explorer.IExplorerPlugin;
+import org.entcore.common.explorer.IExplorerPluginClient;
+import org.entcore.common.explorer.impl.ExplorerRepositoryEvents;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
 
 import org.entcore.common.service.impl.MongoDbSearchService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -43,6 +50,8 @@ public class Mindmap extends BaseServer {
     /**
      * Constant to define the MongoDB collection to use with this module.
      */
+    public static final String APPLICATION = "mindmap";
+    public static final String MINDMAP_TYPE = "mindmap";
     public static final String MINDMAP_COLLECTION = "mindmap";
     public static final String FOLDER_COLLECTION = "mindmap.folder";
 
@@ -51,16 +60,17 @@ public class Mindmap extends BaseServer {
     public static final String DELETE_FOLDER = "mindmap.folder.delete";
     public static final String SOFT_DELETE_FOLDER = "mindmap.folder.softDelete";
     public static final String GET_FOLDER_CHILDREN = "mindmap.folder.getFolderChildren";
-
+    private MindmapExplorerPlugin plugin;
     /**
      * Entry point of the Vert.x module
      */
     @Override
     public void start() throws Exception {
         super.start();
-
-
-        setRepositoryEvents(new MindmapRepositoryEvents(vertx));
+        plugin = MindmapExplorerPlugin.create(securedActions);
+        final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
+        pluginClientPerCollection.put(MINDMAP_COLLECTION, IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE));
+        setRepositoryEvents(new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection));
 
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(MINDMAP_COLLECTION);
@@ -70,12 +80,19 @@ public class Mindmap extends BaseServer {
         if (config.getBoolean("searching-event", true)) {
             setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
         }
-        addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION));
-        addController(new FolderController(vertx.eventBus(), FOLDER_COLLECTION));
+        addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION, plugin));
+        addController(new FolderController(vertx.eventBus(), FOLDER_COLLECTION, plugin));
 
         // Register verticle into the container
         getVertx().deployVerticle(MindmapPNGExporter.class.getName());
         getVertx().deployVerticle(MindmapSVGExporter.class.getName());
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        if(plugin != null){
+            plugin.stop();
+        }
+    }
 }

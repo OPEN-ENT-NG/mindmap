@@ -77,5 +77,7 @@ public interface MindmapService {
 
     Future<MindmapModel> getMindmap(String id);
 
-    Future<Void> createMindmap(JsonObject body);
+    Future<String> createMindmap(JsonObject body);
+
+    Future<JsonObject> updateMindmap(final UserInfos user, final String id, final JsonObject body);
 }

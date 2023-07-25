@@ -24,11 +24,13 @@ import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
 import fr.wseduc.mongodb.MongoUpdateBuilder;
 
+import fr.wseduc.webutils.Utils;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import net.atos.entng.mindmap.core.constants.Field;
+import net.atos.entng.mindmap.explorer.MindmapExplorerPlugin;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
 import net.atos.entng.mindmap.model.MindmapModel;
@@ -42,9 +44,15 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import fr.wseduc.webutils.http.Renders;
+import org.entcore.common.explorer.IdAndVersion;
+import org.entcore.common.explorer.IngestJobState;
 import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.user.UserInfos;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -58,23 +66,24 @@ public class MindmapServiceImpl implements MindmapService {
      * Class logger
      */
     private static final Logger log = LoggerFactory.getLogger(MindmapServiceImpl.class);
+    static List<String> UPDATABLE_FIELDS = Arrays.asList("name", "description", "thumbnail", "modified", "trashed", "visibility");
 
     /**
      * VertX event bus
      */
     private final EventBus eb;
-
     private final MongoDb mongoDb;
-
+    private final MindmapExplorerPlugin plugin;
 
     /**
      * Constructor of the mindmap service
      *
      * @param eb Event bus
      */
-    public MindmapServiceImpl(EventBus eb, MongoDb mongoDb) {
+    public MindmapServiceImpl(EventBus eb, MongoDb mongoDb, final MindmapExplorerPlugin plugin) {
         this.eb = eb;
         this.mongoDb = mongoDb;
+        this.plugin = plugin;
     }
 
     @Override
@@ -150,19 +159,52 @@ public class MindmapServiceImpl implements MindmapService {
     }
 
     @Override
-    public Future<Void> createMindmap(JsonObject body) {
-        Promise<Void> promise = Promise.promise();
-        JsonObject now = MongoDb.now();
+    public Future<String> createMindmap(JsonObject body) {
+        final JsonObject now = MongoDb.nowISO();
         body.put(Field.CREATED, now);
         body.put(Field.MODIFIED, now);
-        mongoDb.insert(Field.COLLECTION_MINDMAP, body, MongoDbResult.validResultHandler(event -> {
-            if (event.isRight()) {
-                promise.complete();
-            } else {
-                String message = String.format("[Mindmap@%s::getMindmap] Failed to create the mindmap: %s",
-                        this.getClass().getSimpleName(), event.left().getValue());
-                log.error(message);
-                promise.fail(event.left().getValue());
+        // build author
+        final UserInfos author = new UserInfos();
+        author.setUserId(body.getJsonObject("owner", new JsonObject()).getString("userId"));
+        author.setUsername(body.getJsonObject("owner", new JsonObject()).getString("displayName"));
+        // get folder
+        final Optional<Number> folderId = Optional.ofNullable(body.getNumber("folder"));
+        body.remove("folder");
+        final long version = System.currentTimeMillis();
+        plugin.setIngestJobStateAndVersion(body, IngestJobState.TO_BE_SENT, version);
+        return plugin.create(author,body, false, folderId).onFailure((e) -> {
+           log.error("Failed to create mindmap: ", e);
+        });
+    }
+
+    @Override
+    public Future<JsonObject> updateMindmap(final UserInfos user, final String id, final JsonObject unsafeBody) {
+        final long version = System.currentTimeMillis();
+        unsafeBody.put("modified", MongoDb.now());
+        final JsonObject body = Utils.validAndGet(unsafeBody, UPDATABLE_FIELDS, Collections.<String>emptyList());
+        if (body == null){
+            return Future.failedFuture("Validation error : invalids fields.");
+        }
+        QueryBuilder query = QueryBuilder.start("_id").is(id);
+        MongoUpdateBuilder modifier = new MongoUpdateBuilder();
+        for (String attr: body.fieldNames()) {
+            modifier.set(attr, body.getValue(attr));
+        }
+        plugin.setIngestJobStateAndVersion(modifier, IngestJobState.TO_BE_SENT, version);
+        final Promise<JsonObject> promise = Promise.promise();
+        mongoDb.update(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), modifier.build(),MongoDbResult.validResultHandler(either-> {
+            if(either.isLeft()){
+                log.error("Failed to update mindmap: ", either.left().getValue());
+                promise.fail(either.left().getValue());
+            }else{
+                body.put("_id", id);
+                plugin.setVersion(body, version);
+                plugin.notifyUpsert(user, body).onComplete(e->{
+                    if(e.failed()){
+                        log.error("Failed to notify upsert mindmap: ", e.cause());
+                    }
+                    promise.complete(either.right().getValue());
+                });
             }
         }));
         return promise.future();
@@ -237,11 +279,13 @@ public class MindmapServiceImpl implements MindmapService {
 
         QueryBuilder query = QueryBuilder.start(Field._ID).is(id);
         query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
-
-
         mongoDb.delete(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
-
-        return promise.future();
+        return promise.future().compose(result -> {
+            final long now = System.currentTimeMillis();
+            return plugin.notifyDeleteById(user, new IdAndVersion(id, now)).map(result);
+        }).onFailure(e->{
+            log.error("Failed to notify delete mindmap: ", e);
+        });
     }
 
     @Override

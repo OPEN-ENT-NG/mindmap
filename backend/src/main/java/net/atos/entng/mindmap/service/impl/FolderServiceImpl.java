@@ -20,6 +20,7 @@ import io.vertx.core.logging.LoggerFactory;
 
 import net.atos.entng.mindmap.core.constants.Field;
 
+import net.atos.entng.mindmap.explorer.MindmapExplorerPlugin;
 import net.atos.entng.mindmap.helper.MongoHelper;
 import net.atos.entng.mindmap.helper.PromiseHelper;
 import net.atos.entng.mindmap.service.FolderService;
@@ -45,10 +46,10 @@ public class FolderServiceImpl implements FolderService {
     private final MindmapService mindmapService;
 
 
-    public FolderServiceImpl(EventBus eb, MongoDb mongoDb) {
+    public FolderServiceImpl(EventBus eb, MongoDb mongoDb, final MindmapExplorerPlugin plugin) {
         this.eb = eb;
         this.mongoDb = mongoDb;
-        this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance());
+        this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance(), plugin);
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderServiceImpl.class);
