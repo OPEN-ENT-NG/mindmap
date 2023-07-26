@@ -16,7 +16,7 @@ const routes = [
         loader: indexLoader,
         errorElement: <ErrorPage />,
       },
-      {
+      /* {
         path: "view/:mapId",
         async lazy() {
           const { mapLoader, Mindmap } = await import("../app/mindmap");
@@ -26,8 +26,19 @@ const routes = [
           };
         },
         errorElement: <ErrorPage />,
-      },
+      }, */
     ],
+  },
+  {
+    path: "id/:id",
+    async lazy() {
+      const { mapLoader, Mindmap } = await import("../app/mindmap");
+      return {
+        loader: mapLoader,
+        Component: Mindmap,
+      };
+    },
+    errorElement: <ErrorPage />,
   },
 ];
 
