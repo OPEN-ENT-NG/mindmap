@@ -83,5 +83,7 @@
   "group.school.Teacher": "Enseignants de l'{0}.",
   "group.school.Guest": "Invités de l'{0}.",
   "mindmap.notification.shared.two": "{0} a partagé une carte mentale",
-  "warning.no.mobile": "L'édition de la carte mentale n'est pas optimisée sur support mobile. Pour toute modification, nous vous recommandons d'utiliser un ordinateur."
+  "warning.no.mobile": "L'édition de la carte mentale n'est pas optimisée sur support mobile. Pour toute modification, nous vous recommandons d'utiliser un ordinateur.",
+  "explorer.create.title": "Créer une carte mentale",
+  "explorer.filters.mine": "Mes cartes mentales"
 }

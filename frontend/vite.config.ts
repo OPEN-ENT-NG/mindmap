@@ -55,12 +55,6 @@ export default ({ mode }: { mode: string }) => {
     build: {
       assetsDir: "public",
       rollupOptions: {
-        external: ["/assets/js/ode-explorer/index.js"],
-        input: {
-          index: resolve(__dirname, "index.html"),
-          abondance: resolve(__dirname, "mindmap-explorer.html"),
-          print: resolve(__dirname, "print.html"),
-        },
         output: {
           manualChunks: {
             react: [

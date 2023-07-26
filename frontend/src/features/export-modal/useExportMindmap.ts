@@ -73,7 +73,6 @@ export const useExportMindmap = ({
       svgElement = workspace.getSVGElement();
       size = { width: window.innerWidth, height: window.innerHeight };
       mindmap = designer.getMindmap();
-      console.log("ok", { mindmap });
     } else {
       hotToast.error(t("mindmap.export.failed"));
     }

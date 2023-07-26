@@ -89,7 +89,7 @@ public class MindmapController extends MongoDbControllerHelper {
     @Get("")
     @SecuredAction("mindmap.view")
     public void view(HttpServerRequest request) {
-        renderView(request, new JsonObject(), "index.html", null);
+        renderView(request, new JsonObject(), "mindmap-explorer.html", null);
 
         // Create event "access to application Mindmap" and store it, for module "statistics"
         eventHelper.onAccess(request);

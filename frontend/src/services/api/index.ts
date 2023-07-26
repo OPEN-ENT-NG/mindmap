@@ -4,6 +4,10 @@ import { MindmapProps } from "~/app/mindmap";
 
 export type UpdateMindmapProps = Pick<MindmapProps, "name" | "map">;
 
+export const getMindmap = async (url: string): Promise<void> => {
+  return await odeServices.http().get(url);
+};
+
 export const updateMindmap = async (
   url: string,
   body: UpdateMindmapProps,

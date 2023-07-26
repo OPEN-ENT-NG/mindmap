@@ -1,7 +1,7 @@
 import { Suspense, lazy, useState } from "react";
 
 // @ts-ignore
-import Editor, { useEditor } from "@edifice-wisemapping/editor";
+import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
 import { Breadcrumb, Button, LoadingScreen } from "@ode-react-ui/components";
 import { useOdeClient } from "@ode-react-ui/core";
 import { ID } from "ode-ts-client";
@@ -10,7 +10,7 @@ import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import { useActions } from "~/services/queries";
-
+import { DEFAULT_MAP } from "~/shared/default-map";
 import "~/styles/index.css";
 
 const ExportModal = lazy(async () => await import("~/features/export-modal"));
@@ -29,16 +29,22 @@ export interface MindmapProps {
 
 export async function mapLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const mindmap = await fetch(`/mindmap/${id}`);
+  const response = await fetch(`/mindmap/${id}`);
+  const mindmap = await response.json();
 
-  if (!mindmap) {
+  if (!response) {
     throw new Response("", {
       status: 404,
       statusText: "Not Found",
     });
   }
 
-  return mindmap.json();
+  return mindmap.map
+    ? mindmap
+    : {
+        ...mindmap,
+        map: DEFAULT_MAP(mindmap?.name),
+      };
 }
 
 export const Mindmap = () => {
@@ -49,10 +55,8 @@ export const Mindmap = () => {
   const { t } = useTranslation();
   const { data: actions } = useActions();
 
-  const [status, setStatus] = useState("");
-
   const editor = useEditor({
-    mapInfo: mapInfo(data?.name),
+    mapInfo: mapInfo(data?.name, data?.name),
     options: {
       mode: "edition-editor",
       locale: currentLanguage ?? "en",
@@ -65,13 +69,11 @@ export const Mindmap = () => {
     ),
   });
 
-  const canExport = actions?.some((action) => action.available);
-
   const handleOnEditorSave = () => {
     editor.model.save(true);
   };
 
-  const isLoading = status === "loading";
+  const canExport = actions?.some((action) => action.available);
 
   return data?.map ? (
     <>
@@ -95,7 +97,6 @@ export const Mindmap = () => {
               variant="filled"
               className="ms-4"
               onClick={handleOnEditorSave}
-              isLoading={isLoading}
             >
               {t("mindmap.save", { ns: appCode })}
             </Button>
@@ -103,14 +104,26 @@ export const Mindmap = () => {
         )}
       />
       <div className="mindplot-div-container">
-        <Editor editor={editor} />
+        <Editor
+          editor={editor}
+          onLoad={(designer: Designer) => {
+            designer.addEvent("loadSuccess", () => {
+              const elem = document.getElementById("mindmap-comp");
+              if (elem) {
+                elem.classList.add("ready");
+              }
+            });
+          }}
+        />
       </div>
       <Suspense fallback={<LoadingScreen />}>
-        <ExportModal
-          isOpen={openModal}
-          setOpenModal={setOpenModal}
-          mapName={data?.name}
-        />
+        {openModal && (
+          <ExportModal
+            isOpen={openModal}
+            setOpenModal={setOpenModal}
+            mapName={data?.name}
+          />
+        )}
       </Suspense>
     </>
   ) : (

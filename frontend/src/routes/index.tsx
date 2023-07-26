@@ -33,4 +33,5 @@ const routes = [
 
 export const router = createBrowserRouter(routes, {
   basename: import.meta.env.PROD ? "/mindmap" : "/",
+  // basename: "/mindmap",
 });
