@@ -26,7 +26,7 @@ export const Index = () => {
           <Card
             key={item._id}
             name={item.name}
-            onOpen={() => navigate(`view/${item._id}`)}
+            onOpen={() => navigate(`id/${item._id}`)}
           />
         );
       })}

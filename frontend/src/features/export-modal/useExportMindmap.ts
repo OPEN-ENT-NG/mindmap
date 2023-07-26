@@ -16,8 +16,15 @@ import { useTranslation } from "react-i18next";
 type ExportFormat = "svg" | "jpg" | "png" | "mm" | "wxml";
 type ExportGroup = "image" | "mindmap-tool";
 
-export const useExportMindmap = ({ mapName }: { mapName: string }) => {
+export const useExportMindmap = ({
+  mapName,
+  onSuccess,
+}: {
+  mapName: string;
+  onSuccess: () => void;
+}) => {
   const { t } = useTranslation();
+
   const [submit, setSubmit] = useState<boolean>(false);
   const [exportFormat, setExportFormat] = useState<ExportFormat>("svg");
   const [exportGroup, setExportGroup] = useState<ExportGroup>("image");
@@ -26,6 +33,7 @@ export const useExportMindmap = ({ mapName }: { mapName: string }) => {
 
   const handleOnSubmit = (): void => {
     setSubmit(true);
+    onSuccess?.();
   };
 
   const handleOnExportFormatChange = (event: any) => {
@@ -59,12 +67,13 @@ export const useExportMindmap = ({ mapName }: { mapName: string }) => {
 
     const designer: Designer = globalThis.designer;
     // exporting from editor toolbar action
-    if (designer != null) {
+    if (designer) {
       // Depending on the type of export. It will require differt POST.
       const workspace = designer.getWorkSpace();
       svgElement = workspace.getSVGElement();
       size = { width: window.innerWidth, height: window.innerHeight };
       mindmap = designer.getMindmap();
+      console.log("ok", { mindmap });
     } else {
       hotToast.error(t("mindmap.export.failed"));
     }

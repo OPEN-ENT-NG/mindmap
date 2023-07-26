@@ -16,17 +16,6 @@ const routes = [
         loader: indexLoader,
         errorElement: <ErrorPage />,
       },
-      /* {
-        path: "view/:mapId",
-        async lazy() {
-          const { mapLoader, Mindmap } = await import("../app/mindmap");
-          return {
-            loader: mapLoader,
-            Component: Mindmap,
-          };
-        },
-        errorElement: <ErrorPage />,
-      }, */
     ],
   },
   {
@@ -43,5 +32,5 @@ const routes = [
 ];
 
 export const router = createBrowserRouter(routes, {
-  // basename: "/mindmap",
+  basename: import.meta.env.PROD ? "/mindmap" : "/",
 });

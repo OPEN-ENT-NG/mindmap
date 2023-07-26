@@ -5,8 +5,8 @@ import {
   // @ts-ignore
 } from "@edifice-wisemapping/editor";
 
-import MapInfoImpl from "~/features/mindmap/map-info-impl";
-import MindmapStorageManager from "~/features/mindmap/mindmap-storage-manager";
+import MapInfoImpl from "~/features/mindmap/MapInfoImpl";
+import MindmapStorageManager from "~/features/mindmap/MindmapStorageManager";
 
 export const mapInfo: MapInfo = (name: string): MapInfo =>
   new MapInfoImpl(name, name, false);

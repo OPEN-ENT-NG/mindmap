@@ -1,3 +1,8 @@
+body {
+  min-width: inherit;
+  width: auto;
+}
+
 .mindplot-div-container {
   position: relative;
   height: 100vh !important;
@@ -14,12 +19,15 @@
 .MuiTooltip-popper .MuiTooltip-tooltip {
   font-size: 11px;
 }
+
 .MuiBox-root .MuiTypography-root {
   font-size: 12px;
 }
+
 .MuiToolbar-root .MuiTypography-root {
   font-size: 16px;
 }
+
 #exportModal {
   z-index: 9999;
 }

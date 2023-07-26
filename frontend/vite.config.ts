@@ -48,8 +48,10 @@ export default ({ mode }: { mode: string }) => {
     "/mindmap": proxyObj,
   };
 
+  const base = mode === "production" ? "/mindmap" : "";
+
   return defineConfig({
-    // base: "/mindmap",
+    base,
     build: {
       assetsDir: "public",
       rollupOptions: {
@@ -81,21 +83,7 @@ export default ({ mode }: { mode: string }) => {
         },
       },
     },
-    plugins: [
-      react(),
-      tsconfigPaths(),
-      /* {
-        name: "deep-index",
-        configureServer(server) {
-          server.middlewares.use((req, res, next) => {
-            if (req.url === "/") {
-              req.url = "/view/index.html";
-            }
-            next();
-          });
-        },
-      }, */
-    ],
+    plugins: [react(), tsconfigPaths()],
     server: {
       proxy,
       host: "0.0.0.0",

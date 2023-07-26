@@ -5,7 +5,6 @@ import { updateMindmap } from "~/services/api";
 
 class MindmapStorageManager extends PersistenceManager {
   private documentUrl: string;
-
   private mapName: string;
 
   constructor(documentUrl: string, mapName: string) {
@@ -22,9 +21,9 @@ class MindmapStorageManager extends PersistenceManager {
       map: mapXml,
     };
 
-    console.log({ body });
-
-    updateMindmap(this.documentUrl, body);
+    if (body) {
+      updateMindmap(this.documentUrl, body);
+    }
   }
 
   loadMapDom(): Promise<Document> {
