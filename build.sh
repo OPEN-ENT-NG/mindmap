@@ -5,13 +5,18 @@ cd frontend
 ./build.sh --no-docker clean init build
 cd ..
 
-# Backend
 cd backend
+# Create directory structure and copy frontend dist
 mkdir -p ./src/main/resources
 cp -R ../frontend/dist/* ./src/main/resources/
+
+# Create view directory and copy HTML files
 mkdir -p ./src/main/resources/view
-find ./src/main/resources -name "*.html" -type f -exec cp {} ./src/main/resources/view/ \;
-find ./src/main/resources -maxdepth 1 -type f -name "*.html" -delete
-rm -rf ../frontend/dist
+cp -R ./src/main/resources/*.html ./src/main/resources/view
+
+# Build .
 ./build.sh --no-docker clean build
-find ./src/main/resources -mindepth 1 -type d -exec rm -rf {} +
+
+# Clean up - remove frontend/dist and backend/src/main/resources
+rm -rf ../frontend/dist
+rm -rf ./src/main/resources

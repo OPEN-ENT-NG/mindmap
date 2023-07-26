@@ -18,11 +18,10 @@ pipeline {
           sh 'mkdir -p ./src/main/resources'
           sh 'cp -R ../frontend/dist/* ./src/main/resources/'
           sh 'mkdir -p ./src/main/resources/view'
-          sh 'find ./src/main/resources -name "*.html" -type f -exec cp {} ./src/main/resources/view/ \;'
-          sh 'find ./src/main/resources -maxdepth 1 -type f -name "*.html" -delete'
+          sh 'cp -R ./src/main/resources/*.html ./src/main/resources/view'
+          sh './build.sh clean build publish'
           sh 'rm -rf ../frontend/dist'
-          sh './build.sh --no-docker clean build'
-          sh 'find ./src/main/resources -mindepth 1 -type d -exec rm -rf {} +'
+          sh 'rm -rf ./src/main/resources'
         }
       }
     }
