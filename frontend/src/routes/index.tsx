@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Root from "~/app/root";
 import { Index, indexLoader } from "~/app/temp";
-import ErrorPage from "~/shared/components/ErrorPage";
+import ErrorPage from "~/components/page-error";
 
 const routes = [
   {

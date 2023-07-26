@@ -7,6 +7,7 @@ import {
   SizeType,
   TextExporterFactory,
   Mindmap,
+  // @ts-ignore
 } from "@edifice-wisemapping/editor";
 import { Alert } from "@ode-react-ui/components";
 import { useHotToast } from "@ode-react-ui/hooks";
@@ -15,7 +16,7 @@ import { useTranslation } from "react-i18next";
 type ExportFormat = "svg" | "jpg" | "png" | "mm" | "wxml";
 type ExportGroup = "image" | "mindmap-tool";
 
-export default function useExportMindmap({ mapName }: { mapName: string }) {
+export const useExportMindmap = ({ mapName }: { mapName: string }) => {
   const { t } = useTranslation();
   const [submit, setSubmit] = useState<boolean>(false);
   const [exportFormat, setExportFormat] = useState<ExportFormat>("svg");
@@ -130,4 +131,4 @@ export default function useExportMindmap({ mapName }: { mapName: string }) {
     exportFormat,
     zoomToFit,
   };
-}
+};

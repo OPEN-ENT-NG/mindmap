@@ -1,20 +1,17 @@
-// @ts-ignore
 import { useState } from "react";
 
+// @ts-ignore
 import Editor from "@edifice-wisemapping/editor";
-import { Button } from "@ode-react-ui/components";
+import { Breadcrumb, Button } from "@ode-react-ui/components";
 import { useOdeClient } from "@ode-react-ui/core";
 import { ID } from "ode-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
-import {
-  mapInfo,
-  options,
-  persistenceManager,
-} from "~/features/mindmap/configuration";
-import ExportModal from "~/shared/components/ExportModal";
+import ExportModal from "~/features/export-modal";
+import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import "~/styles/index.css";
+import { useActions } from "~/services/queries";
 
 export interface MindmapProps {
   created: Date;
@@ -42,21 +39,15 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
   return mindmap.json();
 }
 
-/* const initialization = (designer: Designer) => {
-  designer.addEvent("loadSuccess", () => {
-    const elem = document.getElementById("mindmap-comp");
-    if (elem) {
-      elem.classList.add("ready");
-    }
-  });
-}; */
-
 export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
-  const { t } = useTranslation();
-  const { currentLanguage } = useOdeClient();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const params = useParams();
+  const { appCode, currentApp, currentLanguage } = useOdeClient();
+  const { t } = useTranslation();
+  const { data: actions } = useActions();
+
+  const canExport = actions?.some((action) => action.available);
 
   const onCancel = () => {
     setOpenModal(false);
@@ -64,20 +55,75 @@ export const Mindmap = () => {
 
   return data?.map ? (
     <>
-      <Button onClick={() => setOpenModal(true)}>{t("mindmap.export")}</Button>
+      {/* <Breadcrumb
+        app={currentApp!}
+        name={data.name}
+        actions={
+          <>
+            {canExport ? (
+              <Button
+                variant="outline"
+                className="ms-4"
+                onClick={() => setOpenModal(true)}
+              >
+                {t("mindmap.export", { ns: appCode })}
+              </Button>
+            ) : null}
+            <Button
+              color="primary"
+              variant="filled"
+              className="ms-4"
+              onClick={() => {
+                console.log("save");
+              }}
+            >
+              {t("mindmap.save", { ns: appCode })}
+            </Button>
+          </>
+        }
+      /> */}
       <div className="mindplot-div-container">
         <Editor
-          // onLoad={initialization}
           mapInfo={mapInfo(data?.name)}
-          onAction={(action: any) => {
-            console.log("action called:", action);
+          options={{
+            mode: "edition-editor",
+            locale: currentLanguage ?? "en",
+            enableKeyboardEvents: true,
+            enableAppBar: false,
           }}
-          options={options("edition-editor", currentLanguage ?? "en", true)}
           persistenceManager={persistenceManager(
             `/mindmap/${params?.mapId}`,
             data?.name,
           )}
-        />
+        >
+          <Breadcrumb
+            app={currentApp!}
+            name={data.name}
+            actions={
+              <>
+                {canExport ? (
+                  <Button
+                    variant="outline"
+                    className="ms-4"
+                    onClick={() => setOpenModal(true)}
+                  >
+                    {t("mindmap.export", { ns: appCode })}
+                  </Button>
+                ) : null}
+                <Button
+                  color="primary"
+                  variant="filled"
+                  className="ms-4"
+                  onClick={() => {
+                    console.log("save");
+                  }}
+                >
+                  {t("mindmap.save", { ns: appCode })}
+                </Button>
+              </>
+            }
+          />
+        </Editor>
       </div>
       {openModal && (
         <ExportModal

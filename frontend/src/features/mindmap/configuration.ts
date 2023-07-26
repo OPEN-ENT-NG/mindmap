@@ -20,11 +20,13 @@ export const options: EditorOptions = (
   mode: string,
   locale: string,
   enableKeyboardEvents: boolean,
+  enableAppBar: boolean,
 ): EditorOptions => {
   const options: EditorOptions = {
     mode,
     locale,
     enableKeyboardEvents,
+    enableAppBar,
   };
 
   return options;

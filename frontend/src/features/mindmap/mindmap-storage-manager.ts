@@ -22,6 +22,8 @@ class MindmapStorageManager extends PersistenceManager {
       map: mapXml,
     };
 
+    console.log({ body });
+
     updateMindmap(this.documentUrl, body);
   }
 

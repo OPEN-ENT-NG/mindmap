@@ -44,7 +44,7 @@
     ]
   },
   "dependencies": {
-    "@edifice-wisemapping/editor": "0.6.1-alpha.0",
+    "@edifice-wisemapping/editor": "file:package.tgz",
     "@ode-react-ui/components": "dev",
     "@ode-react-ui/core": "dev",
     "@ode-react-ui/hooks": "dev",

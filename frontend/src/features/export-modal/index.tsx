@@ -6,10 +6,11 @@ import {
   Select,
   Checkbox,
 } from "@ode-react-ui/components";
+import { useOdeClient } from "@ode-react-ui/core";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 
-import useExportMindmap from "../hooks/useExportMindmap";
+import { useExportMindmap } from "./useExportMindmap";
 
 interface ModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export default function ExportModal({
   onCancel = () => ({}),
 }: ModalProps) {
   const { t } = useTranslation();
+  const { appCode } = useOdeClient();
 
   const {
     handleOnSubmit,
@@ -37,7 +39,7 @@ export default function ExportModal({
   return createPortal(
     <Modal isOpen={isOpen} onModalClose={onCancel} id="exportModal">
       <Modal.Header onModalClose={onCancel}>
-        {t("mindmap.export.modal.title")}
+        {t("mindmap.export.modal.title", { ns: appCode })}
       </Modal.Header>
       <Modal.Body>
         <FormControl id="export">
@@ -46,7 +48,7 @@ export default function ExportModal({
             value="image"
             onChange={handleOnGroupChange}
             model={exportGroup}
-            label="Export Image"
+            label={t("mindmap.export.image")}
           />
           <FormControl id="image" className="form-div-center">
             {exportGroup == "image" && (
