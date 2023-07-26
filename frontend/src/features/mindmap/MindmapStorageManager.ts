@@ -2,10 +2,10 @@
 import { PersistenceManager } from "@edifice-wisemapping/editor";
 
 import { updateMindmap } from "~/services/api";
+import { DEFAULT_MAP } from "~/shared/default-map";
 
 class MindmapStorageManager extends PersistenceManager {
   private documentUrl: string;
-
   private mapName: string;
 
   constructor(documentUrl: string, mapName: string) {
@@ -22,7 +22,9 @@ class MindmapStorageManager extends PersistenceManager {
       map: mapXml,
     };
 
-    updateMindmap(this.documentUrl, body);
+    if (body) {
+      updateMindmap(this.documentUrl, body);
+    }
   }
 
   loadMapDom(): Promise<Document> {
@@ -39,7 +41,7 @@ class MindmapStorageManager extends PersistenceManager {
         return response.json();
       })
       .then((data) => {
-        return data.map;
+        return data.map ? data.map : DEFAULT_MAP(data?.name);
       })
       .then((xmlStr) => new DOMParser().parseFromString(xmlStr, "text/xml"));
 

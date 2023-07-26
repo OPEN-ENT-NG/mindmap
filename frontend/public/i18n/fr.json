@@ -10,8 +10,9 @@
   "mindmap.export": "Exporter",
   "mindmap.export.zoom": "Centrer et ajuster le zoom",
   "mindmap.export.minmap.tools": "Outil Mindmap",
-  "mindmap.export.modal.title": "Exportez votre carte mentale",
+  "mindmap.export.modal.title": "Exporter une carte mentale",
   "mindmap.export.failed": "Une erreur est survenue lors de l'export de la resource",
+  "mindmap.export.image": "Exporter une image",
   "mindmap.back": "Retour",
   "mindmap.save": "Enregistrer",
   "mindmap.cancel": "Annuler",
@@ -82,5 +83,7 @@
   "group.school.Teacher": "Enseignants de l'{0}.",
   "group.school.Guest": "Invités de l'{0}.",
   "mindmap.notification.shared.two": "{0} a partagé une carte mentale",
-  "warning.no.mobile": "L'édition de la carte mentale n'est pas optimisée sur support mobile. Pour toute modification, nous vous recommandons d'utiliser un ordinateur."
+  "warning.no.mobile": "L'édition de la carte mentale n'est pas optimisée sur support mobile. Pour toute modification, nous vous recommandons d'utiliser un ordinateur.",
+  "explorer.create.title": "Créer une carte mentale",
+  "explorer.filters.mine": "Mes cartes mentales"
 }

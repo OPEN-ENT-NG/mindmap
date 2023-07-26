@@ -5,11 +5,11 @@ import {
   // @ts-ignore
 } from "@edifice-wisemapping/editor";
 
-import MapInfoImpl from "~/features/mindmap/map-info-impl";
-import MindmapStorageManager from "~/features/mindmap/mindmap-storage-manager";
+import MapInfoImpl from "~/features/mindmap/MapInfoImpl";
+import MindmapStorageManager from "~/features/mindmap/MindmapStorageManager";
 
-export const mapInfo: MapInfo = (name: string): MapInfo =>
-  new MapInfoImpl(name, name, false);
+export const mapInfo: MapInfo = (id: string, name: string): MapInfo =>
+  new MapInfoImpl(id, name, false);
 
 export const persistenceManager: PersistenceManager = (
   url: string,
@@ -20,11 +20,13 @@ export const options: EditorOptions = (
   mode: string,
   locale: string,
   enableKeyboardEvents: boolean,
+  enableAppBar: boolean,
 ): EditorOptions => {
   const options: EditorOptions = {
     mode,
     locale,
     enableKeyboardEvents,
+    enableAppBar,
   };
 
   return options;

@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Root from "~/app/root";
 import { Index, indexLoader } from "~/app/temp";
-import ErrorPage from "~/shared/components/ErrorPage";
+import ErrorPage from "~/components/page-error";
 
 const routes = [
   {
@@ -16,17 +16,6 @@ const routes = [
         loader: indexLoader,
         errorElement: <ErrorPage />,
       },
-      /* {
-        path: "view/:mapId",
-        async lazy() {
-          const { mapLoader, Mindmap } = await import("../app/mindmap");
-          return {
-            loader: mapLoader,
-            Component: Mindmap,
-          };
-        },
-        errorElement: <ErrorPage />,
-      }, */
     ],
   },
   {
@@ -43,5 +32,6 @@ const routes = [
 ];
 
 export const router = createBrowserRouter(routes, {
+  basename: import.meta.env.PROD ? "/mindmap" : "/",
   // basename: "/mindmap",
 });

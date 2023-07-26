@@ -48,17 +48,13 @@ export default ({ mode }: { mode: string }) => {
     "/mindmap": proxyObj,
   };
 
+  const base = mode === "production" ? "/mindmap" : "";
+
   return defineConfig({
-    // base: "/mindmap",
+    base,
     build: {
       assetsDir: "public",
       rollupOptions: {
-        external: ["/assets/js/ode-explorer/index.js"],
-        input: {
-          index: resolve(__dirname, "index.html"),
-          abondance: resolve(__dirname, "mindmap-explorer.html"),
-          print: resolve(__dirname, "print.html"),
-        },
         output: {
           manualChunks: {
             react: [
@@ -81,21 +77,7 @@ export default ({ mode }: { mode: string }) => {
         },
       },
     },
-    plugins: [
-      react(),
-      tsconfigPaths(),
-      /* {
-        name: "deep-index",
-        configureServer(server) {
-          server.middlewares.use((req, res, next) => {
-            if (req.url === "/") {
-              req.url = "/view/index.html";
-            }
-            next();
-          });
-        },
-      }, */
-    ],
+    plugins: [react(), tsconfigPaths()],
     server: {
       proxy,
       host: "0.0.0.0",
