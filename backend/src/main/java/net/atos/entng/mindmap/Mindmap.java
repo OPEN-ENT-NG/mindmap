@@ -86,6 +86,8 @@ public class Mindmap extends BaseServer {
         // Register verticle into the container
         getVertx().deployVerticle(MindmapPNGExporter.class.getName());
         getVertx().deployVerticle(MindmapSVGExporter.class.getName());
+        // start plugin
+        plugin.start();
     }
 
     @Override
