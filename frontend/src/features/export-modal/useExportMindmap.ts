@@ -33,7 +33,6 @@ export const useExportMindmap = ({
 
   const handleOnSubmit = (): void => {
     setSubmit(true);
-    onSuccess?.();
   };
 
   const handleOnExportFormatChange = (event: any) => {
@@ -122,6 +121,7 @@ export const useExportMindmap = ({
           // Clean up ...
           URL.revokeObjectURL(url);
           document.body.removeChild(anchor);
+          onSuccess?.();
         })
         .catch((fail) => {
           console.error("Unexpected error during export:" + fail);

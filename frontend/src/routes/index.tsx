@@ -1,11 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import Root from "~/app/root";
-import { Index, indexLoader } from "~/app/temp";
 import ErrorPage from "~/components/page-error";
 
 const routes = [
-  {
+  /* {
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
@@ -17,7 +15,7 @@ const routes = [
         errorElement: <ErrorPage />,
       },
     ],
-  },
+  }, */
   {
     path: "id/:id",
     async lazy() {

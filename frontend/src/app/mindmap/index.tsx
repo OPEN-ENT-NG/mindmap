@@ -8,12 +8,13 @@ import { ID } from "ode-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
+import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import { useActions } from "~/services/queries";
 import { DEFAULT_MAP } from "~/shared/default-map";
 import "~/styles/index.css";
 
-const ExportModal = lazy(async () => await import("~/features/export-modal"));
+// const ExportModal = lazy(async () => await import("~/features/export-modal"));
 
 export interface MindmapProps {
   _id: string;
@@ -116,15 +117,15 @@ export const Mindmap = () => {
           }}
         />
       </div>
-      <Suspense fallback={<LoadingScreen />}>
-        {openModal && (
-          <ExportModal
-            isOpen={openModal}
-            setOpenModal={setOpenModal}
-            mapName={data?.name}
-          />
-        )}
-      </Suspense>
+      {/* <Suspense fallback={<LoadingScreen />}> */}
+      {openModal && (
+        <ExportModal
+          isOpen={openModal}
+          setOpenModal={setOpenModal}
+          mapName={data?.name}
+        />
+      )}
+      {/* </Suspense> */}
     </>
   ) : (
     <p>No mindmap found</p>
