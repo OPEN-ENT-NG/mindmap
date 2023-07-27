@@ -85,5 +85,11 @@
   "mindmap.notification.shared.two": "{0} a partagé une carte mentale",
   "warning.no.mobile": "L'édition de la carte mentale n'est pas optimisée sur support mobile. Pour toute modification, nous vous recommandons d'utiliser un ordinateur.",
   "explorer.create.title": "Créer une carte mentale",
-  "explorer.filters.mine": "Mes cartes mentales"
+  "explorer.filters.mine": "Mes cartes mentales",
+  "explorer.emptyScreen.label": "Ce dossier est vide pour le moment. Vous pouvez organiser vos cartes mentales dedans, dès maintenant !",
+  "explorer.searchbar.placeholder": "Rechercher un blog",
+  "explorer.filter.owner": "Mes cartes mentales",
+  "explorer.label.search": "Rechercher dans mes blogs",
+  "explorer.emptyScreen.app.alt": "Illustration de l'application blog sans ressources",
+  "explorer.emptyScreen.trash.empty": "Aucun blogs dans la corbeille pour le moment."
 }
