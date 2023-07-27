@@ -94,6 +94,15 @@ public class MindmapController extends MongoDbControllerHelper {
         // Create event "access to application Mindmap" and store it, for module "statistics"
         eventHelper.onAccess(request);
     }
+    /**
+     * Display react front view /id/:id
+     * @param request
+     */
+    @Get("/id/:id")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void viewById(HttpServerRequest request) {
+        renderView(request, new JsonObject(), "index.html", null);
+    }
 
     @Get("/print/mindmap") //avoid route conflict
     @SecuredAction("mindmap.print")
