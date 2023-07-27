@@ -26,6 +26,8 @@
         "net.atos.entng.mindmap.controllers.MindmapController|exportPngMindmap";
       var WORKFLOW_EXPORT_SVG =
         "net.atos.entng.mindmap.controllers.MindmapController|exportSvgMindmap";
+      var WORKFLOW_PUBLISH =
+        "net.atos.entng.mindmap.controllers.MindmapController|publish";
       var odeConfig = {
         app: "mindmap",
         types: ["mindmap"],
@@ -67,6 +69,12 @@
             workflow: WORFLOW_ACCESS,
             target: "actionbar",
             right: "read",
+          },
+          {
+            id: "publish",
+            workflow: WORKFLOW_PUBLISH,
+            target: "actionbar",
+            right: "creator",
           },
           {
             id: "print",
