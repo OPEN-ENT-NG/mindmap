@@ -53,7 +53,7 @@ export default function ExportModal({
             value="image"
             onChange={handleOnGroupChange}
             model={exportGroup}
-            label={t("mindmap.export.image")}
+            label={t("mindmap.export.image", { ns: appCode })}
           />
           <FormControl id="image" className="form-div-center">
             {exportGroup == "image" && (
@@ -78,7 +78,7 @@ export default function ExportModal({
                 />
                 <Checkbox
                   checked={zoomToFit}
-                  label={t("mindmap.export.zoom")}
+                  label={t("mindmap.export.zoom", { ns: appCode })}
                   onChange={handleOnZoomToFit}
                 />
               </>
@@ -89,7 +89,7 @@ export default function ExportModal({
             value="mindmap-tool"
             onChange={handleOnGroupChange}
             model={exportGroup}
-            label={t("mindmap.export.minmap.tools")}
+            label={t("mindmap.export.minmap.tools", { ns: appCode })}
           />
           <FormControl id="mindmap-tool" className="form-div-center">
             {exportGroup == "mindmap-tool" && (
