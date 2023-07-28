@@ -22,12 +22,6 @@ mods
 */mods
 data
 developer.id
-*.mod.json
-src/main/resources/public/dist
-src/main/resources/public/temp
-src/main/resources/public/js
-src/main/resources/public/template/entcore
-/src/main/resources/view
 /coverage/front/cobertura-coverage.xml
 rev-manifest.json
 /build
@@ -36,3 +30,6 @@ node_modules/
 gradle/
 gradlew*
 package-lock.json
+# Ignore the entire "resources" folder except jsonchema
+src/main/resources/public
+src/main/resources/view
