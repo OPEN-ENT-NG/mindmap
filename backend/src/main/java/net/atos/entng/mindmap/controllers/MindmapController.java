@@ -103,7 +103,17 @@ public class MindmapController extends MongoDbControllerHelper {
     public void viewById(HttpServerRequest request) {
         renderView(request, new JsonObject(), "index.html", null);
     }
+    /**
+     * Display react front print /print/id/:id
+     * @param request
+     */
+    @Get("/print/id/:id")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void viewPrintById(HttpServerRequest request) {
+        renderView(request, new JsonObject(), "index.html", null);
+    }
 
+    @Deprecated
     @Get("/print/mindmap") //avoid route conflict
     @SecuredAction("mindmap.print")
     public void printView(HttpServerRequest request) {
