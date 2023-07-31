@@ -27,6 +27,17 @@ const routes = [
     },
     errorElement: <ErrorPage />,
   },
+  {
+    path: "print/id/:id",
+    async lazy() {
+      const { mapLoader, Mindmap } = await import("../app/print");
+      return {
+        loader: mapLoader,
+        Component: Mindmap,
+      };
+    },
+    errorElement: <ErrorPage />,
+  },
 ];
 
 export const router = createBrowserRouter(routes, {
