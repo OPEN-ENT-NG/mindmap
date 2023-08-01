@@ -35,3 +35,15 @@ body {
 .form-div-center {
   margin: 0px 20px 10px 20px;
 }
+
+@media print {
+  body, html, #root {
+    all: unset;
+    display: revert;
+  }
+
+  .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}

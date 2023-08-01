@@ -1,6 +1,6 @@
-import { Suspense, lazy, useState } from "react";
-
 // @ts-ignore
+import { useEffect } from "react";
+
 import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
 import { useOdeClient } from "@ode-react-ui/core";
 import { ID } from "ode-ts-client";
@@ -56,12 +56,22 @@ export const Mindmap = () => {
       locale: currentLanguage ?? "en",
       enableKeyboardEvents: false,
       enableAppBar: false,
+      zoom: 1.7,
     },
     persistenceManager: persistenceManager(
       `/mindmap/${params?.id}`,
       data?.name,
     ),
   });
+
+  useEffect(() => {
+    const designer: Designer = globalThis.designer;
+    designer.addEvent("loadSuccess", () => {
+      if (designer) {
+        window.print();
+      }
+    });
+  }, []);
 
   return data?.map ? (
     <>
