@@ -5,8 +5,8 @@ import {
   FormControl,
   Select,
   Checkbox,
-} from "@ode-react-ui/components";
-import { useOdeClient } from "@ode-react-ui/core";
+  useOdeClient,
+} from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 

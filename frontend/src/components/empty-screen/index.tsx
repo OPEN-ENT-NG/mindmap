@@ -1,5 +1,4 @@
-import { EmptyScreen } from "@ode-react-ui/components";
-import { useOdeClient, useOdeTheme } from "@ode-react-ui/core";
+import { useOdeClient, useOdeTheme, EmptyScreen } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 
 export default function EmptyScreenApp(): JSX.Element {

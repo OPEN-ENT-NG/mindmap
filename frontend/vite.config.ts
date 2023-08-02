@@ -57,7 +57,7 @@ export default ({ mode }: { mode: string }) => {
       rollupOptions: {
         external: ["ode-ts-client", "ode-explorer"],
         output: {
-          /* manualChunks: {
+          manualChunks: {
             react: [
               "react",
               "react-router-dom",
@@ -67,8 +67,8 @@ export default ({ mode }: { mode: string }) => {
               "react-hot-toast",
             ],
             wisemapping: ["@edifice-wisemapping/editor"],
-          }, */
-          inlineDynamicImports: true,
+          },
+          // inlineDynamicImports: true,
           paths: {
             "ode-ts-client": "/assets/js/ode-ts-client/ode-ts-client.esm.js",
             "ode-explorer": "/assets/js/ode-explorer/index.js",

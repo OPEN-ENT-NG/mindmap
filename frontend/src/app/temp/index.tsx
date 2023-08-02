@@ -1,5 +1,4 @@
-import { Card } from "@ode-react-ui/components";
-import { useOdeClient, useUser } from "@ode-react-ui/core";
+import { useOdeClient, useUser, Card } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useNavigate } from "react-router-dom";
 

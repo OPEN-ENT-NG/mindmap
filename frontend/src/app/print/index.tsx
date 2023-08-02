@@ -1,8 +1,8 @@
 // @ts-ignore
 import { useEffect } from "react";
 
+import { useOdeClient } from "@edifice-ui/react";
 import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
-import { useOdeClient } from "@ode-react-ui/core";
 import { ID } from "ode-ts-client";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 

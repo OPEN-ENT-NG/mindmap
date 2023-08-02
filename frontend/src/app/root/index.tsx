@@ -1,5 +1,4 @@
-import { LoadingScreen, Layout } from "@ode-react-ui/components";
-import { useOdeClient } from "@ode-react-ui/core";
+import { LoadingScreen, Layout, useOdeClient } from "@edifice-ui/react";
 import { Outlet } from "react-router-dom";
 
 function Root() {

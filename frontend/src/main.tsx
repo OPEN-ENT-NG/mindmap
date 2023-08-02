@@ -1,7 +1,7 @@
 import React from "react";
 
 import "./i18n";
-import { OdeClientProvider } from "@ode-react-ui/core";
+import { OdeClientProvider, ThemeProvider } from "@edifice-ui/react";
 import {
   QueryCache,
   QueryClient,
@@ -44,7 +44,9 @@ root.render(
         app: "mindmap",
       }}
     >
-      <RouterProvider router={router} />
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </OdeClientProvider>
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>,

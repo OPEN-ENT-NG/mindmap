@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { Alert, useHotToast } from "@edifice-ui/react";
 import {
   Designer,
   ImageExporterFactory,
@@ -9,8 +10,6 @@ import {
   Mindmap,
   // @ts-ignore
 } from "@edifice-wisemapping/editor";
-import { Alert } from "@ode-react-ui/components";
-import { useHotToast } from "@ode-react-ui/hooks";
 import { useTranslation } from "react-i18next";
 
 type ExportFormat = "svg" | "jpg" | "png" | "mm" | "wxml";

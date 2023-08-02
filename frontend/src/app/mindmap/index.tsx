@@ -1,10 +1,9 @@
-import { Suspense, lazy, useState } from "react";
+import { useState } from "react";
 
 // @ts-ignore
+import { useOdeClient, Breadcrumb, Button, AppHeader } from "@edifice-ui/react";
 import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
-import { Breadcrumb, Button, LoadingScreen } from "@ode-react-ui/components";
-import { useOdeClient } from "@ode-react-ui/core";
-import { ID } from "ode-ts-client";
+import { ID, IWebApp } from "ode-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
@@ -78,9 +77,7 @@ export const Mindmap = () => {
 
   return data?.map ? (
     <>
-      <Breadcrumb
-        app={currentApp!}
-        name={data.name}
+      <AppHeader
         isFullscreen
         render={() => (
           <>
@@ -103,7 +100,9 @@ export const Mindmap = () => {
             </Button>
           </>
         )}
-      />
+      >
+        <Breadcrumb app={currentApp as IWebApp} name={data.name} />
+      </AppHeader>
       <div className="mindplot-div-container">
         <Editor
           editor={editor}

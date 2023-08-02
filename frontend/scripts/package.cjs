@@ -41,6 +41,17 @@ function generatePackage(content) {
   );
 }
 
+function generateDeps(content) {
+  const deps = content.dependencies;
+
+  return {
+    ...deps,
+    "@edifice-ui/icons": BRANCH,
+    "@edifice-ui/react": BRANCH,
+    "ode-ts-client": BRANCH,
+  }
+}
+
 function createPackage() {
   fs.readFile(
     path.resolve(__dirname, "../package.json.template"),
@@ -62,14 +73,6 @@ function createPackage() {
       generatePackage(content);
     },
   );
-}
-
-function generateDeps(content) {
-  const deps = content.dependencies;
-
-  const updatedDeps = { ...deps, ["ode-ts-client"]: BRANCH };
-
-  return updatedDeps;
 }
 
 createPackage();

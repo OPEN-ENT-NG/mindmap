@@ -1,6 +1,6 @@
 {
   "name": "mindmap",
-  "version": "1.15.5-develop-pedago.202307281034",
+  "version": "1.15.5-develop-pedago.20230821537",
   "description": "ENT mindmap module.",
   "homepage": "https://github.com/OPEN-ENT-NG/mindmap#readme",
   "bugs": {
@@ -45,10 +45,8 @@
   },
   "dependencies": {
     "@edifice-wisemapping/editor": "0.7.0",
-    "@ode-react-ui/components": "dev",
-    "@ode-react-ui/core": "dev",
-    "@ode-react-ui/hooks": "dev",
-    "@ode-react-ui/icons": "dev",
+    "@edifice-ui/icons": "develop-pedago",
+    "@edifice-ui/react": "develop-pedago",
     "@react-spring/web": "9.7.2",
     "@tanstack/react-query": "4.29.12",
     "dayjs": "1.11.8",
