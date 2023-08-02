@@ -55,8 +55,9 @@ export default ({ mode }: { mode: string }) => {
     build: {
       assetsDir: "public",
       rollupOptions: {
+        external: ["ode-ts-client", "ode-explorer"],
         output: {
-          manualChunks: {
+          /* manualChunks: {
             react: [
               "react",
               "react-router-dom",
@@ -65,14 +66,12 @@ export default ({ mode }: { mode: string }) => {
               "react-hook-form",
               "react-hot-toast",
             ],
-            "ode-react-ui": [
-              "@ode-react-ui/components",
-              "@ode-react-ui/core",
-              "@ode-react-ui/hooks",
-              "@ode-react-ui/icons",
-            ],
             wisemapping: ["@edifice-wisemapping/editor"],
-            "ode-ts-client": ["ode-ts-client"],
+          }, */
+          inlineDynamicImports: true,
+          paths: {
+            "ode-ts-client": "/assets/js/ode-ts-client/ode-ts-client.esm.js",
+            "ode-explorer": "/assets/js/ode-explorer/index.js",
           },
         },
       },
