@@ -1,7 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default ({ mode }: { mode: string }) => {
@@ -11,10 +10,7 @@ export default ({ mode }: { mode: string }) => {
   const hasEnvFile = Object.keys(envFile).length;
 
   // Proxy variables
-  const headers = {
-    cookie: `oneSessionId=${envs.VITE_ONE_SESSION_ID};authenticated=true; XSRF-TOKEN=${envs.VITE_XSRF_TOKEN}`,
-  };
-  const resHeaders = hasEnvFile
+  const headers = hasEnvFile
     ? {
         "set-cookie": [
           `oneSessionId=${envs.VITE_ONE_SESSION_ID}`,
@@ -28,7 +24,9 @@ export default ({ mode }: { mode: string }) => {
     ? {
         target: envs.VITE_RECETTE,
         changeOrigin: true,
-        headers,
+        headers: {
+          cookie: `oneSessionId=${envs.VITE_ONE_SESSION_ID};authenticated=true; XSRF-TOKEN=${envs.VITE_XSRF_TOKEN}`,
+        },
       }
     : {
         target: envs.VITE_LOCALHOST || "http://localhost:8090",
@@ -50,39 +48,44 @@ export default ({ mode }: { mode: string }) => {
 
   const base = mode === "production" ? "/mindmap" : "";
 
-  return defineConfig({
-    base,
-    build: {
-      assetsDir: "public",
-      rollupOptions: {
-        external: ["ode-ts-client", "ode-explorer"],
-        output: {
-          manualChunks: {
-            react: [
-              "react",
-              "react-router-dom",
-              "react-dom",
-              "react-error-boundary",
-              "react-hook-form",
-              "react-hot-toast",
-            ],
-            wisemapping: ["@edifice-wisemapping/editor"],
-          },
-          // inlineDynamicImports: true,
-          paths: {
-            "ode-ts-client": "/assets/js/ode-ts-client/ode-ts-client.esm.js",
-            "ode-explorer": "/assets/js/ode-explorer/index.js",
-          },
+  const build = {
+    assetsDir: "public",
+    rollupOptions: {
+      external: ["ode-ts-client", "ode-explorer"],
+      output: {
+        manualChunks: {
+          react: [
+            "react",
+            "react-router-dom",
+            "react-dom",
+            "react-error-boundary",
+            "react-hook-form",
+            "react-hot-toast",
+          ],
+          wisemapping: ["@edifice-wisemapping/editor"],
+        },
+        paths: {
+          "ode-ts-client": "/assets/js/ode-ts-client/ode-ts-client.esm.js",
+          "ode-explorer": "/assets/js/ode-explorer/index.js",
         },
       },
     },
-    plugins: [react(), tsconfigPaths()],
-    server: {
-      proxy,
-      host: "0.0.0.0",
-      port: 3000,
-      headers: resHeaders,
-      open: false,
-    },
+  };
+
+  const plugins = [react(), tsconfigPaths()];
+
+  const server = {
+    proxy,
+    host: "0.0.0.0",
+    port: 3000,
+    headers,
+    open: false,
+  };
+
+  return defineConfig({
+    base,
+    build,
+    plugins,
+    server,
   });
 };
