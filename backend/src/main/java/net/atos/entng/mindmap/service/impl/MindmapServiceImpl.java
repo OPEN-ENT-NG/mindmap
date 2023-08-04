@@ -66,7 +66,7 @@ public class MindmapServiceImpl implements MindmapService {
      * Class logger
      */
     private static final Logger log = LoggerFactory.getLogger(MindmapServiceImpl.class);
-    static List<String> UPDATABLE_FIELDS = Arrays.asList("name", "description", "thumbnail", "modified", "trashed", "visibility");
+    static List<String> UPDATABLE_FIELDS = Arrays.asList("name", "map", "description", "thumbnail", "modified", "trashed", "visibility");
 
     /**
      * VertX event bus
