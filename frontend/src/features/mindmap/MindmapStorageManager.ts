@@ -1,8 +1,8 @@
 // @ts-ignore
 import { PersistenceManager } from "@edifice-wisemapping/editor";
 
+import { DEFAULT_MAP } from "~/config/default-map";
 import { updateMindmap } from "~/services/api";
-import { DEFAULT_MAP } from "~/shared/default-map";
 
 class MindmapStorageManager extends PersistenceManager {
   private documentUrl: string;

@@ -1,6 +1,6 @@
 import { odeServices } from "ode-ts-client";
 
-import { MindmapProps } from "~/app/mindmap";
+import { MindmapProps } from "~/routes/mindmap";
 
 export type UpdateMindmapProps = Pick<MindmapProps, "name" | "map">;
 
@@ -8,11 +8,20 @@ export const getMindmap = async (url: string): Promise<void> => {
   return await odeServices.http().get(url);
 };
 
-export const updateMindmap = async (
+/* export const updateMindmap = (
   url: string,
   body: UpdateMindmapProps,
 ): Promise<void> => {
-  return await odeServices.http().put(url, body);
+  console.log(url, body);
+  return odeServices.http().put(url, body);
+}; */
+
+export const updateMindmap = async (
+  url: string,
+  mindmapBody: UpdateMindmapProps,
+) => {
+  console.log({ mindmapBody });
+  return await odeServices.http().putJson(url, mindmapBody);
 };
 
 /**

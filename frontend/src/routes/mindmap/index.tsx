@@ -1,14 +1,22 @@
-// @ts-ignore
-import { useEffect } from "react";
+import { Suspense, useState } from "react";
 
-import { useOdeClient } from "@edifice-ui/react";
+import {
+  useOdeClient,
+  Breadcrumb,
+  Button,
+  AppHeader,
+  LoadingScreen,
+} from "@edifice-ui/react";
+// @ts-ignore
 import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
-import { ID } from "ode-ts-client";
+import { ID, IWebApp } from "ode-ts-client";
+import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
+import { DEFAULT_MAP } from "~/config/default-map";
+import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
-import { DEFAULT_MAP } from "~/shared/default-map";
-import "~/styles/index.css";
+import { useActions } from "~/services/queries";
 
 // const ExportModal = lazy(async () => await import("~/features/export-modal"));
 
@@ -46,17 +54,20 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 
 export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const params = useParams();
-  const { currentLanguage } = useOdeClient();
+  const { appCode, currentApp, currentLanguage } = useOdeClient();
+  const { t } = useTranslation();
+  const { data: actions } = useActions();
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
     options: {
-      mode: "viewonly",
+      mode: "edition-editor",
       locale: currentLanguage ?? "en",
-      enableKeyboardEvents: false,
+      enableKeyboardEvents: true,
       enableAppBar: false,
-      zoom: 1.7,
+      saveOnLoad: false,
     },
     persistenceManager: persistenceManager(
       `/mindmap/${params?.id}`,
@@ -64,17 +75,40 @@ export const Mindmap = () => {
     ),
   });
 
-  useEffect(() => {
-    const designer: Designer = globalThis.designer;
-    designer.addEvent("loadSuccess", () => {
-      if (designer) {
-        window.print();
-      }
-    });
-  }, []);
+  const handleOnEditorSave = () => {
+    editor.model.save(true);
+  };
+
+  const canExport = actions?.some((action) => action.available);
 
   return data?.map ? (
     <>
+      <AppHeader
+        isFullscreen
+        render={() => (
+          <>
+            {canExport ? (
+              <Button
+                variant="outline"
+                className="ms-4"
+                onClick={() => setOpenModal(true)}
+              >
+                {t("mindmap.export", { ns: appCode })}
+              </Button>
+            ) : null}
+            <Button
+              color="primary"
+              variant="filled"
+              className="ms-4"
+              onClick={handleOnEditorSave}
+            >
+              {t("mindmap.save", { ns: appCode })}
+            </Button>
+          </>
+        )}
+      >
+        <Breadcrumb app={currentApp as IWebApp} name={data.name} />
+      </AppHeader>
       <div className="mindplot-div-container">
         <Editor
           editor={editor}
@@ -88,6 +122,15 @@ export const Mindmap = () => {
           }}
         />
       </div>
+      <Suspense fallback={<LoadingScreen />}>
+        {openModal && (
+          <ExportModal
+            isOpen={openModal}
+            setOpenModal={setOpenModal}
+            mapName={data?.name}
+          />
+        )}
+      </Suspense>
     </>
   ) : (
     <p>No mindmap found</p>
