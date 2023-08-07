@@ -51,7 +51,7 @@ export default ({ mode }: { mode: string }) => {
   const build = {
     assetsDir: "public",
     rollupOptions: {
-      external: ["ode-ts-client", "ode-explorer"],
+      external: ["ode-ts-client"],
       output: {
         manualChunks: {
           react: [
@@ -66,7 +66,6 @@ export default ({ mode }: { mode: string }) => {
         },
         paths: {
           "ode-ts-client": "/assets/js/ode-ts-client/ode-ts-client.esm.js",
-          "ode-explorer": "/assets/js/ode-explorer/index.js",
         },
       },
     },
