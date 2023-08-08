@@ -51,7 +51,7 @@ export default ({ mode }: { mode: string }) => {
   const build = {
     assetsDir: "public",
     rollupOptions: {
-      external: ["ode-ts-client"],
+      external: ["edifice-ts-client"],
       output: {
         manualChunks: {
           react: [
@@ -65,7 +65,7 @@ export default ({ mode }: { mode: string }) => {
           wisemapping: ["@edifice-wisemapping/editor"],
         },
         paths: {
-          "ode-ts-client": "/assets/js/ode-ts-client/ode-ts-client.esm.js",
+          "edifice-ts-client": "/assets/js/edifice-ts-client/index.js",
         },
       },
     },

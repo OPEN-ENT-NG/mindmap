@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { useOdeClient } from "@edifice-ui/react";
 import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
-import { ID } from "ode-ts-client";
+import { ID } from "edifice-ts-client";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { DEFAULT_MAP } from "~/config/default-map";

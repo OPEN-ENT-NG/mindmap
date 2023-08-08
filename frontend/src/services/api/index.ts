@@ -1,4 +1,4 @@
-import { odeServices } from "ode-ts-client";
+import { odeServices } from "edifice-ts-client";
 
 import { MindmapProps } from "~/routes/mindmap";
 

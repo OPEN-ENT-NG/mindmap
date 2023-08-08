@@ -9,7 +9,7 @@ import {
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
-import { ID, IWebApp } from "ode-ts-client";
+import { ID, IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
