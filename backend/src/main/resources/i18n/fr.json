@@ -87,9 +87,14 @@
   "explorer.create.title": "Créer une carte mentale",
   "explorer.filters.mine": "Mes cartes mentales",
   "explorer.emptyScreen.label": "Ce dossier est vide pour le moment. Vous pouvez organiser vos cartes mentales dedans, dès maintenant !",
-  "explorer.searchbar.placeholder": "Rechercher un blog",
+  "explorer.searchbar.placeholder": "Rechercher une carte mentale",
   "explorer.filter.owner": "Mes cartes mentales",
-  "explorer.label.search": "Rechercher dans mes blogs",
-  "explorer.emptyScreen.app.alt": "Illustration de l'application blog sans ressources",
-  "explorer.emptyScreen.trash.empty": "Aucun blogs dans la corbeille pour le moment."
+  "explorer.label.search": "Rechercher dans mes cartes mentales",
+  "explorer.emptyScreen.app.alt": "Illustration de l'application carte mentale sans ressources",
+  "explorer.emptyScreen.trash.empty": "Aucune carte mentale dans la corbeille pour le moment.",
+  "explorer.emptyScreen.title.create": "Créer votre première carte mentale !",
+  "explorer.emptyScreen.txt2d.consultation": "Il n’y a pas encore de carte mentale. Patience ! Des sujets passionnants s’apprêtent à déferler sur cette page.",
+  "explorer.emptyScreen.txt1d.consultation": "Il n’y a pas encore de carte mentale. Patience ! C'est ici que vous pourrez bientôt suivre et commenter toutes les activités de la classe.",
+  "explorer.emptyScreen.txt2d.create": "Vous partez en voyage linguistique et souhaitez partager toutes vos aventures ? Devenez apprenti reporter ! Seul ou à plusieurs, publiez et partagez facilement textes, photos et vidéos. => Créer une carte mentale",
+  "explorer.emptyScreen.txt1d.create": "Une sortie en classe découverte ou un potager bio dans l’école ? Créez un carte mentale pour mettre en valeur les activités des enfants et informer facilement les parents ! => Créer une carte"
 }
