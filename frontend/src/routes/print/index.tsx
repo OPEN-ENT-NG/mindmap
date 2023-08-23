@@ -1,8 +1,12 @@
 // @ts-ignore
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { useOdeClient } from "@edifice-ui/react";
-import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
+import { Heading, Image, useOdeClient } from "@edifice-ui/react";
+import Editor, {
+  useEditor,
+  Designer,
+  ImageExporterFactory,
+} from "@edifice-wisemapping/editor";
 import { ID } from "edifice-ts-client";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
@@ -48,6 +52,7 @@ export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
   const params = useParams();
   const { currentLanguage } = useOdeClient();
+  const [hrefImage, setHrefImage] = useState<string>("");
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
@@ -66,9 +71,21 @@ export const Mindmap = () => {
 
   useEffect(() => {
     const designer: Designer = globalThis.designer;
-    designer.addEvent("loadSuccess", () => {
+    designer.addEvent("loadSuccess", async () => {
       if (designer) {
-        window.print();
+        const workspace = designer.getWorkSpace();
+        const svgElement = workspace.getSVGElement();
+        const size = { width: window.innerWidth, height: window.innerHeight };
+        const exporter = await ImageExporterFactory.create(
+          "png",
+          svgElement,
+          size.width,
+          size.height,
+          true,
+        );
+        const imageData = await exporter.exportAndEncode();
+        setHrefImage(imageData);
+        setTimeout(() => window.print(), 1000);
       }
     });
   }, []);
@@ -76,17 +93,28 @@ export const Mindmap = () => {
   return data?.map ? (
     <>
       <div className="mindplot-div-container">
-        <Editor
-          editor={editor}
-          onLoad={(designer: Designer) => {
-            designer.addEvent("loadSuccess", () => {
-              const elem = document.getElementById("mindmap-comp");
-              if (elem) {
-                elem.classList.add("ready");
-              }
-            });
-          }}
-        />
+        {hrefImage ? (
+          <>
+            <Heading headingStyle="h1" level="h1" className="p-16">
+              {data.name}
+            </Heading>
+            <div id="printpngwrapper">
+              <Image id="printpng" src={hrefImage} alt="" />
+            </div>
+          </>
+        ) : (
+          <Editor
+            editor={editor}
+            onLoad={(designer: Designer) => {
+              designer.addEvent("loadSuccess", () => {
+                const elem = document.getElementById("mindmap-comp");
+                if (elem) {
+                  elem.classList.add("ready");
+                }
+              });
+            }}
+          />
+        )}
       </div>
     </>
   ) : (
