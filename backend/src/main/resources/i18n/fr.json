@@ -91,5 +91,7 @@
   "explorer.filter.owner": "Mes cartes mentales",
   "explorer.label.search": "Rechercher dans mes blogs",
   "explorer.emptyScreen.app.alt": "Illustration de l'application blog sans ressources",
-  "explorer.emptyScreen.trash.empty": "Aucun blogs dans la corbeille pour le moment."
+  "explorer.emptyScreen.trash.empty": "Aucun blogs dans la corbeille pour le moment.",
+  "tooltip.shared": "Carte mentale partagé",
+  "tooltip.public": "Carte mentale public"
 }
