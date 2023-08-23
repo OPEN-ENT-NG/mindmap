@@ -36,14 +36,15 @@ body {
   margin: 0px 20px 10px 20px;
 }
 
-@media print {
-  body, html, #root {
-    all: unset;
-    display: revert;
-  }
-
-  .no-print, .no-print *
-    {
-        display: none !important;
-    }
+@page {
+  margin: 1.5cm;
+}
+#printpng{
+  max-height: 160mm;
+  max-width: 280mm;
+}
+#printpngwrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
