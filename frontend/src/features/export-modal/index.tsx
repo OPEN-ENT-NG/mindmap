@@ -63,16 +63,16 @@ export default function ExportModal({
                   value={exportFormat}
                   options={[
                     {
-                      label: "Scalable Vector Graphics (SVG)",
-                      value: "svg",
+                      label: "JPEG Image (JPEG)",
+                      value: "jpg",
                     },
                     {
                       label: "Portable Network Graphics (PNG)",
                       value: "png",
                     },
                     {
-                      label: "JPEG Image (JPEG)",
-                      value: "jpg",
+                      label: "Scalable Vector Graphics (SVG)",
+                      value: "svg",
                     },
                   ]}
                 />
