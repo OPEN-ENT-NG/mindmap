@@ -13,7 +13,7 @@ export const useExportMindmap = ({
   onSuccess: () => void;
 }) => {
   const [submit, setSubmit] = useState<boolean>(false);
-  const [exportFormat, setExportFormat] = useState<ExportFormat>("svg");
+  const [exportFormat, setExportFormat] = useState<ExportFormat>("jpg");
   const [exportGroup, setExportGroup] = useState<ExportGroup>("image");
   const [zoomToFit, setZoomToFit] = useState<boolean>(true);
 
