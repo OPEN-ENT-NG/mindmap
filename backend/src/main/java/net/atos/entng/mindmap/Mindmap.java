@@ -69,8 +69,9 @@ public class Mindmap extends BaseServer {
         super.start();
         plugin = MindmapExplorerPlugin.create(securedActions);
         final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
-        pluginClientPerCollection.put(MINDMAP_COLLECTION, IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE));
-        setRepositoryEvents(new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection));
+        final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
+        pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
+        setRepositoryEvents(new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection, mainPlugin));
 
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(MINDMAP_COLLECTION);

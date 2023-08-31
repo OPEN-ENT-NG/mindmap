@@ -99,7 +99,9 @@ public class MindmapExplorerPlugin extends ExplorerPluginResourceMongo {
             final ShareModel shareModel = new ShareModel(source.getJsonArray("shared", new JsonArray()), securedActions, creatorId);
             message.withShared(shareModel);
         }
-        message.withThumbnail(source.getString("thumbnail"));
+        if(source.containsKey("thumbnail")){
+            message.withThumbnail(source.getString("thumbnail"));
+        }
         message.withDescription(source.getString("description"));
         return Future.succeededFuture(message);
     }
