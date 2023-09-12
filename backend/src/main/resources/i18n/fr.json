@@ -93,10 +93,10 @@
   "explorer.emptyScreen.app.alt": "Illustration de l'application carte mentale sans ressources",
   "explorer.emptyScreen.trash.empty": "Aucune carte mentale dans la corbeille pour le moment.",
   "explorer.emptyScreen.title.create": "Créer votre première carte mentale !",
-  "explorer.emptyScreen.txt2d.consultation": "Il n’y a pas encore de carte mentale. Patience ! Des sujets passionnants s’apprêtent à déferler sur cette page.",
-  "explorer.emptyScreen.txt1d.consultation": "Il n’y a pas encore de carte mentale. Patience ! C'est ici que vous pourrez bientôt suivre et commenter toutes les activités de la classe.",
-  "explorer.emptyScreen.txt2d.create": "Vous partez en voyage linguistique et souhaitez partager toutes vos aventures ? Devenez apprenti reporter ! Seul ou à plusieurs, publiez et partagez facilement textes, photos et vidéos.",
-  "explorer.emptyScreen.txt1d.create": "Une sortie en classe découverte ou un potager bio dans l’école ? Créez un carte mentale pour mettre en valeur les activités des enfants et informer facilement les parents !",
+  "explorer.emptyScreen.txt2d.consultation": "Avec la carte mentale, les idées se transforment en schémas structurés. Fiches de lecture, prise de notes, présentations orales… on mémorise tout plus facilement.",
+  "explorer.emptyScreen.txt1d.consultation": "Avec la carte mentale, les idées se transforment en schémas structurés. Fiches de lecture, prise de notes, présentations orales… on mémorise tout plus facilement.",
+  "explorer.emptyScreen.txt2d.create": "Fatigué de laisser filer vos idées de génie ? L’appli Carte mentale permet non seulement de les noter, mais aussi d’y relier toutes les réflexions qui en découlent ! À tester absolument.",
+  "explorer.emptyScreen.txt1d.create": "Fatigué de laisser filer vos idées de génie ? L’appli Carte mentale permet non seulement de les noter, mais aussi d’y relier toutes les réflexions qui en découlent ! À tester absolument.",
   "tooltip.shared": "Carte mentale partagée",
   "tooltip.public": "Carte mentale public"
 }
