@@ -15,6 +15,8 @@ pipeline {
     stage('Backend') {
       steps {
         dir('backend') {
+          sh 'cp -R ../frontend/old/* ./src/main/resources/public/'
+          sh 'cp -R ../frontend/old/*.html ./src/main/resources/'
           sh 'cp -R ../frontend/dist/* ./src/main/resources/'
           sh 'mkdir -p ./src/main/resources/view'
           sh 'mv ./src/main/resources/*.html ./src/main/resources/view'

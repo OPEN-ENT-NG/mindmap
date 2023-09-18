@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html ng-controller="MindmapController" ng-class="{print: printMode}">
+<head>
+    <title>{{#i18n}}mindmap.title{{/i18n}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/assets/js/entcore/ng-app.js?version=old" id="context" type="text/javascript"></script>
+    <script type="text/javascript" src="/mindmap/public/js/application.js?version=old"></script>
+
+    <!--  Wisemapping dependencies : START -->
+    <script src="/mindmap/public/vendor/wisemapping/js/mootools-core.js" type="text/javascript"></script>
+    <script src="/mindmap/public/vendor/wisemapping/js/mootools-more.js" type="text/javascript"></script>
+    <script src="/mindmap/public/vendor/wisemapping/js/atos-integ.min.js" type="text/javascript"></script>
+    <script src="/mindmap/public/vendor/wisemapping/js/core.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="/mindmap/public/vendor/wisemapping/css/embedded.css"/>
+    <!--  Wisemapping dependencies : END -->
+    <script type="text/ng-template" id="empty"></script>
+</head>
+
+<body class="mindmap" library-root guard-root>
+<portal ng-if="!notFoundd && !printMode">
+    <infotip name="mindmap-no-mobile" class="warning zero-desktop">
+        <strong>
+            <i18n>warning.no.mobile</i18n>
+        </strong>
+    </infotip>
+    <div class="row">
+        <div class="twelve cell">
+            <div class="seven cell">
+                <side-panel class="zero-mobile" ng-if="selectedMindmap">
+                    <container template="side-panel"></container>
+                </side-panel>
+                <app-title>
+                    <h1>
+                        <i class="mindmap"></i>
+                        <span navigation-trigger="goto('')"><a href="/mindmap"><i18n>mindmap.title</i18n></a></span>
+                        <span subtitle ng-if="selectedMindmap.name && selectedMindmap.name.trim().length > 0"> > [[mindmap.name]]</span>
+                    </h1>
+                </app-title>
+            </div>
+            <div class="contextual-buttons five cell">
+                <button workflow="mindmap.create" ng-if="(!mindmap || !mindmap._id) && (mindmapsItem.mindmapsAll.length || folders.all.length)"
+                        navigation-trigger="newMindmap()" class="cell right-magnet">
+                    <i18n>mindmap.new</i18n>
+                </button>
+                <button workflow="mindmap.view"
+                        ng-if="mindmap && mindmap._id && action == 'mindmap-open' && canExport()"
+                        class="cell right-magnet" ng-click="exportMindmap()" ng-disabled="exportInProgress">
+                    <i18n>mindmap.export</i18n>
+                </button>
+                <button ng-if="mindmap && mindmap._id && action == 'mindmap-open' && mindmap.myRights.contrib" id="save" class="cell right-magnet">
+                    <i18n>mindmap.save</i18n>
+                </button>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <section id="mindmap-content">
+        <container template="main" class="flexible content cell"></container>
+        <container template="mindmap" class="flexible navigation"
+                   ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+
+        <!-- Allows to display the export panel -->
+        <div ng-if="display.showExportPanel">
+            <lightbox show="display.showExportPanel" on-close="display.showExportPanel = false;">
+                <h2>
+                    <i18n>mindmap.export
+                        <i18n>
+                </h2>
+                <div class="row">
+                    <p>
+                        <i18n>mindmap.export.description</i18n>
+                    </p>
+                </div>
+                <div class="row">
+                    <p workflow="mindmap.exportpng">
+                        <input type="radio" ng-model="exportType" value="png"><span><i18n>mindmap.format.png</i18n></span>
+                    </p>
+                    <p workflow="mindmap.exportsvg">
+                        <input type="radio" ng-model="exportType" value="svg"><span><i18n>mindmap.format.svg</i18n></span>
+                    </p>
+                </div>
+                <div class="row">
+                    <button class="right-magnet" ng-click="display.showExportPanel = false;">
+                        <i18n>mindmap.cancel</i18n>
+                    </button>
+                    <button class="right-magnet" ng-click="exportMindmapSubmit(exportType)">
+                        <i18n>mindmap.submit</i18n>
+                    </button>
+                </div>
+            </lightbox>
+        </div>
+    </section>
+</portal>
+
+<div ng-if="printMode">
+    <section id="mindmap-content">
+        <container template="mindmap" class="flexible navigation block"
+                   ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"
+        ></container>
+    </section>
+</div>
+<div ng-if="notFound">
+    <div ng-if="!me.userId" class="absolute">
+        <default-styles>
+            <h1><a data-reload><i class="oops"></i>
+                <i18n>oops</i18n>
+            </a></h1>
+            <article>
+                <div class="row">
+                    <i18n>mindmap.or.page.notfound.or.unauthorized</i18n>
+                </div>
+
+                <div class="row vertical-spacing-twice">
+                    <button data-reload onclick="history.go(-1)">
+                        <i18n>back</i18n>
+                    </button>
+                </div>
+            </article>
+        </default-styles>
+    </div>
+    <div ng-if="me.userId" class="absolute">
+        <portal>
+            <h1><a data-reload><i class="oops"></i>
+                <i18n>oops</i18n>
+            </a></h1>
+            <article>
+                <div class="row">
+                    <i18n>mindmap.or.page.notfound.or.unauthorized</i18n>
+                </div>
+
+                <div class="row vertical-spacing-twice">
+                    <button data-reload onclick="history.go(-1)">
+                        <i18n>back</i18n>
+                    </button>
+                </div>
+            </article>
+        </portal>
+    </div>
+</div>
+<library-publish></library-publish>
+<script src="/mindmap/public/vendor/wisemapping/js/editor.min.js" type="text/javascript"></script>
+<script src="/mindmap/public/vendor/wisemapping/js/mindplot.min.js" type="text/javascript"></script>
+<script src="/mindmap/public/vendor/FileSaver.js/Blob.min.js" type="text/javascript"></script>
+<script src="/mindmap/public/vendor/FileSaver.js/FileSaver.min.js" type="text/javascript"></script>
+</body>
+</html>
