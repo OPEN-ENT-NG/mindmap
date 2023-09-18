@@ -9,6 +9,10 @@ cd ..
 cd backend
 cp -R ../frontend/dist/* ./src/main/resources/
 
+# Move old ui to src/main/resources
+cp -R ../frontend/old/* ./src/main/resources/public/
+cp -R ../frontend/old/*.html ./src/main/resources/
+
 # Create view directory and copy HTML files
 mkdir -p ./src/main/resources/view
 mv ./src/main/resources/*.html ./src/main/resources/view
