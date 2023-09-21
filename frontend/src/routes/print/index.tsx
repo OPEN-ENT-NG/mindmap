@@ -70,6 +70,11 @@ export const Mindmap = () => {
   });
 
   useEffect(() => {
+    //init pupetter config
+    globalThis.pdfGeneratorConfig = {
+      landscape: true,
+    };
+    // init designer
     const designer: Designer = globalThis.designer;
     designer.addEvent("loadSuccess", async () => {
       if (designer) {
