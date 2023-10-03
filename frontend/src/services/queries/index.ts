@@ -2,11 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { IAction } from "edifice-ts-client";
 
 import { sessionHasWorkflowRights } from "../api";
-
-const WORKFLOW_EXPORT_PNG =
-  "net.atos.entng.mindmap.controllers.MindmapController|exportPngMindmap";
-const WORKFLOW_EXPORT_SVG =
-  "net.atos.entng.mindmap.controllers.MindmapController|exportSvgMindmap";
+import { workflows } from "~/config";
 
 /**
  * useActions query
@@ -15,12 +11,14 @@ const WORKFLOW_EXPORT_SVG =
  */
 // const { actions } = getAppParams();
 export const useActions = () => {
+  const { exportpng, exportsvg } = workflows;
+
   return useQuery<Record<string, boolean>, Error, IAction[]>({
     queryKey: ["actions"],
     queryFn: async () => {
       const availableRights = await sessionHasWorkflowRights([
-        WORKFLOW_EXPORT_PNG,
-        WORKFLOW_EXPORT_SVG,
+        exportpng,
+        exportsvg,
       ]);
       return availableRights;
     },
@@ -28,11 +26,11 @@ export const useActions = () => {
       const actions: any[] = [
         {
           id: "export-png",
-          workflow: WORKFLOW_EXPORT_PNG,
+          workflow: exportpng,
         },
         {
           id: "export-svg",
-          workflow: WORKFLOW_EXPORT_SVG,
+          workflow: exportsvg,
         },
       ];
       return actions.map((action) => ({

@@ -6,6 +6,8 @@ import {
   Button,
   AppHeader,
   LoadingScreen,
+  useHasWorkflow,
+  useUser,
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
@@ -13,9 +15,11 @@ import { ID, IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
+import { rights } from "~/config";
 import { DEFAULT_MAP } from "~/config/default-map";
 import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
+import { useUserRights } from "~/hooks/useUserRights";
 import { useActions } from "~/services/queries";
 
 // const ExportModal = lazy(async () => await import("~/features/export-modal"));
@@ -54,16 +58,19 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 
 export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const params = useParams();
+
   const { appCode, currentApp, currentLanguage } = useOdeClient();
   const { t } = useTranslation();
-  const { data: actions } = useActions();
+
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
+  const { canUpdate, canExport } = useUserRights({ data });
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
     options: {
-      mode: "edition-editor",
+      mode: canUpdate ? "edition-owner" : "viewonly",
       locale: currentLanguage ?? "en",
       enableKeyboardEvents: true,
       enableAppBar: false,
@@ -78,8 +85,6 @@ export const Mindmap = () => {
   const handleOnEditorSave = () => {
     editor.model.save(true);
   };
-
-  const canExport = actions?.some((action) => action.available);
 
   return data?.map ? (
     <>
@@ -96,14 +101,16 @@ export const Mindmap = () => {
                 {t("mindmap.export", { ns: appCode })}
               </Button>
             ) : null}
-            <Button
-              color="primary"
-              variant="filled"
-              className="ms-4"
-              onClick={handleOnEditorSave}
-            >
-              {t("mindmap.save", { ns: appCode })}
-            </Button>
+            {canUpdate ? (
+              <Button
+                color="primary"
+                variant="filled"
+                className="ms-4"
+                onClick={handleOnEditorSave}
+              >
+                {t("mindmap.save", { ns: appCode })}
+              </Button>
+            ) : null}
           </>
         )}
       >
