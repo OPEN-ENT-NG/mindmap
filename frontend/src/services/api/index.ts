@@ -32,3 +32,12 @@ export const updateMindmap = async (
 export const sessionHasWorkflowRights = async (actionRights: string[]) => {
   return await odeServices.rights().sessionHasWorkflowRights(actionRights);
 };
+
+/**
+ * hasResourceRight API
+ * @param actionRights
+ * @returns check if user has rights
+ */
+/* export const hasResourceRight = async () => {
+  return await odeServices.rights().hasResourceRight();
+}; */

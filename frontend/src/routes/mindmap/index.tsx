@@ -6,8 +6,6 @@ import {
   Button,
   AppHeader,
   LoadingScreen,
-  useHasWorkflow,
-  useUser,
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
@@ -15,12 +13,10 @@ import { ID, IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
-import { rights } from "~/config";
 import { DEFAULT_MAP } from "~/config/default-map";
 import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import { useUserRights } from "~/hooks/useUserRights";
-import { useActions } from "~/services/queries";
 
 // const ExportModal = lazy(async () => await import("~/features/export-modal"));
 
