@@ -18,27 +18,28 @@ export const useUserRights = ({
 
   const userId = user?.userId;
   const groupsIds = user?.groupsIds;
-  const isOwner = data?.owner.userId === user?.userId;
+  const isOwner = data?.owner.userId === userId;
 
-  let canUpdate = true;
+  let canUpdate;
 
   if (isOwner) {
     canUpdate = true;
   }
 
-  if (rights) {
-    for (const right of shared) {
-      if (right["groupId"] !== undefined) {
-        if (groupsIds?.includes(right["groupId"])) {
-          canUpdate = right[rights.contrib.right];
-        }
+  if (!isOwner && rights) {
+    canUpdate = shared.some((right) => {
+      const groupId = right["groupId"];
+      const userRight = right[rights.contrib.right];
+
+      if (groupId !== undefined && groupsIds?.includes(groupId)) {
+        return userRight;
       }
-      if (right["userId"] !== undefined) {
-        if (userId === right["userId"]) {
-          canUpdate = right[rights.contrib.right];
-        }
-      }
-    }
+
+      const userRightUserId = right["userId"];
+      return userRightUserId !== undefined && userId === userRightUserId
+        ? userRight
+        : false;
+    });
   }
 
   const canExport = actions?.some((action) => action.available);
