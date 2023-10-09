@@ -53,6 +53,7 @@ export default function ExportModal({
             value="image"
             onChange={handleOnGroupChange}
             model={exportGroup}
+            checked={exportGroup === "image"}
             label={t("mindmap.export.image", { ns: appCode })}
           />
           <FormControl id="image" className="form-div-center">
@@ -89,6 +90,7 @@ export default function ExportModal({
             value="mindmap-tool"
             onChange={handleOnGroupChange}
             model={exportGroup}
+            checked={exportGroup === "mindmap-tool"}
             label={t("mindmap.export.minmap.tools", { ns: appCode })}
           />
           <FormControl id="mindmap-tool" className="form-div-center">
