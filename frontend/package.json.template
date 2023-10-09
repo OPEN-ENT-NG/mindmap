@@ -46,7 +46,7 @@
   "dependencies": {
     "@edifice-ui/icons": "%packageVersion%",
     "@edifice-ui/react": "%packageVersion%",
-    "@edifice-wisemapping/editor": "0.7.0",
+    "@edifice-wisemapping/editor": "0.7.3",
     "@react-spring/web": "9.7.2",
     "@tanstack/react-query": "4.29.12",
     "dayjs": "1.11.8",
