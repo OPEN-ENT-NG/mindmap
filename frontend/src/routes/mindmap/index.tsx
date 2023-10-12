@@ -89,11 +89,7 @@ export const Mindmap = () => {
         render={() => (
           <>
             {canExport ? (
-              <Button
-                variant="outline"
-                className="ms-4"
-                onClick={() => setOpenModal(true)}
-              >
+              <Button variant="outline" onClick={() => setOpenModal(true)}>
                 {t("mindmap.export", { ns: appCode })}
               </Button>
             ) : null}
