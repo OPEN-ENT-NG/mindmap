@@ -1,0 +1,48 @@
+body {
+  min-width: inherit;
+  width: auto;
+}
+
+.mindplot-div-container {
+  position: relative;
+  height: 100vh !important;
+}
+
+.mindplot-div-container svg {
+  font-size: 24px;
+}
+
+#root {
+  height: 100%;
+}
+
+.MuiInputBase-root textarea, 
+.MuiInputBase-root input, 
+.MuiBox-root .MuiTypography-root, 
+.MuiBox-root .MuiButtonBase-root, 
+.MuiTooltip-popper 
+.MuiTooltip-tooltip,
+.MuiPaper-root .MuiTypography-root {
+  font-size: 1.4rem;
+}
+
+#exportModal {
+  z-index: 9999;
+}
+
+.form-div-center {
+  margin: 0px 20px 10px 20px;
+}
+
+@page {
+  margin: 1.5cm;
+}
+#printpng{
+  max-height: 160mm;
+  max-width: 280mm;
+}
+#printpngwrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
