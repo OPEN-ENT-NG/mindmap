@@ -15,6 +15,7 @@ pipeline {
     stage('Backend') {
       steps {
         dir('backend') {
+          sh 'mkdir -p ./src/main/resources/public/ || TRUE'
           sh 'cp -R ../frontend/old/* ./src/main/resources/public/'
           sh 'cp -R ../frontend/old/*.html ./src/main/resources/'
           sh 'cp -R ../frontend/dist/* ./src/main/resources/'
