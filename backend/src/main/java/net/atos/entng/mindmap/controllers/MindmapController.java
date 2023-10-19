@@ -267,7 +267,7 @@ public class MindmapController extends MongoDbControllerHelper {
                     JsonObject params = new JsonObject();
                     params.put("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType());
                     params.put("username", user.getUsername());
-                    params.put("mindmapUri", "/mindmap/view/" + id);
+                    params.put("mindmapUri", "/mindmap/id/" + id);
                     params.put("resourceUri", params.getString("mindmapUri"));
 
                     params.put("pushNotif", new JsonObject().put("title", "mindmap.notification.shared")
@@ -309,7 +309,7 @@ public class MindmapController extends MongoDbControllerHelper {
                     JsonObject params = new JsonObject();
                     params.put("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType());
                     params.put("username", user.getUsername());
-                    params.put("mindmapUri", "/mindmap/view/" + id);
+                    params.put("mindmapUri", "/mindmap/id/" + id);
                     params.put("resourceUri", params.getString("mindmapUri"));
                     params.put("pushNotif", new JsonObject().put("title", "mindmap.notification.shared")
                             .put("body", I18n.getInstance()

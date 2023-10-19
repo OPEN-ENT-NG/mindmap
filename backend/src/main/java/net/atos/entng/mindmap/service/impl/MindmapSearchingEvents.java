@@ -83,7 +83,7 @@ public class MindmapSearchingEvents implements SearchingEvents {
 				jr.put(aHeader.get(2), j.getJsonObject("modified"));
 				jr.put(aHeader.get(3), j.getJsonObject("owner").getString("displayName"));
 				jr.put(aHeader.get(4), j.getJsonObject("owner").getString("userId"));
-				jr.put(aHeader.get(5), "/mindmap/view/" + j.getString("_id"));
+				jr.put(aHeader.get(5), "/mindmap/id/" + j.getString("_id"));
 				traity.add(jr);
 			}
 		}

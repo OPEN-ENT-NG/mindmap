@@ -57,7 +57,7 @@ Behaviours.register('mindmap', {
             ownerName: e.owner.displayName,
             owner: e.owner.userId,
             icon: e.thumbnail || "/img/illustrations/mindmap-default.png",
-            path: '/mindmap#/view/' + e._id,
+            path: '/mindmap/id/' + e._id,
             id: e._id
         }));
 

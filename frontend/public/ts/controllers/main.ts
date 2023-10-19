@@ -639,7 +639,7 @@ export const MindmapController = ng.controller('MindmapController', ['$scope', '
                 $scope.action = 'mindmap-open';
                 $scope.mindmap.readOnly = (!$scope.mindmap.myRights.contrib);
                 template.open('mindmap', 'mindmap-edit');
-                window.location.hash = '/view/' + $scope.mindmap._id;
+                window.location.hash = '/id/' + $scope.mindmap._id;
             });
 
 
