@@ -32,6 +32,14 @@
     },
     "folder": {
       "type": "number"
+    },
+    "folder_parent": {
+        "userId" : {
+            "type": "string"
+        },
+        "folder_parent_id": {
+            "type": ["string","null"]
+        }
     }
   },
   "required": ["name"]
