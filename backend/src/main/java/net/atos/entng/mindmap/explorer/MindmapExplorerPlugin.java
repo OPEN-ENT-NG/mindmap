@@ -1,5 +1,6 @@
 package net.atos.entng.mindmap.explorer;
 
+import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.webutils.security.SecuredAction;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
@@ -103,6 +104,11 @@ public class MindmapExplorerPlugin extends ExplorerPluginResourceMongo {
             message.withThumbnail(source.getString("thumbnail"));
         }
         message.withDescription(source.getString("description"));
+        // set updated date
+        final Object modified = source.getValue("modified");
+        if(modified != null && modified instanceof JsonObject){
+            message.withUpdatedAt(MongoDb.parseIsoDate((JsonObject) modified));
+        }
         return Future.succeededFuture(message);
     }
 
