@@ -100,6 +100,7 @@
   "explorer.emptyScreen.txt1d.consultation": "Avec la carte mentale, les idées se transforment en schémas structurés. Fiches de lecture, prise de notes, présentations orales… on mémorise tout plus facilement.",
   "explorer.emptyScreen.txt2d.create": "Fatigué de laisser filer vos idées de génie ? L’appli Carte mentale permet non seulement de les noter, mais aussi d’y relier toutes les réflexions qui en découlent ! À tester absolument.",
   "explorer.emptyScreen.txt1d.create": "Fatigué de laisser filer vos idées de génie ? L’appli Carte mentale permet non seulement de les noter, mais aussi d’y relier toutes les réflexions qui en découlent ! À tester absolument.",
+  "explorer.emptyScreen.search.text": "Désolé, il n’y a rien sous ce nom-là... Aucune carte mentale ne correspond à votre recherche. Modifiez les critères et tentez à nouveau !",
   "tooltip.shared": "Carte mentale partagée",
   "tooltip.public": "Carte mentale public"
 }
