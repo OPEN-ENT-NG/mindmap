@@ -1,3 +1,5 @@
+import { AppHeader, Button, Heading, Layout } from "@edifice-ui/react";
+import { t } from "i18next";
 import { useRouteError } from "react-router-dom";
 
 export default function PageError() {
@@ -5,12 +7,28 @@ export default function PageError() {
   console.error(error);
 
   return (
-    <div id="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.message}</i>
-      </p>
-    </div>
+    <Layout>
+      <AppHeader render={() => <></>}>
+        <div className="container-fluid mt-64 mb-64">
+          <div className="d-flex flex-column gap-16 align-items-center">
+            <Heading level="h2" headingStyle="h2" className="text-secondary">
+              {t("oops")}
+            </Heading>
+            <div className="text">
+              {" "}
+              {t("mindmap.or.page.notfound.or.unauthorized", { ns: "mindmap" })}
+            </div>
+            <Button
+              color="primary"
+              onClick={() => {
+                window.location.href = "/mindmap";
+              }}
+            >
+              {t("back")}
+            </Button>
+          </div>
+        </div>
+      </AppHeader>
+    </Layout>
   );
 }
