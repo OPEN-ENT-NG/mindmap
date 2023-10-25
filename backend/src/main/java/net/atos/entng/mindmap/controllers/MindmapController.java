@@ -106,7 +106,13 @@ public class MindmapController extends MongoDbControllerHelper {
     @Get("/id/:id")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void viewById(HttpServerRequest request) {
-        renderView(request, new JsonObject(), "index.html", null);
+        final boolean useNewUi = this.config.getBoolean("use-explorer-ui", true);
+        if(useNewUi){
+            renderView(request, new JsonObject(), "index.html", null);
+        }else{
+            // redirect to old ui
+            redirect(request, "/mindmap#/view/"+request.params().get("id"));
+        }
     }
     /**
      * Display react front print /print/id/:id
