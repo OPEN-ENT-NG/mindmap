@@ -69,7 +69,7 @@
 	                        title: resource.name,
 	                        cover: resource.thumbnail,
 	                        application: 'MindMap',
-	                        pdfUri: "/mindmap/print/mindmap#/print/png/".concat(resource._id)
+	                        pdfUri: "/mindmap#/print/png/".concat(resource._id)
 	                    }
 	                };
 	            };
@@ -6175,7 +6175,7 @@
 	            var _this = this;
 	            if (redirect === void 0) { redirect = true; }
 	            if (redirect) {
-	                window.open('/mindmap/print/mindmap#/print/png/' + mindmap._id);
+	                window.open('/mindmap#/print/png/' + mindmap._id);
 	                return;
 	            }
 	            delete $scope.mindmap;
