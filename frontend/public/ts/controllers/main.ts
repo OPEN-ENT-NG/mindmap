@@ -12,9 +12,12 @@ import forEach = require("core-js/fn/array/for-each");
 
 declare let mapAdapter: any;
 declare let currentLanguage: any;
-
 declare let saveAs: (data, name, opts?) => void;
-
+declare let window: any
+//init pupetter config
+window.pdfGeneratorConfig = {
+    landscape: true,
+};
 
 /**
  * Controller for mindmaps. All methods contained in this controller can be called
