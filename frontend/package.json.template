@@ -1,6 +1,6 @@
 {
   "name": "mindmap",
-  "version": "2.0.0-%branch%.%generateVersion%",
+  "version": "2.0.0",
   "description": "ENT mindmap module.",
   "homepage": "https://github.com/OPEN-ENT-NG/mindmap#readme",
   "bugs": {
