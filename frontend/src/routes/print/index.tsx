@@ -1,4 +1,3 @@
-// @ts-ignore
 import { useEffect, useState } from "react";
 
 import { Heading, Image, useOdeClient } from "@edifice-ui/react";
@@ -6,6 +5,7 @@ import Editor, {
   useEditor,
   Designer,
   ImageExporterFactory,
+  // @ts-ignore
 } from "@edifice-wisemapping/editor";
 import { ID } from "edifice-ts-client";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
@@ -13,8 +13,6 @@ import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 import { DEFAULT_MAP } from "~/config/default-map";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import "./index.css";
-
-// const ExportModal = lazy(async () => await import("~/features/export-modal"));
 
 export interface MindmapProps {
   _id: string;
@@ -51,8 +49,10 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
   const params = useParams();
-  const { currentLanguage } = useOdeClient();
+
   const [hrefImage, setHrefImage] = useState<string>("");
+
+  const { currentLanguage } = useOdeClient();
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
@@ -95,34 +95,24 @@ export const Mindmap = () => {
     });
   }, []);
 
-  return data?.map ? (
-    <>
-      <div className="mindplot-div-container">
-        {hrefImage ? (
-          <>
-            <Heading headingStyle="h1" level="h1" className="p-16">
-              {data.name}
-            </Heading>
-            <div id="printpngwrapper">
-              <Image id="printpng" src={hrefImage} alt="" />
-            </div>
-          </>
-        ) : (
-          <Editor
-            editor={editor}
-            onLoad={(designer: Designer) => {
-              designer.addEvent("loadSuccess", () => {
-                const elem = document.getElementById("mindmap-comp");
-                if (elem) {
-                  elem.classList.add("ready");
-                }
-              });
-            }}
-          />
-        )}
-      </div>
-    </>
-  ) : (
-    <p>No mindmap found</p>
+  return (
+    data?.map && (
+      <>
+        <div className="mindplot-div-container">
+          {hrefImage ? (
+            <>
+              <Heading headingStyle="h1" level="h1" className="p-16">
+                {data.name}
+              </Heading>
+              <div id="printpngwrapper">
+                <Image id="printpng" src={hrefImage} alt="" />
+              </div>
+            </>
+          ) : (
+            <Editor editor={editor} />
+          )}
+        </div>
+      </>
+    )
   );
 };

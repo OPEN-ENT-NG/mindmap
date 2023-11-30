@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { OptionsType } from "@edifice-ui/react";
+
 import { exporter } from "~/services/utils";
 
 type ExportFormat = "svg" | "jpg" | "png" | "mm" | "wxml";
@@ -17,21 +19,46 @@ export const useExportMindmap = ({
   const [exportGroup, setExportGroup] = useState<ExportGroup>("image");
   const [zoomToFit, setZoomToFit] = useState<boolean>(true);
 
+  const imagesOptions = [
+    {
+      label: "JPEG Image (JPEG)",
+      value: "jpg",
+    },
+    {
+      label: "Portable Network Graphics (PNG)",
+      value: "png",
+    },
+    {
+      label: "Scalable Vector Graphics (SVG)",
+      value: "svg",
+    },
+  ];
+
+  const formatOptions = [
+    {
+      label: "WiseMapping (WXML)",
+      value: "wxml",
+    },
+    {
+      label: "Freemind 1.0.1 (MM)",
+      value: "mm",
+    },
+  ];
+
   const handleOnSubmit = (): void => {
     setSubmit(true);
-  };
-
-  const handleOnExportFormatChange = (event: any) => {
-    setExportFormat(event.target.value);
   };
 
   const handleOnZoomToFit = (): void => {
     setZoomToFit(!zoomToFit);
   };
 
-  const handleOnGroupChange = (event: any) => {
-    const value: ExportGroup = event.target.value;
-    setExportGroup(value);
+  const handleOnExportFormatChange = (option: OptionsType | string) => {
+    setExportFormat(option as ExportFormat);
+  };
+
+  const handleOnGroupChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
 
     let defaultFormat: ExportFormat;
     switch (value) {
@@ -41,7 +68,10 @@ export const useExportMindmap = ({
       case "mindmap-tool":
         defaultFormat = "wxml";
         break;
+      default:
+        defaultFormat = "svg";
     }
+    setExportGroup(value as unknown as ExportGroup);
     setExportFormat(defaultFormat);
   };
 
@@ -72,6 +102,8 @@ export const useExportMindmap = ({
   }, [submit]);
 
   return {
+    imagesOptions,
+    formatOptions,
     handleOnSubmit,
     handleOnExportFormatChange,
     handleOnZoomToFit,

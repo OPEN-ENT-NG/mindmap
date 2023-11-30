@@ -20,7 +20,6 @@ export const updateMindmap = async (
   url: string,
   mindmapBody: UpdateMindmapProps,
 ) => {
-  console.log({ mindmapBody });
   return await odeServices.http().putJson(url, mindmapBody);
 };
 

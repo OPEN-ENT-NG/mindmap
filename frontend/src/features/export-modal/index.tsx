@@ -31,7 +31,8 @@ export default function ExportModal({
   };
 
   const {
-    // openModal,
+    imagesOptions,
+    formatOptions,
     handleOnSubmit,
     handleOnExportFormatChange,
     handleOnZoomToFit,
@@ -60,27 +61,18 @@ export default function ExportModal({
             {exportGroup == "image" && (
               <>
                 <Select
-                  onChange={handleOnExportFormatChange}
-                  value={exportFormat}
-                  options={[
-                    {
-                      label: "JPEG Image (JPEG)",
-                      value: "jpg",
-                    },
-                    {
-                      label: "Portable Network Graphics (PNG)",
-                      value: "png",
-                    },
-                    {
-                      label: "Scalable Vector Graphics (SVG)",
-                      value: "svg",
-                    },
-                  ]}
+                  block
+                  size="md"
+                  onValueChange={handleOnExportFormatChange}
+                  options={imagesOptions}
+                  aria-required={true}
+                  placeholderOption={imagesOptions[0].label}
                 />
                 <Checkbox
                   checked={zoomToFit}
                   label={t("mindmap.export.zoom", { ns: appCode })}
                   onChange={handleOnZoomToFit}
+                  className="my-8"
                 />
               </>
             )}
@@ -97,19 +89,12 @@ export default function ExportModal({
             {exportGroup == "mindmap-tool" && (
               <>
                 <Select
-                  onChange={handleOnExportFormatChange}
-                  value={exportFormat}
-                  options={[
-                    {
-                      label: "WiseMapping (WXML)",
-                      value: "wxml",
-                    },
-                    {
-                      label: "Freemind 1.0.1 (MM)",
-                      value: "mm",
-                    },
-                  ]}
-                ></Select>
+                  block
+                  size="md"
+                  onValueChange={handleOnExportFormatChange}
+                  options={formatOptions}
+                  placeholderOption={exportFormat}
+                />
               </>
             )}
           </FormControl>

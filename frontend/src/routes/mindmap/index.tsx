@@ -8,7 +8,7 @@ import {
   LoadingScreen,
 } from "@edifice-ui/react";
 // @ts-ignore
-import Editor, { useEditor, Designer } from "@edifice-wisemapping/editor";
+import Editor, { useEditor } from "@edifice-wisemapping/editor";
 import { ID, IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
@@ -17,8 +17,6 @@ import { DEFAULT_MAP } from "~/config/default-map";
 import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import { useUserRights } from "~/hooks/useUserRights";
-
-// const ExportModal = lazy(async () => await import("~/features/export-modal"));
 
 export interface MindmapProps {
   _id: string;
@@ -56,12 +54,11 @@ export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
   const params = useParams();
 
-  const { appCode, currentApp, currentLanguage } = useOdeClient();
-  const { t } = useTranslation();
-
   const [openModal, setOpenModal] = useState<boolean>(false);
 
+  const { appCode, currentApp, currentLanguage } = useOdeClient();
   const { canUpdate, canExport } = useUserRights({ data });
+  const { t } = useTranslation();
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
@@ -78,60 +75,52 @@ export const Mindmap = () => {
     ),
   });
 
-  const handleOnEditorSave = () => {
-    editor.model.save(true);
-  };
+  const handleOnEditorSave = () => editor.model.save(true);
 
-  return data?.map ? (
-    <>
-      <AppHeader
-        isFullscreen
-        render={() => (
-          <>
-            {canExport ? (
-              <Button variant="outline" onClick={() => setOpenModal(true)}>
-                {t("mindmap.export", { ns: appCode })}
-              </Button>
-            ) : null}
-            {canUpdate ? (
-              <Button
-                color="primary"
-                variant="filled"
-                className="ms-4"
-                onClick={handleOnEditorSave}
-              >
-                {t("mindmap.save", { ns: appCode })}
-              </Button>
-            ) : null}
-          </>
-        )}
-      >
-        <Breadcrumb app={currentApp as IWebApp} name={data.name} />
-      </AppHeader>
-      <div className="mindplot-div-container">
-        <Editor
-          editor={editor}
-          onLoad={(designer: Designer) => {
-            designer.addEvent("loadSuccess", () => {
-              const elem = document.getElementById("mindmap-comp");
-              if (elem) {
-                elem.classList.add("ready");
-              }
-            });
-          }}
-        />
-      </div>
-      <Suspense fallback={<LoadingScreen />}>
-        {openModal && (
-          <ExportModal
-            isOpen={openModal}
-            setOpenModal={setOpenModal}
-            mapName={data?.name}
-          />
-        )}
-      </Suspense>
-    </>
-  ) : (
-    <p>No mindmap found</p>
+  /* const designer: Designer = globalThis.designer; */
+
+  return (
+    data?.map && (
+      <>
+        <AppHeader
+          isFullscreen
+          render={() => (
+            <>
+              {canExport ? (
+                <Button variant="outline" onClick={() => setOpenModal(true)}>
+                  {t("mindmap.export", { ns: appCode })}
+                </Button>
+              ) : null}
+              {canUpdate ? (
+                <Button
+                  color="primary"
+                  variant="filled"
+                  className="ms-4"
+                  onClick={handleOnEditorSave}
+                >
+                  {t("mindmap.save", { ns: appCode })}
+                </Button>
+              ) : null}
+              {/* <button onClick={() => designer.undo()}>undo</button>
+            <button onClick={() => designer.redo()}>redo</button> */}
+            </>
+          )}
+        >
+          <Breadcrumb app={currentApp as IWebApp} name={data.name} />
+        </AppHeader>
+        <div className="mindplot-div-container">
+          <Editor editor={editor} />
+        </div>
+        <Suspense fallback={<LoadingScreen />}>
+          {openModal && (
+            <ExportModal
+              isOpen={openModal}
+              setOpenModal={setOpenModal}
+              mapName={data?.name}
+            />
+          )}
+        </Suspense>
+      </>
+    )
   );
 };

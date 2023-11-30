@@ -48,6 +48,6 @@ root.render(
         <RouterProvider router={router} />
       </ThemeProvider>
     </OdeClientProvider>
-    <ReactQueryDevtools initialIsOpen={false} />
+    <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
   </QueryClientProvider>,
 );
