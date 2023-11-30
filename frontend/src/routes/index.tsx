@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import ErrorPage from "~/routes/page-error";
+import PageError from "~/routes/page-error";
+
 import "~/styles/index.css";
 
 const routes = [
@@ -13,7 +14,7 @@ const routes = [
         Component: Mindmap,
       };
     },
-    errorElement: <ErrorPage />,
+    errorElement: <PageError />,
   },
   {
     path: "print/id/:id",
@@ -24,7 +25,7 @@ const routes = [
         Component: Mindmap,
       };
     },
-    errorElement: <ErrorPage />,
+    errorElement: <PageError />,
   },
 ];
 
