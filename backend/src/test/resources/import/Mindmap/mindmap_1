@@ -1,0 +1,42 @@
+{
+	"_id" : "9f09e4c9-6e3c-478c-8388-76865b79a583",
+	"name" : "MOLIERE",
+	"description" : "Comédien et Auteur de pièces de théâtre",
+	"owner" : {
+		"userId" : "57ebdb1f-930f-42e3-aea2-f0ab0b980428",
+		"displayName" : "AURELIE DROUILLAC"
+	},
+	"created" : "2023-01-01 01:01.01.001",
+	"modified" : "2023-01-01 01:01.01.001",
+	"map" : "<map name=\"MOLIERE\" version=\"tango\"></map>",
+	"shared" : [
+		{
+			"groupId" : "474-1429810567870",
+			"net-atos-entng-mindmap-controllers-MindmapController|retrieve" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|update" : true
+		},
+		{
+			"groupId" : "471-1429810567870",
+			"net-atos-entng-mindmap-controllers-MindmapController|retrieve" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|update" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|share" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|removeShareMindmap" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|shareMindmapSubmit" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|delete" : true
+		},
+		{
+			"groupId" : "472-1429810567870",
+			"net-atos-entng-mindmap-controllers-MindmapController|retrieve" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|share" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|removeShareMindmap" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|shareMindmapSubmit" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|delete" : true,
+			"net-atos-entng-mindmap-controllers-MindmapController|update" : true
+		},
+		{
+			"groupId" : "473-1429810567870",
+			"net-atos-entng-mindmap-controllers-MindmapController|retrieve" : true
+		}
+	],
+	"thumbnail" : "/workspace/document/ea689395-91f3-4847-b947-bd6050447f37"
+}
