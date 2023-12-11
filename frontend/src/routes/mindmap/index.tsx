@@ -35,7 +35,7 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
   const response = await fetch(`/mindmap/${id}`);
   const mindmap = await response.json();
 
-  if (!response) {
+  if (!response || mindmap?.trashed) {
     throw new Response("", {
       status: 404,
       statusText: "Not Found",
