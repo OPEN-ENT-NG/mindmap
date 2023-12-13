@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 
 import {
   useOdeClient,
@@ -6,7 +6,6 @@ import {
   Button,
   AppHeader,
   LoadingScreen,
-  useUser,
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor } from "@edifice-wisemapping/editor";
@@ -33,6 +32,23 @@ export interface MindmapProps {
 
 export async function mapLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
+
+  // Fix #WB2-1252: show 404 resource error page if resource is in trash
+  // To know if the resource has been trashed we need to request Explorer API. The information is not updates in legacy app.
+  const explorerMindmapResponse = await fetch(
+    `/explorer/resources?application=mindmap&resource_type=mindmap&asset_id[]=${params?.id}`,
+  );
+  const explorerMindmapData = await explorerMindmapResponse.json();
+  const explorerMindmap = explorerMindmapData?.resources?.find(
+    (resource: MindmapResource) => resource.assetId === params?.id,
+  );
+  if (explorerMindmap?.trashed) {
+    throw new Response("", {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }
+
   const response = await fetch(`/mindmap/${id}`);
   const mindmap = await response.json();
 
@@ -54,7 +70,6 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
   const params = useParams();
-  const { user } = useUser();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -76,31 +91,6 @@ export const Mindmap = () => {
       data?.name,
     ),
   });
-
-  useEffect(() => {
-    handleTrashedMindmap();
-  }, []);
-
-  const handleTrashedMindmap = async () => {
-    // Fix #WB2-1252: show 404 resource error page if resource is in trash
-    // To know if the resource has been trashed we need to request Explorer API. The information is not updates in legacy app.
-    const explorerMindmapResponse = await fetch(
-      `/explorer/resources?application=mindmap&resource_type=mindmap&asset_id[]=${params?.id}`,
-    );
-    const explorerMindmapData = await explorerMindmapResponse.json();
-    const explorerMindmap = explorerMindmapData?.resources?.find(
-      (resource: MindmapResource) => resource.assetId === params?.id,
-    );
-    if (
-      explorerMindmap?.trashed ||
-      explorerMindmap?.trashedBy?.includes(user?.userId)
-    ) {
-      throw new Response("", {
-        status: 404,
-        statusText: "Not Found",
-      });
-    }
-  };
 
   const handleOnEditorSave = () => editor.model.save(true);
 
