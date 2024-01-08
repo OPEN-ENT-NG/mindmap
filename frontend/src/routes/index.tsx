@@ -1,4 +1,4 @@
-import { Explorer } from "@edifice-ui/explorer";
+import { Explorer } from "ode-explorer/lib";
 import { createBrowserRouter } from "react-router-dom";
 
 import { explorerConfig } from "~/config/config";
