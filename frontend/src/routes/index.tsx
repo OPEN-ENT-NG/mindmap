@@ -1,9 +1,9 @@
 import { Explorer } from "@edifice-ui/explorer";
 import { createBrowserRouter } from "react-router-dom";
 
-import Root from "~/app/root";
 import { explorerConfig } from "~/config/config";
 import PageError from "~/routes/page-error";
+import Root from "~/routes/root";
 
 import "~/styles/index.css";
 
