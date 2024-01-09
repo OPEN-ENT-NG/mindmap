@@ -91,7 +91,7 @@ public class MindmapController extends MongoDbControllerHelper {
     public void view(HttpServerRequest request) {
         final boolean useNewUi = this.config.getBoolean("use-explorer-ui", true);
         if(useNewUi){
-            renderView(request, new JsonObject(), "mindmap-explorer.html", null);
+            renderView(request, new JsonObject(), "index.html", null);
         }else{
             renderView(request, new JsonObject(), "mindmap-old.html", null);
         }

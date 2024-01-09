@@ -46,6 +46,7 @@
   "dependencies": {
     "@edifice-ui/icons": "develop",
     "@edifice-ui/react": "develop",
+    "ode-explorer": "dev",
     "@edifice-wisemapping/editor": "0.7.8",
     "@react-spring/web": "9.7.3",
     "@tanstack/react-query": "5.8.4",
