@@ -1,5 +1,6 @@
 import { Suspense, useEffect, useState } from "react";
 
+import { Redo, Undo } from "@edifice-ui/icons";
 import {
   useOdeClient,
   Breadcrumb,
@@ -101,6 +102,7 @@ export const Mindmap = () => {
         setTrashed(true);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -118,7 +120,7 @@ export const Mindmap = () => {
 
   const handleOnEditorSave = () => editor.model.save(true);
 
-  /* const designer: Designer = globalThis.designer; */
+  const designer: Designer = globalThis.designer;
 
   return (
     data?.map && (
@@ -142,14 +144,20 @@ export const Mindmap = () => {
                   {t("mindmap.save", { ns: appCode })}
                 </Button>
               ) : null}
-              {/* <button onClick={() => designer.undo()}>undo</button>
-            <button onClick={() => designer.redo()}>redo</button> */}
             </>
           )}
         >
           <Breadcrumb app={currentApp as IWebApp} name={data.name} />
         </AppHeader>
         <div className="mindplot-div-container">
+          <div className="undo-redo-toolbar">
+            <button aria-label="undo" onClick={() => designer.undo()}>
+              <Undo width={20} height={20} />
+            </button>
+            <button onClick={() => designer.redo()} aria-label="redo">
+              <Redo width={20} height={20} />
+            </button>
+          </div>
           <Editor editor={editor} />
         </div>
         <Suspense fallback={<LoadingScreen />}>
