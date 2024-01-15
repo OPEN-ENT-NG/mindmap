@@ -1,10 +1,23 @@
+import { Explorer } from "ode-explorer/lib";
 import { createBrowserRouter } from "react-router-dom";
 
+import { explorerConfig } from "~/config/config";
 import PageError from "~/routes/page-error";
+import Root from "~/routes/root";
 
 import "~/styles/index.css";
 
 const routes = [
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        index: true,
+        element: <Explorer config={explorerConfig} />,
+      },
+    ],
+  },
   {
     path: "id/:id",
     async lazy() {
