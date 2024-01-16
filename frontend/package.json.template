@@ -44,8 +44,8 @@
     ]
   },
   "dependencies": {
-    "@edifice-ui/icons": "develop-pedago",
-    "@edifice-ui/react": "develop-pedago",
+    "@edifice-ui/icons": "develop",
+    "@edifice-ui/react": "develop",
     "ode-explorer": "dev",
     "@edifice-wisemapping/editor": "0.7.8",
     "@react-spring/web": "9.7.3",
@@ -72,7 +72,7 @@
     "clsx": "2.0.0",
     "concurrently": "8.2.2",
     "csstype": "3.1.2",
-    "edifice-ts-client": "develop-pedago",
+    "edifice-ts-client": "develop",
     "eslint": "8.54.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-import": "2.29.0",
