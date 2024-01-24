@@ -50,7 +50,7 @@ body {
 
 .undo-redo-toolbar {
   position: fixed;
-  z-index: 2;
+  z-index: 1101;
   right: 7px;
   top: 9rem;
   background-color: #fff;

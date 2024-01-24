@@ -8,6 +8,7 @@ import {
   AppHeader,
   LoadingScreen,
   useUser,
+  Tooltip,
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor } from "@edifice-wisemapping/editor";
@@ -151,12 +152,16 @@ export const Mindmap = () => {
         </AppHeader>
         <div className="mindplot-div-container">
           <div className="undo-redo-toolbar">
-            <button aria-label="undo" onClick={() => designer.undo()}>
-              <Undo width={20} height={20} />
-            </button>
-            <button onClick={() => designer.redo()} aria-label="redo">
-              <Redo width={20} height={20} />
-            </button>
+            <Tooltip message={t("mindmap.undo")} placement="bottom-end">
+              <button aria-label="undo" onClick={() => designer.undo()}>
+                <Undo width={20} height={20} />
+              </button>
+            </Tooltip>
+            <Tooltip message={t("mindmap.redo")} placement="bottom-end">
+              <button onClick={() => designer.redo()} aria-label="redo">
+                <Redo width={20} height={20} />
+              </button>
+            </Tooltip>
           </div>
           <Editor editor={editor} />
         </div>

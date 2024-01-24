@@ -63,6 +63,7 @@ export default ({ mode }: { mode: string }) => {
             "react-error-boundary",
             "react-hook-form",
           ],
+          edifice: ["@edifice-ui/react"],
           wisemapping: ["@edifice-wisemapping/editor"],
         },
         paths: {
