@@ -151,18 +151,20 @@ export const Mindmap = () => {
           <Breadcrumb app={currentApp as IWebApp} name={data.name} />
         </AppHeader>
         <div className="mindplot-div-container">
-          <div className="undo-redo-toolbar">
-            <Tooltip message={t("mindmap.undo")} placement="bottom-end">
-              <button aria-label="undo" onClick={() => designer.undo()}>
-                <Undo width={20} height={20} />
-              </button>
-            </Tooltip>
-            <Tooltip message={t("mindmap.redo")} placement="bottom-end">
-              <button onClick={() => designer.redo()} aria-label="redo">
-                <Redo width={20} height={20} />
-              </button>
-            </Tooltip>
-          </div>
+          {canUpdate ? (
+            <div className="undo-redo-toolbar">
+              <Tooltip message={t("mindmap.undo")} placement="bottom-end">
+                <button aria-label="undo" onClick={() => designer.undo()}>
+                  <Undo width={20} height={20} />
+                </button>
+              </Tooltip>
+              <Tooltip message={t("mindmap.redo")} placement="bottom-end">
+                <button onClick={() => designer.redo()} aria-label="redo">
+                  <Redo width={20} height={20} />
+                </button>
+              </Tooltip>
+            </div>
+          ) : null}
           <Editor editor={editor} />
         </div>
         <Suspense fallback={<LoadingScreen />}>
