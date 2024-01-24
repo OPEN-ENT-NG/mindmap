@@ -153,12 +153,18 @@ export const Mindmap = () => {
         <div className="mindplot-div-container">
           {canUpdate ? (
             <div className="undo-redo-toolbar">
-              <Tooltip message={t("mindmap.undo")} placement="bottom-end">
+              <Tooltip
+                message={t("mindmap.undo", { ns: appCode })}
+                placement="bottom-end"
+              >
                 <button aria-label="undo" onClick={() => designer.undo()}>
                   <Undo width={20} height={20} />
                 </button>
               </Tooltip>
-              <Tooltip message={t("mindmap.redo")} placement="bottom-end">
+              <Tooltip
+                message={t("mindmap.redo", { ns: appCode })}
+                placement="bottom-end"
+              >
                 <button onClick={() => designer.redo()} aria-label="redo">
                   <Redo width={20} height={20} />
                 </button>
