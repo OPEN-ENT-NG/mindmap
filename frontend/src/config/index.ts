@@ -7,6 +7,7 @@ export const workflows = {
     "net.atos.entng.mindmap.controllers.MindmapController|exportPngMindmap",
   exportsvg:
     "net.atos.entng.mindmap.controllers.MindmapController|exportSvgMindmap",
+  print: "net.atos.entng.mindmap.controllers.MindmapController|printView",
 };
 
 export const rights = {

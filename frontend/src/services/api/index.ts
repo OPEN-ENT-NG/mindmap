@@ -8,14 +8,11 @@ export const getMindmap = async (url: string): Promise<void> => {
   return await odeServices.http().get(url);
 };
 
-/* export const updateMindmap = (
-  url: string,
-  body: UpdateMindmapProps,
-): Promise<void> => {
-  console.log(url, body);
-  return odeServices.http().put(url, body);
-}; */
-
+/**
+ * sessionHasWorkflowRights API
+ * @param url
+ * @param mindmap body with name and current map
+ */
 export const updateMindmap = async (
   url: string,
   mindmapBody: UpdateMindmapProps,
