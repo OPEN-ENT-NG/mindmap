@@ -44,9 +44,9 @@
     ]
   },
   "dependencies": {
-    "@edifice-ui/icons": "develop",
-    "@edifice-ui/react": "develop",
-    "ode-explorer": "dev",
+    "@edifice-ui/icons": "%packageVersion%",
+    "@edifice-ui/react": "%packageVersion%",
+    "ode-explorer": "%packageVersion%",
     "@edifice-wisemapping/editor": "0.7.8",
     "@react-spring/web": "9.7.3",
     "@tanstack/react-query": "5.8.4",
@@ -72,7 +72,7 @@
     "clsx": "2.0.0",
     "concurrently": "8.2.2",
     "csstype": "3.1.2",
-    "edifice-ts-client": "develop",
+    "edifice-ts-client": "%packageVersion%",
     "eslint": "8.54.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-import": "2.29.0",

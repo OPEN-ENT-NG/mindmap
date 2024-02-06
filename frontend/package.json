@@ -1,6 +1,6 @@
 {
   "name": "mindmap",
-  "version": "2.0.3-dev.20231281207",
+  "version": "2.0.3-develop.20240261702",
   "description": "ENT mindmap module.",
   "homepage": "https://github.com/OPEN-ENT-NG/mindmap#readme",
   "bugs": {
@@ -83,7 +83,7 @@
     "lint-staged": "15.1.0",
     "prettier": "3.1.0",
     "typescript": "5.3.2",
-    "vite": "4.5.1",
+    "vite": "4.4.9",
     "vite-tsconfig-paths": "4.2.1"
   },
   "packageManager": "pnpm@8.6.6",
