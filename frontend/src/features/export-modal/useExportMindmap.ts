@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { OptionsType } from "@edifice-ui/react";
 
-import { exporter } from "~/services/utils";
+import { exporter } from "~/utils";
 
 type ExportFormat = "svg" | "jpg" | "png" | "mm" | "wxml";
 type ExportGroup = "image" | "mindmap-tool";

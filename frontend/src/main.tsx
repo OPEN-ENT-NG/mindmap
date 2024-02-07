@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./i18n";
+// import "./init";
 import { OdeClientProvider, ThemeProvider } from "@edifice-ui/react";
 import {
   QueryCache,

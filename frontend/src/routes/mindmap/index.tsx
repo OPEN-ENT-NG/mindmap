@@ -8,6 +8,7 @@ import {
   AppHeader,
   LoadingScreen,
   useUser,
+  Tooltip,
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor } from "@edifice-wisemapping/editor";
@@ -126,6 +127,7 @@ export const Mindmap = () => {
     data?.map && (
       <>
         <AppHeader
+          style={{ position: "fixed" }}
           isFullscreen
           render={() => (
             <>
@@ -150,14 +152,26 @@ export const Mindmap = () => {
           <Breadcrumb app={currentApp as IWebApp} name={data.name} />
         </AppHeader>
         <div className="mindplot-div-container">
-          <div className="undo-redo-toolbar">
-            <button aria-label="undo" onClick={() => designer.undo()}>
-              <Undo width={20} height={20} />
-            </button>
-            <button onClick={() => designer.redo()} aria-label="redo">
-              <Redo width={20} height={20} />
-            </button>
-          </div>
+          {canUpdate ? (
+            <div className="undo-redo-toolbar">
+              <Tooltip
+                message={t("mindmap.undo", { ns: appCode })}
+                placement="bottom-end"
+              >
+                <button aria-label="undo" onClick={() => designer.undo()}>
+                  <Undo width={20} height={20} />
+                </button>
+              </Tooltip>
+              <Tooltip
+                message={t("mindmap.redo", { ns: appCode })}
+                placement="bottom-end"
+              >
+                <button onClick={() => designer.redo()} aria-label="redo">
+                  <Redo width={20} height={20} />
+                </button>
+              </Tooltip>
+            </div>
+          ) : null}
           <Editor editor={editor} />
         </div>
         <Suspense fallback={<LoadingScreen />}>
