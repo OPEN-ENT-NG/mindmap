@@ -36,7 +36,7 @@ export interface MindmapProps {
 export async function mapLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
   const response = await fetch(`/mindmap/${id}`);
-  const mindmap = await response.json();
+  const mindmap: MindmapProps = await response.json();
 
   if (!response) {
     throw new Response("", {
@@ -121,6 +121,7 @@ export const Mindmap = () => {
 
   const handleOnEditorSave = () => editor.model.save(true);
 
+  // @ts-ignore
   const designer: Designer = globalThis.designer;
 
   return (

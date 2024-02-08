@@ -99,6 +99,7 @@ export const useExportMindmap = ({
         });
     }
     setSubmit(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submit]);
 
   return {
