@@ -8,6 +8,7 @@ import {
   AppHeader,
   LoadingScreen,
   Tooltip,
+  useTrashedResource,
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor } from "@edifice-wisemapping/editor";
@@ -18,7 +19,6 @@ import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 import { DEFAULT_MAP } from "~/config/default-map";
 import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
-import { useTrashedResource } from "~/hooks/useTrashedResouce";
 import { useUserRights } from "~/hooks/useUserRights";
 
 export interface MindmapProps {
@@ -63,7 +63,7 @@ export const Mindmap = () => {
   const { canUpdate, canExport } = useUserRights({ data });
   const { t } = useTranslation();
 
-  useTrashedResource(params);
+  useTrashedResource(params?.id);
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
