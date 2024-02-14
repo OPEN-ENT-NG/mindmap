@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 
 import { Redo, Undo } from "@edifice-ui/icons";
 import {
@@ -7,18 +7,18 @@ import {
   Button,
   AppHeader,
   LoadingScreen,
-  useUser,
   Tooltip,
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor } from "@edifice-wisemapping/editor";
-import { ID, IWebApp, MindmapResource } from "edifice-ts-client";
+import { ID, IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { DEFAULT_MAP } from "~/config/default-map";
 import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
+import { useTrashedResource } from "~/hooks/useTrashedResouce";
 import { useUserRights } from "~/hooks/useUserRights";
 
 export interface MindmapProps {
@@ -54,16 +54,16 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const Mindmap = () => {
-  const [trashed, setTrashed] = useState<boolean>(false);
   const data = useLoaderData() as MindmapProps;
   const params = useParams();
-  const { user } = useUser();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { appCode, currentApp, currentLanguage } = useOdeClient();
   const { canUpdate, canExport } = useUserRights({ data });
   const { t } = useTranslation();
+
+  useTrashedResource(params);
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
@@ -79,45 +79,6 @@ export const Mindmap = () => {
       data?.name,
     ),
   });
-
-  /**
-   * Fix #WB2-1252: show 404 resource error page if resource is in trash.
-   * Check if resource is trashed.
-   */
-  useEffect(() => {
-    (async () => {
-      // To know if the resource has been trashed we need to request Explorer API. The information is not updates in legacy app.
-      const explorerMindmapResponse = await fetch(
-        `/explorer/resources?application=mindmap&resource_type=mindmap&asset_id[]=${params?.id}`,
-      );
-      const explorerMindmapData = await explorerMindmapResponse.json();
-      const explorerMindmap = explorerMindmapData?.resources?.find(
-        (resource: MindmapResource) => resource.assetId === params?.id,
-      );
-      if (
-        explorerMindmap?.trashed ||
-        explorerMindmap?.trashedBy?.includes(user?.userId)
-      ) {
-        // Error boundaries are not working with async calls,
-        // so we need to use a state and then in another useEffect we handle the error
-        setTrashed(true);
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
-   * Fix #WB2-1252: show 404 resource error page if resource is in trash.
-   * The useEffect to handle the error of a trashed resource.
-   */
-  useEffect(() => {
-    if (trashed) {
-      throw new Response("", {
-        status: 404,
-        statusText: "Not Found",
-      });
-    }
-  }, [trashed]);
 
   const handleOnEditorSave = () => editor.model.save(true);
 

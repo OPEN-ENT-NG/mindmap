@@ -14,6 +14,7 @@ const routes: RouteObject[] = [
     children: [
       {
         index: true,
+        // @ts-ignore
         element: <Explorer config={explorerConfig} />,
       },
     ],
