@@ -38,6 +38,12 @@ export const explorerConfig = {
       target: "tree",
     },
     {
+      id: "copy",
+      workflow: workflows.view,
+      target: "actionbar",
+      right: "read",
+    },
+    {
       id: "move",
       workflow: workflows.view,
       target: "actionbar",
