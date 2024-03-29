@@ -57,9 +57,9 @@ clean () {
 doInit () {
   echo "[init] Get branch name from jenkins env..."
 
-  if [ ! -z "$FRONT_DEP" ]; then
-    echo "[buildNode] Get tag name from jenkins param... $FRONT_DEP"
-    BRANCH_NAME="$FRONT_DEP"
+  if [ ! -z "$FRONT_BRANCH" ]; then
+    echo "[buildNode] Get tag name from jenkins param... $FRONT_BRANCH"
+    BRANCH_NAME="$FRONT_BRANCH"
   else
     BRANCH_NAME=`echo $GIT_BRANCH | sed -e "s|origin/||g"`
     if [ "$BRANCH_NAME" = "" ]; then
