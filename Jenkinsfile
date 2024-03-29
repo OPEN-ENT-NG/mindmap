@@ -4,6 +4,15 @@ pipeline {
   agent any
 
   stages {
+    stage("Initialization") {
+      steps {
+        script {
+          def version = sh(returnStdout: true, script: 'docker compose -f backend/docker-compose.yml run --rm maven mvn $MVN_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout')
+          buildName "${env.GIT_BRANCH.replace("origin/", "")}@${version}"
+        }
+      }
+    }
+
     stage('Frontend') {
       steps {
         dir('frontend') {
@@ -11,7 +20,7 @@ pipeline {
         }
       }
     }
-    
+
     stage('Backend') {
       steps {
         dir('backend') {
@@ -22,7 +31,7 @@ pipeline {
           sh 'mkdir -p ./src/main/resources/view'
           sh 'mv ./src/main/resources/*.html ./src/main/resources/view'
           sh 'cp -R ./src/main/resources/notify ./src/main/resources/view/notify'
-          sh './build.sh clean build publish'
+          sh './build.sh init clean install publish'
           sh 'rm -rf ../frontend/dist'
         }
       }

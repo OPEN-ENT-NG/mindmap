@@ -20,6 +20,7 @@
 package net.atos.entng.mindmap;
 
 
+import io.vertx.core.Promise;
 import net.atos.entng.mindmap.controllers.FolderController;
 import net.atos.entng.mindmap.controllers.MindmapController;
 import net.atos.entng.mindmap.explorer.MindmapExplorerPlugin;
@@ -65,8 +66,8 @@ public class Mindmap extends BaseServer {
      * Entry point of the Vert.x module
      */
     @Override
-    public void start() throws Exception {
-        super.start();
+    public void start(Promise<Void> startPromise) throws Exception {
+        super.start(startPromise);
         plugin = MindmapExplorerPlugin.create(securedActions);
         final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
         final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);

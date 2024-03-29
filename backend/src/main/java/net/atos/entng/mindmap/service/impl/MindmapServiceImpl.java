@@ -88,7 +88,7 @@ public class MindmapServiceImpl implements MindmapService {
 
     @Override
     public void exportPNG(final HttpServerRequest request, JsonObject message) {
-        eb.send(MindmapPNGExporter.MINDMAP_PNGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
+        eb.request(MindmapPNGExporter.MINDMAP_PNGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
             @Override
             public void handle(AsyncResult<Message<JsonObject>> reply) {
                 JsonObject response = reply.result().body();
@@ -101,7 +101,7 @@ public class MindmapServiceImpl implements MindmapService {
 
     @Override
     public void exportSVG(final HttpServerRequest request, JsonObject message) {
-        eb.send(MindmapSVGExporter.MINDMAP_SVGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
+        eb.request(MindmapSVGExporter.MINDMAP_SVGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
             @Override
             public void handle(AsyncResult<Message<JsonObject>> reply) {
                 JsonObject response = reply.result().body();
