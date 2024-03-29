@@ -19,7 +19,7 @@
 
 package net.atos.entng.mindmap.service.impl;
 
-import com.mongodb.QueryBuilder;
+import com.mongodb.client.model.Filters;
 import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
 import fr.wseduc.mongodb.MongoUpdateBuilder;
@@ -44,6 +44,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import fr.wseduc.webutils.http.Renders;
+import org.bson.conversions.Bson;
 import org.entcore.common.explorer.IdAndVersion;
 import org.entcore.common.explorer.IngestJobState;
 import org.entcore.common.mongodb.MongoDbResult;
@@ -53,6 +54,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static com.mongodb.client.model.Filters.*;
 
 
 /**
@@ -88,7 +91,7 @@ public class MindmapServiceImpl implements MindmapService {
 
     @Override
     public void exportPNG(final HttpServerRequest request, JsonObject message) {
-        eb.send(MindmapPNGExporter.MINDMAP_PNGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
+        eb.request(MindmapPNGExporter.MINDMAP_PNGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
             @Override
             public void handle(AsyncResult<Message<JsonObject>> reply) {
                 JsonObject response = reply.result().body();
@@ -101,7 +104,7 @@ public class MindmapServiceImpl implements MindmapService {
 
     @Override
     public void exportSVG(final HttpServerRequest request, JsonObject message) {
-        eb.send(MindmapSVGExporter.MINDMAP_SVGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
+        eb.request(MindmapSVGExporter.MINDMAP_SVGEXPORTER_ADDRESS, message, new Handler<AsyncResult<Message<JsonObject>>>() {
             @Override
             public void handle(AsyncResult<Message<JsonObject>> reply) {
                 JsonObject response = reply.result().body();
@@ -185,7 +188,7 @@ public class MindmapServiceImpl implements MindmapService {
         if (body == null){
             return Future.failedFuture("Validation error : invalids fields.");
         }
-        QueryBuilder query = QueryBuilder.start("_id").is(id);
+        final Bson query = eq("_id", id);
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
         for (String attr: body.fieldNames()) {
             modifier.set(attr, body.getValue(attr));
@@ -212,11 +215,11 @@ public class MindmapServiceImpl implements MindmapService {
 
     @Override
     public Future<JsonObject> moveSharedMindmapToRootFolder(List<String> ids, UserInfos user) {
-        Promise<JsonObject> promise = Promise.promise();
-
-        QueryBuilder query = QueryBuilder.start();
-        query.put(String.format("%s.%s", Field.SHARED, Field.USER_ID)).is(user.getUserId());
-        query.put(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID)).in(ids);
+        final Promise<JsonObject> promise = Promise.promise();
+        final Bson query = and(
+            eq(String.format("%s.%s", Field.SHARED, Field.USER_ID), user.getUserId()),
+            in(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID), ids)
+        );
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
         modifier.pull(Field.FOLDER_PARENT, new JsonObject().put(Field.USER_ID, user.getUserId()));
         mongoDb.update(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), modifier.build(), false, ids.size() >= 1, MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
@@ -227,11 +230,10 @@ public class MindmapServiceImpl implements MindmapService {
     @Override
     public Future<JsonObject> updateMindmapFolder(List<String> ids, JsonObject body, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
-
-        QueryBuilder query = QueryBuilder.start();
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
-        query.put(Field.FOLDER_PARENT_ID).in(ids);
-
+        final Bson query = and(
+            eq(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId()),
+            in(Field.FOLDER_PARENT_ID, ids)
+        );
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
         for (String attr : body.fieldNames()) {
             modifier.set(attr, body.getValue(attr));
@@ -258,7 +260,7 @@ public class MindmapServiceImpl implements MindmapService {
     @Override
     public Future<JsonObject> updateMindmapFolderParent(String id, JsonObject body, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
-        QueryBuilder query = QueryBuilder.start(Field._ID).is(id);
+        final Bson query = eq(Field._ID, id);
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
         String res = body.getJsonObject(Field.FOLDER_PARENT).getValue(Field.FOLDER_PARENT_ID).toString();
         if (res.equals(Field.NULL)) {
@@ -276,9 +278,10 @@ public class MindmapServiceImpl implements MindmapService {
     @Override
     public Future<JsonObject> deleteMindmap(String id, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
-
-        QueryBuilder query = QueryBuilder.start(Field._ID).is(id);
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
+        final Bson query = and(
+          eq(Field._ID, id),
+          eq(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId())
+        );
         mongoDb.delete(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
         return promise.future().compose(result -> {
             final long now = System.currentTimeMillis();
@@ -292,9 +295,10 @@ public class MindmapServiceImpl implements MindmapService {
     public Future<JsonObject> deleteMindmapFolderList(List<String> ids, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
 
-        QueryBuilder query = QueryBuilder.start();
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
-        query.put(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID)).in(ids);
+        final Bson query = and(
+            eq(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId()),
+            in(String.format("%s.%s", Field.FOLDER_PARENT, Field.FOLDER_PARENT_ID),ids)
+        );
 
 
         mongoDb.delete(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
@@ -307,8 +311,10 @@ public class MindmapServiceImpl implements MindmapService {
     public Future<JsonObject> deleteMindmapList(JsonObject body, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
         List<String> ids = body.getJsonArray("ids").getList();
-        QueryBuilder query = QueryBuilder.start(Field._ID).in(ids);
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
+        final Bson query = and(
+          in(Field._ID, ids),
+          eq(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId())
+        );
 
         mongoDb.delete(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
 
@@ -319,9 +325,10 @@ public class MindmapServiceImpl implements MindmapService {
     public Future<JsonArray> getTrashMindmap(UserInfos user) {
         Promise<JsonArray> promise = Promise.promise();
 
-        QueryBuilder query = QueryBuilder.start();
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
-        query.put(Field.DELETED_AT).notEquals(null);
+        final Bson query = and(
+          eq(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId()),
+          not(eq(Field.DELETED_AT, null))
+        );
 
 
         mongoDb.find(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), MongoDbResult.validResultsHandler(PromiseHelper.handlerJsonArray(promise)));
