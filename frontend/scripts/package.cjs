@@ -82,6 +82,7 @@ function generateDeps(content) {
     ...content.dependencies,
     "@edifice-ui/icons": getCorrectVersion("@edifice-ui/icons"),
     "@edifice-ui/react": getCorrectVersion("@edifice-ui/react"),
+    "ode-explorer": getCorrectVersion("ode-explorer"),
   };
 }
 
