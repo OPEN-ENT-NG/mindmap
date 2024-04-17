@@ -65,7 +65,6 @@ function findPackageLatest(lib) {
 }
 
 function generatePackage(content) {
-  console.log(executeGitCommand("npm view edifice-ts-client version"));
   fs.writeFile(
     path.resolve(__dirname, "../package.json"),
     JSON.stringify(content, null, 2),
@@ -82,16 +81,15 @@ function generateDeps(content) {
   return {
     ...content.dependencies,
     "@edifice-ui/icons": getCorrectVersion("@edifice-ui/icons"),
-    "@edifice-ui/react": getCorrectVersion("@edifice-ui/icons"),
-    "ode-explorer": getCorrectVersion("ode-explorer"),
+    "@edifice-ui/react": getCorrectVersion("@edifice-ui/react"),
   };
 }
 
 function generateDevDeps(content) {
   return {
     ...content.devDependencies,
-    "edifice-bootstrap": getCorrectVersion("@edifice-ui/icons"),
-    "edifice-ts-client": getCorrectVersion("@edifice-ui/icons"),
+    "edifice-bootstrap": getCorrectVersion("edifice-bootstrap"),
+    "edifice-ts-client": getCorrectVersion("edifice-ts-client"),
   };
 }
 
