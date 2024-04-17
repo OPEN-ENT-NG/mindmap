@@ -27,19 +27,21 @@ export const useUserRights = ({
   }
 
   if (!isOwner && rights) {
-    canUpdate = shared.some((right) => {
-      const groupId = right["groupId"];
-      const userRight = right[rights.contrib.right];
+    canUpdate = shared
+      ? shared.some((right) => {
+          const groupId = right["groupId"];
+          const userRight = right[rights.contrib.right];
 
-      if (groupId !== undefined && groupsIds?.includes(groupId)) {
-        return userRight;
-      }
+          if (groupId !== undefined && groupsIds?.includes(groupId)) {
+            return userRight;
+          }
 
-      const userRightUserId = right["userId"];
-      return userRightUserId !== undefined && userId === userRightUserId
-        ? userRight
-        : false;
-    });
+          const userRightUserId = right["userId"];
+          return userRightUserId !== undefined && userId === userRightUserId
+            ? userRight
+            : false;
+        })
+      : false;
   }
 
   const canExport = actions?.some((action) => action.available);

@@ -5,6 +5,38 @@ const now = new Date();
 
 const BRANCH = executeGitCommand("git rev-parse --abbrev-ref HEAD");
 
+function getCorrectVersion(lib) {
+  let branch;
+  switch (BRANCH) {
+    case "main": {
+      branch = executeGitCommand(`npm view ${lib} version`);
+      break;
+    }
+
+    case "develop": {
+      branch = "develop";
+      break;
+    }
+
+    case "develop-pedago": {
+      branch = "develop-pedago";
+      break;
+    }
+
+    case "develop-b2school": {
+      branch = "develop-b2school";
+      break;
+    }
+
+    default: {
+      branch = "develop";
+      break;
+    }
+  }
+
+  return branch;
+}
+
 function executeGitCommand(command) {
   return execSync(command)
     .toString("utf8")
@@ -28,7 +60,12 @@ function generateVersion() {
   return format;
 }
 
+function findPackageLatest(lib) {
+  return executeGitCommand(`npm view ${lib} version`);
+}
+
 function generatePackage(content) {
+  console.log(executeGitCommand("npm view edifice-ts-client version"));
   fs.writeFile(
     path.resolve(__dirname, "../package.json"),
     JSON.stringify(content, null, 2),
@@ -44,16 +81,17 @@ function generatePackage(content) {
 function generateDeps(content) {
   return {
     ...content.dependencies,
-    "@edifice-ui/icons": BRANCH,
-    "@edifice-ui/react": BRANCH,
-    "ode-explorer": BRANCH,
+    "@edifice-ui/icons": getCorrectVersion("@edifice-ui/icons"),
+    "@edifice-ui/react": getCorrectVersion("@edifice-ui/icons"),
+    "ode-explorer": getCorrectVersion("ode-explorer"),
   };
 }
 
 function generateDevDeps(content) {
   return {
     ...content.devDependencies,
-    "edifice-ts-client": BRANCH,
+    "edifice-bootstrap": getCorrectVersion("@edifice-ui/icons"),
+    "edifice-ts-client": getCorrectVersion("@edifice-ui/icons"),
   };
 }
 

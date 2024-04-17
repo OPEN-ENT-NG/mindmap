@@ -1,12 +1,10 @@
-import { LoadingScreen, Layout } from "@edifice-ui/react";
+import { LoadingScreen, Layout, useOdeClient } from "@edifice-ui/react";
 import { Outlet } from "react-router-dom";
 
-import { useMindmapRedirect } from "~/hooks/useMindmapRedirect";
-
 function Root() {
-  const isLoading = useMindmapRedirect();
+  const { init } = useOdeClient();
 
-  if (isLoading) return <LoadingScreen position={false} />;
+  if (!init) return <LoadingScreen position={false} />;
 
   return (
     <Layout>
