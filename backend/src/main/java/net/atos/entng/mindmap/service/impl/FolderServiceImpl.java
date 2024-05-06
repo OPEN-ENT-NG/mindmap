@@ -1,6 +1,6 @@
 package net.atos.entng.mindmap.service.impl;
 
-import com.mongodb.QueryBuilder;
+import com.mongodb.client.model.Filters;
 import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
 
@@ -27,27 +27,27 @@ import net.atos.entng.mindmap.service.FolderService;
 import net.atos.entng.mindmap.service.MindmapService;
 
 
+import org.bson.conversions.Bson;
 import org.entcore.common.mongodb.MongoDbResult;
 
 import org.entcore.common.user.UserInfos;
 
 import fr.wseduc.mongodb.MongoUpdateBuilder;
 
-import java.nio.file.AccessMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.mongodb.client.model.Filters.*;
+
 
 public class FolderServiceImpl implements FolderService {
     private static final Logger log = LoggerFactory.getLogger(FolderServiceImpl.class);
-    private final EventBus eb;
     private final MongoDb mongoDb;
     private final MindmapService mindmapService;
 
 
     public FolderServiceImpl(EventBus eb, MongoDb mongoDb, final MindmapExplorerPlugin plugin) {
-        this.eb = eb;
         this.mongoDb = mongoDb;
         this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance(), plugin);
     }
@@ -73,11 +73,11 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public Future<JsonObject> updateFolder(List<String> ids, JsonObject body, UserInfos user) {
-        Promise<JsonObject> promise = Promise.promise();
-
-        QueryBuilder query = QueryBuilder.start(Field._ID).in(ids);
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
-
+        final Promise<JsonObject> promise = Promise.promise();
+        final Bson query = and(
+          in(Field._ID, ids),
+          Filters.eq(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId())
+        );
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
         for (String attr : body.fieldNames()) {
             modifier.set(attr, body.getValue(attr));
@@ -156,8 +156,10 @@ public class FolderServiceImpl implements FolderService {
     public Future<JsonObject> deleteFolder(JsonObject body, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
         List<String> ids = body.getJsonArray(Field.IDS).getList();
-        QueryBuilder query = QueryBuilder.start(Field._ID).in(ids);
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
+        final Bson query = and(
+          in(Field._ID, ids),
+          eq(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId())
+        );
         getNestedFolderChildrenIds(ids)
 
                 .compose(nestedfolderChildrenResult -> MongoHelper.getResultCommand(nestedfolderChildrenResult)
@@ -190,15 +192,12 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public Future<JsonObject> deleteFolderList(List<String> ids, UserInfos user) {
-        Promise<JsonObject> promise = Promise.promise();
-
-        QueryBuilder query = QueryBuilder.start(Field._ID).in(ids);
-        query.put(String.format("%s.%s", Field.OWNER, Field.USER_ID)).is(user.getUserId());
-
-
+        final Promise<JsonObject> promise = Promise.promise();
+        final Bson query = and(
+          in(Field._ID, ids),
+          eq(String.format("%s.%s", Field.OWNER, Field.USER_ID), user.getUserId())
+        );
         mongoDb.delete(Field.COLLECTION_MINDMAP_FOLDER, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
-
-
         return promise.future();
     }
 
