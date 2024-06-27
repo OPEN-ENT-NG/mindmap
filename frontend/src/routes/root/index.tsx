@@ -1,4 +1,4 @@
-import { LoadingScreen, Layout } from "@edifice-ui/react";
+import { Layout, LoadingScreen } from "@edifice-ui/react";
 import { Outlet } from "react-router-dom";
 
 import { useMindmapRedirect } from "~/hooks/useMindmapRedirect";

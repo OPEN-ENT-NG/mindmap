@@ -2,12 +2,12 @@ import { Suspense, useState } from "react";
 
 import { Redo, Undo } from "@edifice-ui/icons";
 import {
-  useOdeClient,
+  AppHeader,
   Breadcrumb,
   Button,
-  AppHeader,
   LoadingScreen,
   Tooltip,
+  useOdeClient,
   useTrashedResource,
 } from "@edifice-ui/react";
 // @ts-ignore
@@ -60,7 +60,7 @@ export const Mindmap = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { appCode, currentApp, currentLanguage } = useOdeClient();
-  const { canUpdate, canExport } = useUserRights({ data });
+  const { canUpdate, canExport } = useUserRights(data);
   const { t } = useTranslation();
 
   useTrashedResource(params?.id);

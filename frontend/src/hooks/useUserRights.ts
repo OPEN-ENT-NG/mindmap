@@ -4,18 +4,19 @@ import { rights } from "~/config";
 import { MindmapProps } from "~/routes/mindmap";
 import { useActions } from "~/services/queries";
 
-export const useUserRights = ({
-  data,
-}: {
-  data: MindmapProps;
-}): {
+export const useUserRights = (
+  data: MindmapProps,
+): {
   canUpdate: boolean | undefined;
   canExport: boolean | undefined;
 } => {
   const { user } = useUser();
   const { data: actions } = useActions();
-  const { shared } = data;
 
+  /**
+   * Check if data.shared exist, otherwise, we have an empty array
+   */
+  const shared = data.shared ?? [];
   const userId = user?.userId;
   const groupsIds = user?.groupsIds;
   const isOwner = data?.owner.userId === userId;
