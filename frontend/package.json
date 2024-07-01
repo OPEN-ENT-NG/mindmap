@@ -1,6 +1,6 @@
 {
   "name": "mindmap",
-  "version": "2.1.3-develop.20240711519",
+  "version": "2.1.3-HEAD.20240731055",
   "description": "ENT mindmap module.",
   "homepage": "https://github.com/OPEN-ENT-NG/mindmap#readme",
   "bugs": {
@@ -44,14 +44,14 @@
     ]
   },
   "dependencies": {
-    "@edifice-ui/icons": "1.5.9",
-    "@edifice-ui/react": "1.5.9",
+    "@edifice-ui/icons": "develop-pedago",
+    "@edifice-ui/react": "develop-pedago",
     "@edifice-wisemapping/editor": "0.7.10",
     "@react-spring/web": "9.7.3",
     "@tanstack/react-query": "5.8.4",
     "i18next": "23.8.1",
     "i18next-http-backend": "2.4.2",
-    "ode-explorer": "develop",
+    "ode-explorer": "develop-pedago",
     "clsx": "2.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -72,7 +72,7 @@
     "@vitejs/plugin-react": "4.2.1",
     "concurrently": "8.2.2",
     "csstype": "3.1.3",
-    "edifice-ts-client": "1.5.9",
+    "edifice-ts-client": "develop-pedago",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.29.1",

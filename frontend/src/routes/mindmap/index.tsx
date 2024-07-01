@@ -7,6 +7,7 @@ import {
   Button,
   LoadingScreen,
   Tooltip,
+  checkUserRight,
   useOdeClient,
   useTrashedResource,
 } from "@edifice-ui/react";
@@ -23,7 +24,6 @@ import { useAccessStore } from "~/hooks/useAccessStore";
 import { MindmapProps } from "~/models/mindmap";
 import { getMindmap } from "~/services/api";
 import { useUserRightsStore } from "~/store";
-import { checkUserRight } from "~/utils/checkUserRight";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
