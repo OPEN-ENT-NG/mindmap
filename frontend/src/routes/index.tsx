@@ -22,9 +22,9 @@ const routes: RouteObject[] = [
   {
     path: "id/:id",
     async lazy() {
-      const { mapLoader, Mindmap } = await import("./mindmap");
+      const { loader, Mindmap } = await import("./mindmap");
       return {
-        loader: mapLoader,
+        loader,
         Component: Mindmap,
       };
     },
@@ -33,9 +33,9 @@ const routes: RouteObject[] = [
   {
     path: "print/id/:id",
     async lazy() {
-      const { mapLoader, Mindmap } = await import("./print");
+      const { loader, Mindmap } = await import("./print");
       return {
-        loader: mapLoader,
+        loader,
         Component: Mindmap,
       };
     },
