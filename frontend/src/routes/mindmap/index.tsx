@@ -25,7 +25,7 @@ import { getMindmap } from "~/services/api";
 import { useUserRightsStore } from "~/store";
 import { checkUserRight } from "~/utils/checkUserRight";
 
-export async function mapLoader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
   const data = await getMindmap(`/mindmap/${id}`);
 
