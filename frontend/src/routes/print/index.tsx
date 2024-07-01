@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 
 import { Heading, Image, useOdeClient } from "@edifice-ui/react";
 import Editor, {
-  useEditor,
   Designer,
   ImageExporterFactory,
-  // @ts-ignore
+  useEditor,
 } from "@edifice-wisemapping/editor";
 import { ID } from "edifice-ts-client";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { DEFAULT_MAP } from "~/config/default-map";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
+import { getMindmap } from "~/services/api";
 import "./index.css";
 
 export interface MindmapProps {
@@ -26,10 +26,9 @@ export interface MindmapProps {
   thumbnail: string;
 }
 
-export async function mapLoader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const response = await fetch(`/mindmap/${id}`);
-  const mindmap = await response.json();
+  const response = await getMindmap(`/mindmap/${id}`);
 
   if (!response) {
     throw new Response("", {
@@ -38,11 +37,11 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
     });
   }
 
-  return mindmap.map
-    ? mindmap
+  return response.map
+    ? response
     : {
-        ...mindmap,
-        map: DEFAULT_MAP(mindmap?.name),
+        ...response,
+        map: DEFAULT_MAP(response?.name),
       };
 }
 

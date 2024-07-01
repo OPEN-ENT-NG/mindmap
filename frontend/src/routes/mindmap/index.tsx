@@ -20,6 +20,7 @@ import { DEFAULT_MAP } from "~/config/default-map";
 import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import { useUserRights } from "~/hooks/useUserRights";
+import { getMindmap } from "~/services/api";
 
 export interface MindmapProps {
   _id: string;
@@ -33,10 +34,9 @@ export interface MindmapProps {
   thumbnail: string;
 }
 
-export async function mapLoader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const response = await fetch(`/mindmap/${id}`);
-  const mindmap: MindmapProps = await response.json();
+  const response = await getMindmap(`/mindmap/${id}`);
 
   if (!response) {
     throw new Response("", {
@@ -45,11 +45,11 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
     });
   }
 
-  return mindmap.map
-    ? mindmap
+  return response.map
+    ? response
     : {
-        ...mindmap,
-        map: DEFAULT_MAP(mindmap?.name),
+        ...response,
+        map: DEFAULT_MAP(response?.name),
       };
 }
 
