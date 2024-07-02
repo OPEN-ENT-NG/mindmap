@@ -12,44 +12,39 @@ import {
 } from "@edifice-ui/react";
 // @ts-ignore
 import Editor, { useEditor } from "@edifice-wisemapping/editor";
-import { ID, IWebApp } from "edifice-ts-client";
+import { IWebApp, odeServices } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { DEFAULT_MAP } from "~/config/default-map";
 import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
-import { useUserRights } from "~/hooks/useUserRights";
-
-export interface MindmapProps {
-  _id: string;
-  created: Date;
-  description: string;
-  map: string;
-  modified: Date;
-  name: string;
-  owner: { userId: ID; displayName: string };
-  shared: any[];
-  thumbnail: string;
-}
+import { useAccessStore } from "~/hooks/useAccessStore";
+import { MindmapProps } from "~/models/mindmap";
+import { getMindmap } from "~/services/api";
+import { useUserRightsStore } from "~/store";
+import { checkUserRight } from "~/utils/checkUserRight";
 
 export async function mapLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const response = await fetch(`/mindmap/${id}`);
-  const mindmap: MindmapProps = await response.json();
+  const data = await getMindmap(`/mindmap/${id}`);
 
-  if (!response) {
+  if (odeServices.http().isResponseError()) {
     throw new Response("", {
-      status: 404,
-      statusText: "Not Found",
+      status: odeServices.http().latestResponse.status,
+      statusText: odeServices.http().latestResponse.statusText,
     });
   }
 
-  return mindmap.map
-    ? mindmap
+  const userRights = await checkUserRight(data.rights);
+  const { setUserRights } = useUserRightsStore.getState();
+  setUserRights(userRights);
+
+  return data.map
+    ? data
     : {
-        ...mindmap,
-        map: DEFAULT_MAP(mindmap?.name),
+        ...data,
+        map: DEFAULT_MAP(data?.name),
       };
 }
 
@@ -60,7 +55,7 @@ export const Mindmap = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { appCode, currentApp, currentLanguage } = useOdeClient();
-  const { canUpdate, canExport } = useUserRights(data);
+  const { canUpdate, canExport } = useAccessStore();
   const { t } = useTranslation();
 
   useTrashedResource(params?.id);

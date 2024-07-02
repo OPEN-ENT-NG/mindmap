@@ -1,7 +1,7 @@
 import { useUser } from "@edifice-ui/react";
 
 import { rights } from "~/config";
-import { MindmapProps } from "~/routes/mindmap";
+import { MindmapProps } from "~/models/mindmap";
 import { useActions } from "~/services/queries";
 
 export const useUserRights = (

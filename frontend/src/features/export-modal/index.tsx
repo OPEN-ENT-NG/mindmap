@@ -1,10 +1,10 @@
 import {
-  Modal,
   Button,
-  Radio,
-  FormControl,
-  Select,
   Checkbox,
+  FormControl,
+  Modal,
+  Radio,
+  Select,
   useOdeClient,
 } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
@@ -57,7 +57,7 @@ export default function ExportModal({
             checked={exportGroup === "image"}
             label={t("mindmap.export.image", { ns: appCode })}
           />
-          <FormControl id="image" className="form-div-center">
+          <FormControl id="image" className="form-div-center my-12">
             {exportGroup == "image" && (
               <>
                 <Select
@@ -68,26 +68,29 @@ export default function ExportModal({
                   aria-required={true}
                   placeholderOption={imagesOptions[0].label}
                 />
-                <Checkbox
-                  checked={zoomToFit}
-                  label={t("mindmap.export.zoom", { ns: appCode })}
-                  onChange={handleOnZoomToFit}
-                  className="my-8"
-                />
+                <div className="my-16">
+                  <Checkbox
+                    checked={zoomToFit}
+                    label={t("mindmap.export.zoom", { ns: appCode })}
+                    onChange={handleOnZoomToFit}
+                  />
+                </div>
               </>
             )}
           </FormControl>
-          <Radio
-            name="export-mindmap"
-            value="mindmap-tool"
-            onChange={handleOnGroupChange}
-            model={exportGroup}
-            checked={exportGroup === "mindmap-tool"}
-            label={t("mindmap.export.minmap.tools", { ns: appCode })}
-          />
+          <FormControl id="mindmap-tool">
+            <Radio
+              name="export-mindmap"
+              value="mindmap-tool"
+              onChange={handleOnGroupChange}
+              model={exportGroup}
+              checked={exportGroup === "mindmap-tool"}
+              label={t("mindmap.export.minmap.tools", { ns: appCode })}
+            />
+          </FormControl>
           <FormControl id="mindmap-tool" className="form-div-center">
             {exportGroup == "mindmap-tool" && (
-              <>
+              <div className="my-12">
                 <Select
                   block
                   size="md"
@@ -95,7 +98,7 @@ export default function ExportModal({
                   options={formatOptions}
                   placeholderOption={exportFormat}
                 />
-              </>
+              </div>
             )}
           </FormControl>
         </FormControl>
