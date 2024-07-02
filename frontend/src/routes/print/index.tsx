@@ -1,48 +1,37 @@
 import { useEffect, useState } from "react";
 
 import { Heading, Image, useOdeClient } from "@edifice-ui/react";
+// @ts-ignore
 import Editor, {
-  useEditor,
   Designer,
   ImageExporterFactory,
-  // @ts-ignore
+  useEditor,
 } from "@edifice-wisemapping/editor";
-import { ID } from "edifice-ts-client";
+import { odeServices } from "edifice-ts-client";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
 import { DEFAULT_MAP } from "~/config/default-map";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
+import { MindmapProps } from "~/models/mindmap";
+import { getMindmap } from "~/services/api";
 import "./index.css";
-
-export interface MindmapProps {
-  _id: string;
-  created: Date;
-  description: string;
-  map: string;
-  modified: Date;
-  name: string;
-  owner: { userId: ID; displayName: string };
-  shared: any[];
-  thumbnail: string;
-}
 
 export async function mapLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const response = await fetch(`/mindmap/${id}`);
-  const mindmap = await response.json();
+  const data = await getMindmap(`/mindmap/${id}`);
 
-  if (!response) {
+  if (odeServices.http().isResponseError()) {
     throw new Response("", {
-      status: 404,
-      statusText: "Not Found",
+      status: odeServices.http().latestResponse.status,
+      statusText: odeServices.http().latestResponse.statusText,
     });
   }
 
-  return mindmap.map
-    ? mindmap
+  return data.map
+    ? data
     : {
-        ...mindmap,
-        map: DEFAULT_MAP(mindmap?.name),
+        ...data,
+        map: DEFAULT_MAP(data?.name),
       };
 }
 
@@ -71,10 +60,12 @@ export const Mindmap = () => {
 
   useEffect(() => {
     //init pupetter config
+    // @ts-ignore
     globalThis.pdfGeneratorConfig = {
       landscape: true,
     };
     // init designer
+    // @ts-ignore
     const designer: Designer = globalThis.designer;
     designer.addEvent("loadSuccess", async () => {
       if (designer) {
@@ -97,22 +88,20 @@ export const Mindmap = () => {
 
   return (
     data?.map && (
-      <>
-        <div className="mindplot-div-container">
-          {hrefImage ? (
-            <>
-              <Heading headingStyle="h1" level="h1" className="p-16">
-                {data.name}
-              </Heading>
-              <div id="printpngwrapper">
-                <Image id="printpng" src={hrefImage} alt="" />
-              </div>
-            </>
-          ) : (
-            <Editor editor={editor} />
-          )}
-        </div>
-      </>
+      <div className="mindplot-div-container">
+        {hrefImage ? (
+          <>
+            <Heading headingStyle="h1" level="h1" className="p-16">
+              {data.name}
+            </Heading>
+            <div id="printpngwrapper">
+              <Image id="printpng" src={hrefImage} alt="" />
+            </div>
+          </>
+        ) : (
+          <Editor editor={editor} />
+        )}
+      </div>
     )
   );
 };
