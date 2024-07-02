@@ -20,9 +20,10 @@
 package net.atos.entng.mindmap.controllers;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 import fr.wseduc.mongodb.MongoDb;
-import fr.wseduc.webutils.DefaultAsyncResult;
 import fr.wseduc.webutils.I18n;
 import fr.wseduc.webutils.http.Renders;
 import net.atos.entng.mindmap.Mindmap;
@@ -84,6 +85,15 @@ public class MindmapController extends MongoDbControllerHelper {
         super(collection);
         this.plugin = plugin;
         this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance(), plugin);
+    }
+    @Override
+    protected boolean shouldNormalizedRights() {
+        return true;
+    }
+
+    @Override
+    protected Function<JsonObject, Optional<String>> jsonToOwnerId() {
+        return json -> plugin.getCreatorForModel(json).map(UserInfos::getUserId);
     }
 
     @Get("")
