@@ -14,7 +14,6 @@ const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        // @ts-ignore
         element: <Explorer config={explorerConfig} />,
       },
     ],
@@ -43,6 +42,8 @@ const routes: RouteObject[] = [
   },
 ];
 
+export const basename = import.meta.env.PROD ? "/mindmap" : "/";
+
 export const router = createBrowserRouter(routes, {
-  basename: import.meta.env.PROD ? "/mindmap" : "/",
+  basename,
 });
