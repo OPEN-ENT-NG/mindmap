@@ -1,12 +1,32 @@
-import { Layout, LoadingScreen } from "@edifice-ui/react";
-import { Outlet } from "react-router-dom";
+import { Layout, LoadingScreen, useOdeClient } from "@edifice-ui/react";
+import { Outlet, matchPath } from "react-router-dom";
 
-import { useMindmapRedirect } from "~/hooks/useMindmapRedirect";
+import { basename } from "..";
+
+/** Check old format URL and redirect if needed */
+export const loader = async () => {
+  const hashLocation = location.hash.substring(1);
+
+  // Check if the URL is an old format (angular root with hash) and redirect to the new format
+  if (hashLocation) {
+    const isMindmapPath = matchPath("/view/:id", hashLocation);
+
+    if (isMindmapPath) {
+      // Redirect to the new format
+      const redirectPath = `/id/${isMindmapPath?.params.id}`;
+      location.replace(
+        location.origin + basename.replace(/\/$/g, "") + redirectPath,
+      );
+    }
+  }
+
+  return null;
+};
 
 function Root() {
-  const isLoading = useMindmapRedirect();
+  const { init } = useOdeClient();
 
-  if (isLoading) return <LoadingScreen position={false} />;
+  if (!init) return <LoadingScreen position={false} />;
 
   return (
     <Layout>
