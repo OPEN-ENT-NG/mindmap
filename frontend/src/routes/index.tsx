@@ -3,14 +3,20 @@ import { RouteObject, createBrowserRouter } from "react-router-dom";
 
 import { explorerConfig } from "~/config/config";
 import PageError from "~/routes/page-error";
-import Root from "~/routes/root";
 
 import "~/styles/index.css";
 
 const routes: RouteObject[] = [
   {
-    path: "/",
-    element: <Root />,
+    path: "/*",
+    async lazy() {
+      const { loader, Root: Component } = await import("~/routes/root");
+      return {
+        loader,
+        Component,
+      };
+    },
+    errorElement: <PageError />,
     children: [
       {
         index: true,
