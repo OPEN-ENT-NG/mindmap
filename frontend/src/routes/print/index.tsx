@@ -16,7 +16,7 @@ import { MindmapProps } from "~/models/mindmap";
 import { getMindmap } from "~/services/api";
 import "./index.css";
 
-export async function mapLoader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
   const data = await getMindmap(`/mindmap/${id}`);
 

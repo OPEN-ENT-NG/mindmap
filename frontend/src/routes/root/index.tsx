@@ -23,7 +23,7 @@ export const loader = async () => {
   return null;
 };
 
-function Root() {
+export function Root() {
   const { init } = useOdeClient();
 
   if (!init) return <LoadingScreen position={false} />;
