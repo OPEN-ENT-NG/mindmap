@@ -1,11 +1,13 @@
 import { AppParams } from "ode-explorer/lib";
 
-import { workflows } from ".";
+import { MindmapResourceService } from "~/services/resource";
+import { workflows } from "./workflows";
 
 export const explorerConfig: AppParams = {
   app: "mindmap",
   types: ["mindmap"],
   libraryAppFilter: "MindMap",
+  service: MindmapResourceService,
   filters: [
     { id: "owner", defaultValue: true },
     { id: "public", defaultValue: false },

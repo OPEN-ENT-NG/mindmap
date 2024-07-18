@@ -17,7 +17,7 @@ import { IWebApp, odeServices } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
-import { DEFAULT_MAP } from "~/config/default-map";
+import { DEFAULT_MAP } from "~/config";
 import ExportModal from "~/features/export-modal";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import { useAccessStore } from "~/hooks/useAccessStore";
