@@ -10,7 +10,7 @@ import Editor, {
 import { odeServices } from "edifice-ts-client";
 import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
 
-import { DEFAULT_MAP } from "~/config/default-map";
+import { DEFAULT_MAP } from "~/config";
 import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
 import { MindmapProps } from "~/models/mindmap";
 import { getMindmap } from "~/services/api";
