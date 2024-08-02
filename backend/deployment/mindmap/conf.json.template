@@ -1,5 +1,5 @@
 {
-  "name": "net.atos~mindmap~2.1.5",
+  "name": "net.atos~mindmap~2.1.6",
   "config": {
     "main" : "net.atos.entng.mindmap.Mindmap",
     "port" : 8666,
