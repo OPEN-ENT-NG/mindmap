@@ -22,6 +22,7 @@ pipeline {
           sh 'cp -R ../frontend/old/*.html ./src/main/resources/'
           sh 'cp -R ../frontend/dist/* ./src/main/resources/'
           sh 'mkdir -p ./src/main/resources/view'
+          sh 'rm -rf ./src/main/resources/view/notify'
           sh 'mv ./src/main/resources/*.html ./src/main/resources/view'
           sh 'cp -R ./src/main/resources/notify ./src/main/resources/view/notify'
           sh './build.sh clean build publish'
