@@ -23,25 +23,6 @@ module.exports = {
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/ban-types": "off",
-    "import/order": [
-      "error",
-      {
-        groups: ["builtin", "external", "internal"],
-        pathGroups: [
-          {
-            pattern: "react",
-            group: "external",
-            position: "before",
-          },
-        ],
-        pathGroupsExcludedImportTypes: ["react"],
-        "newlines-between": "always",
-        alphabetize: {
-          order: "asc",
-          caseInsensitive: true,
-        },
-      },
-    ],
   },
   settings: {
     react: {
@@ -56,6 +37,6 @@ module.exports = {
     "public",
     "scripts",
     "vite.config.ts",
-    "old"
+    "old",
   ],
 };
