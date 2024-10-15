@@ -1,27 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { Heading, Image, useOdeClient } from "@edifice-ui/react";
-// @ts-ignore
+import { Heading, Image, useOdeClient } from '@edifice-ui/react';
 import Editor, {
   Designer,
   ImageExporterFactory,
   useEditor,
-} from "@edifice-wisemapping/editor";
-import { odeServices } from "edifice-ts-client";
-import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
+  // @ts-ignore
+} from '@edifice-wisemapping/editor';
+import { odeServices } from 'edifice-ts-client';
+import { LoaderFunctionArgs, useLoaderData, useParams } from 'react-router-dom';
 
-import { DEFAULT_MAP } from "~/config";
-import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
-import { MindmapProps } from "~/models/mindmap";
-import { getMindmap } from "~/services/api";
-import "./index.css";
+import { DEFAULT_MAP } from '~/config';
+import { mapInfo, persistenceManager } from '~/features/mindmap/configuration';
+import { MindmapProps } from '~/models/mindmap';
+import { getMindmap } from '~/services/api';
+import './index.css';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
   const data = await getMindmap(`/mindmap/${id}`);
 
   if (odeServices.http().isResponseError()) {
-    throw new Response("", {
+    throw new Response('', {
       status: odeServices.http().latestResponse.status,
       statusText: odeServices.http().latestResponse.statusText,
     });
@@ -39,15 +39,15 @@ export const Mindmap = () => {
   const data = useLoaderData() as MindmapProps;
   const params = useParams();
 
-  const [hrefImage, setHrefImage] = useState<string>("");
+  const [hrefImage, setHrefImage] = useState<string>('');
 
   const { currentLanguage } = useOdeClient();
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
     options: {
-      mode: "viewonly",
-      locale: currentLanguage ?? "en",
+      mode: 'viewonly',
+      locale: currentLanguage ?? 'en',
       enableKeyboardEvents: false,
       enableAppBar: false,
       zoom: 1.5,
@@ -67,13 +67,13 @@ export const Mindmap = () => {
     // init designer
     // @ts-ignore
     const designer: Designer = globalThis.designer;
-    designer.addEvent("loadSuccess", async () => {
+    designer.addEvent('loadSuccess', async () => {
       if (designer) {
         const workspace = designer.getWorkSpace();
         const svgElement = workspace.getSVGElement();
         const size = { width: window.innerWidth, height: window.innerHeight };
         const exporter = await ImageExporterFactory.create(
-          "png",
+          'png',
           svgElement,
           size.width,
           size.height,

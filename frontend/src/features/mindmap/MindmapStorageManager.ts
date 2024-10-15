@@ -1,8 +1,8 @@
 // @ts-ignore
-import { PersistenceManager } from "@edifice-wisemapping/editor";
-import { DEFAULT_MAP } from "~/config";
+import { PersistenceManager } from '@edifice-wisemapping/editor';
+import { DEFAULT_MAP } from '~/config';
 
-import { updateMindmap } from "~/services/api";
+import { updateMindmap } from '~/services/api';
 
 class MindmapStorageManager extends PersistenceManager {
   private documentUrl: string;
@@ -29,7 +29,7 @@ class MindmapStorageManager extends PersistenceManager {
 
   loadMapDom(): Promise<Document> {
     const result: Promise<Document> = fetch(this.documentUrl, {
-      method: "GET",
+      method: 'GET',
     })
       .then((response: Response) => {
         if (!response.ok) {
@@ -43,7 +43,7 @@ class MindmapStorageManager extends PersistenceManager {
       .then((data) => {
         return data.map ? data.map : DEFAULT_MAP(data?.name);
       })
-      .then((xmlStr) => new DOMParser().parseFromString(xmlStr, "text/xml"));
+      .then((xmlStr) => new DOMParser().parseFromString(xmlStr, 'text/xml'));
 
     return result;
   }

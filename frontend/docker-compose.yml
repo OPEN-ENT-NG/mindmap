@@ -1,8 +1,8 @@
-version: "3"
+version: '3'
 services:
   node:
-    image: "opendigitaleducation/node:18-alpine-pnpm"
-    user: "node"
+    image: 'opendigitaleducation/node:18-alpine-pnpm'
+    user: 'node'
     working_dir: /home/node/app
     network_mode: host
     volumes:

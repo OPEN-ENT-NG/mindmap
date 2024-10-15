@@ -1,16 +1,16 @@
-import { Explorer } from "ode-explorer/lib";
-import { RouteObject, createBrowserRouter } from "react-router-dom";
-import { explorerConfig } from "~/config";
+import { Explorer } from 'ode-explorer/lib';
+import { RouteObject, createBrowserRouter } from 'react-router-dom';
+import { explorerConfig } from '~/config';
 
-import PageError from "~/routes/page-error";
+import PageError from '~/routes/page-error';
 
-import "~/styles/index.css";
+import '~/styles/index.css';
 
 const routes: RouteObject[] = [
   {
-    path: "/*",
+    path: '/*',
     async lazy() {
-      const { loader, Root: Component } = await import("~/routes/root");
+      const { loader, Root: Component } = await import('~/routes/root');
       return {
         loader,
         Component,
@@ -25,9 +25,9 @@ const routes: RouteObject[] = [
     ],
   },
   {
-    path: "id/:id",
+    path: 'id/:id',
     async lazy() {
-      const { loader, Mindmap } = await import("./mindmap");
+      const { loader, Mindmap } = await import('./mindmap');
       return {
         loader,
         Component: Mindmap,
@@ -36,9 +36,9 @@ const routes: RouteObject[] = [
     errorElement: <PageError />,
   },
   {
-    path: "print/id/:id",
+    path: 'print/id/:id',
     async lazy() {
-      const { loader, Mindmap } = await import("./print");
+      const { loader, Mindmap } = await import('./print');
       return {
         loader,
         Component: Mindmap,
@@ -48,7 +48,7 @@ const routes: RouteObject[] = [
   },
 ];
 
-export const basename = import.meta.env.PROD ? "/mindmap" : "/";
+export const basename = import.meta.env.PROD ? '/mindmap' : '/';
 
 export const router = createBrowserRouter(routes, {
   basename,

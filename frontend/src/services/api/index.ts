@@ -1,8 +1,8 @@
-import { odeServices } from "edifice-ts-client";
+import { odeServices } from 'edifice-ts-client';
 
-import { MindmapProps } from "~/models/mindmap";
+import { MindmapProps } from '~/models/mindmap';
 
-export type UpdateMindmapProps = Pick<MindmapProps, "name" | "map">;
+export type UpdateMindmapProps = Pick<MindmapProps, 'name' | 'map'>;
 
 export const getMindmap = async (url: string): Promise<MindmapProps> => {
   return await odeServices.http().get(url);

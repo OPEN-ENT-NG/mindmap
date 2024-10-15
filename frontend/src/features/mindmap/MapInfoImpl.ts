@@ -1,5 +1,5 @@
 // @ts-ignore
-import { MapInfo } from "@edifice-wisemapping/editor";
+import { MapInfo } from '@edifice-wisemapping/editor';
 
 class MapInfoImpl implements MapInfo {
   private id: string;
@@ -42,7 +42,7 @@ class MapInfoImpl implements MapInfo {
   }
 
   getLockedMessage(): string {
-    return "Map Is Locked !";
+    return 'Map Is Locked !';
   }
 
   getZoom(): number {

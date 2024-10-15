@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { OptionsType } from "@edifice-ui/react";
+import { OptionsType } from '@edifice-ui/react';
 
-import { exporter } from "~/utils";
+import { exporter } from '~/utils';
 
-type ExportFormat = "svg" | "jpg" | "png" | "mm" | "wxml";
-type ExportGroup = "image" | "mindmap-tool";
+type ExportFormat = 'svg' | 'jpg' | 'png' | 'mm' | 'wxml';
+type ExportGroup = 'image' | 'mindmap-tool';
 
 export const useExportMindmap = ({
   mapName,
@@ -15,33 +15,33 @@ export const useExportMindmap = ({
   onSuccess: () => void;
 }) => {
   const [submit, setSubmit] = useState<boolean>(false);
-  const [exportFormat, setExportFormat] = useState<ExportFormat>("jpg");
-  const [exportGroup, setExportGroup] = useState<ExportGroup>("image");
+  const [exportFormat, setExportFormat] = useState<ExportFormat>('jpg');
+  const [exportGroup, setExportGroup] = useState<ExportGroup>('image');
   const [zoomToFit, setZoomToFit] = useState<boolean>(true);
 
   const imagesOptions = [
     {
-      label: "JPEG Image (JPEG)",
-      value: "jpg",
+      label: 'JPEG Image (JPEG)',
+      value: 'jpg',
     },
     {
-      label: "Portable Network Graphics (PNG)",
-      value: "png",
+      label: 'Portable Network Graphics (PNG)',
+      value: 'png',
     },
     {
-      label: "Scalable Vector Graphics (SVG)",
-      value: "svg",
+      label: 'Scalable Vector Graphics (SVG)',
+      value: 'svg',
     },
   ];
 
   const formatOptions = [
     {
-      label: "WiseMapping (WXML)",
-      value: "wxml",
+      label: 'WiseMapping (WXML)',
+      value: 'wxml',
     },
     {
-      label: "Freemind 1.0.1 (MM)",
-      value: "mm",
+      label: 'Freemind 1.0.1 (MM)',
+      value: 'mm',
     },
   ];
 
@@ -62,14 +62,14 @@ export const useExportMindmap = ({
 
     let defaultFormat: ExportFormat;
     switch (value) {
-      case "image":
-        defaultFormat = "svg";
+      case 'image':
+        defaultFormat = 'svg';
         break;
-      case "mindmap-tool":
-        defaultFormat = "wxml";
+      case 'mindmap-tool':
+        defaultFormat = 'wxml';
         break;
       default:
-        defaultFormat = "svg";
+        defaultFormat = 'svg';
     }
     setExportGroup(value as unknown as ExportGroup);
     setExportFormat(defaultFormat);
@@ -80,8 +80,8 @@ export const useExportMindmap = ({
       exporter(exportFormat, zoomToFit)
         .then((url: string) => {
           // Create hidden anchor to force download ...
-          const anchor: HTMLAnchorElement = document.createElement("a");
-          anchor.style.display = "display: none";
+          const anchor: HTMLAnchorElement = document.createElement('a');
+          anchor.style.display = 'display: none';
           anchor.download = `${mapName}.${exportFormat}`;
           anchor.href = url;
           document.body.appendChild(anchor);
@@ -95,7 +95,7 @@ export const useExportMindmap = ({
           onSuccess?.();
         })
         .catch((fail) => {
-          console.error("Unexpected error during export:" + fail);
+          console.error('Unexpected error during export:' + fail);
         });
     }
     setSubmit(false);

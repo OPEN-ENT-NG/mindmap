@@ -3,10 +3,10 @@ import {
   PersistenceManager,
   MapInfo,
   // @ts-ignore
-} from "@edifice-wisemapping/editor";
+} from '@edifice-wisemapping/editor';
 
-import MapInfoImpl from "~/features/mindmap/MapInfoImpl";
-import MindmapStorageManager from "~/features/mindmap/MindmapStorageManager";
+import MapInfoImpl from '~/features/mindmap/MapInfoImpl';
+import MindmapStorageManager from '~/features/mindmap/MindmapStorageManager';
 
 export const mapInfo: MapInfo = (id: string, name: string): MapInfo =>
   new MapInfoImpl(id, name, false);

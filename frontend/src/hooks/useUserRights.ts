@@ -1,8 +1,8 @@
-import { useUser } from "@edifice-ui/react";
+import { useUser } from '@edifice-ui/react';
 
-import { rights } from "~/config";
-import { MindmapProps } from "~/models/mindmap";
-import { useActions } from "~/services/queries";
+import { rights } from '~/config';
+import { MindmapProps } from '~/models/mindmap';
+import { useActions } from '~/services/queries';
 
 export const useUserRights = (
   data: MindmapProps,
@@ -29,14 +29,14 @@ export const useUserRights = (
 
   if (!isOwner && rights) {
     canUpdate = shared.some((right) => {
-      const groupId = right["groupId"];
+      const groupId = right['groupId'];
       const userRight = right[rights.contrib.right];
 
       if (groupId !== undefined && groupsIds?.includes(groupId)) {
         return userRight;
       }
 
-      const userRightUserId = right["userId"];
+      const userRightUserId = right['userId'];
       return userRightUserId !== undefined && userId === userRightUserId
         ? userRight
         : false;
