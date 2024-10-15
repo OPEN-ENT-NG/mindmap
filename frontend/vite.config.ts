@@ -1,29 +1,12 @@
-import react from "@vitejs/plugin-react";
-import { createHash } from "node:crypto";
-import { defineConfig, loadEnv, Plugin } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
+/// <reference types="vitest/config" />
+import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import {
+  hashEdificeBootstrap,
+  queryHashVersion,
+} from './plugins/vite-plugin-edifice';
 
-const hash = createHash("md5")
-  .update(Date.now().toString())
-  .digest("hex")
-  .substring(0, 8);
-
-const queryHashVersion = `v=${hash}`;
-
-function hashEdificeBootstrap(): Plugin {
-  return {
-    name: "vite-plugin-edifice",
-    apply: "build",
-    transformIndexHtml(html) {
-      return html.replace(
-        "/assets/themes/edifice-bootstrap/index.css",
-        `/assets/themes/edifice-bootstrap/index.css?${queryHashVersion}`,
-      );
-    },
-  };
-}
-
-// https://vitejs.dev/config/
 export default ({ mode }: { mode: string }) => {
   // Checking environement files
   const envFile = loadEnv(mode, process.cwd());
@@ -33,11 +16,11 @@ export default ({ mode }: { mode: string }) => {
   // Proxy variables
   const headers = hasEnvFile
     ? {
-        "set-cookie": [
+        'set-cookie': [
           `oneSessionId=${envs.VITE_ONE_SESSION_ID}`,
           `XSRF-TOKEN=${envs.VITE_XSRF_TOKEN}`,
         ],
-        "Cache-Control": "public, max-age=300",
+        'Cache-Control': 'public, max-age=300',
       }
     : {};
 
@@ -50,63 +33,80 @@ export default ({ mode }: { mode: string }) => {
         },
       }
     : {
-        target: envs.VITE_LOCALHOST || "http://localhost:8090",
+        target: 'http://localhost:8090',
         changeOrigin: false,
       };
 
-  const proxy = {
-    "/applications-list": proxyObj,
-    "/conf/public": proxyObj,
-    "^/(?=help-1d|help-2d)": proxyObj,
-    "^/(?=assets)": proxyObj,
-    "^/(?=theme|locale|i18n|skin)": proxyObj,
-    "^/(?=auth|appregistry|cas|userbook|directory|communication|conversation|portal|session|timeline|workspace|infra)":
-      proxyObj,
-    "/mindmap": proxyObj,
-    "/xiti": proxyObj,
-    "/analyticsConf": proxyObj,
-    "/explorer": proxyObj,
-  };
+  /* Replace "/" the name of your application (e.g : blog | mindmap | collaborativewall) */
+  return defineConfig({
+    base: mode === 'production' ? '/mindmap' : '',
+    root: __dirname,
+    cacheDir: './node_modules/.vite/mindmap',
 
-  const base = mode === "production" ? "/mindmap" : "";
+    server: {
+      proxy: {
+        '/applications-list': proxyObj,
+        '/conf/public': proxyObj,
+        '^/(?=help-1d|help-2d)': proxyObj,
+        '^/(?=assets)': proxyObj,
+        '^/(?=theme|locale|i18n|skin)': proxyObj,
+        '^/(?=auth|appregistry|archive|cas|userbook|directory|communication|conversation|portal|session|timeline|workspace|infra)':
+          proxyObj,
+        '/xiti': proxyObj,
+        '/analyticsConf': proxyObj,
+        '/explorer': proxyObj,
+        '/mindmap': proxyObj,
+      },
+      port: 4200,
+      headers,
+      host: 'localhost',
+    },
 
-  const build = {
-    assetsDir: "public",
-    rollupOptions: {
-      external: ["edifice-ts-client"],
-      output: {
-        manualChunks: {
-          react: [
-            "react",
-            "react-router-dom",
-            "react-dom",
-            "react-error-boundary",
-            "react-hook-form",
-          ],
-          edifice: ["@edifice-ui/react"],
-          wisemapping: ["@edifice-wisemapping/editor"],
-        },
-        paths: {
-          "edifice-ts-client": `/assets/js/edifice-ts-client/index.js?${queryHashVersion}`,
+    preview: {
+      port: 4300,
+      headers,
+      host: 'localhost',
+    },
+
+    plugins: [
+      react(),
+      tsconfigPaths(),
+      hashEdificeBootstrap({
+        hash: queryHashVersion,
+      }),
+    ],
+
+    build: {
+      outDir: './dist',
+      emptyOutDir: true,
+      reportCompressedSize: true,
+      commonjsOptions: {
+        transformMixedEsModules: true,
+      },
+      assetsDir: 'public',
+      chunkSizeWarningLimit: 5000,
+      rollupOptions: {
+        external: ['edifice-ts-client'],
+        output: {
+          inlineDynamicImports: true,
+          paths: {
+            'edifice-ts-client': `/assets/js/edifice-ts-client/index.js?${queryHashVersion}`,
+          },
         },
       },
     },
-  };
 
-  const plugins = [react(), tsconfigPaths(), hashEdificeBootstrap()];
-
-  const server = {
-    proxy,
-    host: "0.0.0.0",
-    port: 3000,
-    headers,
-    open: true,
-  };
-
-  return defineConfig({
-    base,
-    build,
-    plugins,
-    server,
+    test: {
+      watch: false,
+      globals: true,
+      environment: 'jsdom',
+      include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+      setupFiles: ['./src/mocks/setup.ts'],
+      reporters: ['default'],
+      coverage: {
+        reportsDirectory: './coverage/mindmap',
+        provider: 'v8',
+      },
+    },
   });
 };

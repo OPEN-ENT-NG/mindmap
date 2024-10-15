@@ -6,11 +6,11 @@ import {
   Radio,
   Select,
   useOdeClient,
-} from "@edifice-ui/react";
-import { createPortal } from "react-dom";
-import { useTranslation } from "react-i18next";
+} from '@edifice-ui/react';
+import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
-import { useExportMindmap } from "./useExportMindmap";
+import { useExportMindmap } from './useExportMindmap';
 
 interface ModalProps {
   isOpen: boolean;
@@ -45,7 +45,7 @@ export default function ExportModal({
   return createPortal(
     <Modal isOpen={isOpen} onModalClose={handleOnCancel} id="export-modal">
       <Modal.Header onModalClose={handleOnCancel}>
-        {t("mindmap.export.modal.title", { ns: appCode })}
+        {t('mindmap.export.modal.title', { ns: appCode })}
       </Modal.Header>
       <Modal.Body>
         <FormControl id="export">
@@ -54,11 +54,11 @@ export default function ExportModal({
             value="image"
             onChange={handleOnGroupChange}
             model={exportGroup}
-            checked={exportGroup === "image"}
-            label={t("mindmap.export.image", { ns: appCode })}
+            checked={exportGroup === 'image'}
+            label={t('mindmap.export.image', { ns: appCode })}
           />
           <FormControl id="image" className="form-div-center my-12">
-            {exportGroup == "image" && (
+            {exportGroup == 'image' && (
               <>
                 <Select
                   block
@@ -71,7 +71,7 @@ export default function ExportModal({
                 <div className="my-16">
                   <Checkbox
                     checked={zoomToFit}
-                    label={t("mindmap.export.zoom", { ns: appCode })}
+                    label={t('mindmap.export.zoom', { ns: appCode })}
                     onChange={handleOnZoomToFit}
                   />
                 </div>
@@ -84,12 +84,12 @@ export default function ExportModal({
               value="mindmap-tool"
               onChange={handleOnGroupChange}
               model={exportGroup}
-              checked={exportGroup === "mindmap-tool"}
-              label={t("mindmap.export.minmap.tools", { ns: appCode })}
+              checked={exportGroup === 'mindmap-tool'}
+              label={t('mindmap.export.minmap.tools', { ns: appCode })}
             />
           </FormControl>
           <FormControl id="mindmap-tool" className="form-div-center">
-            {exportGroup == "mindmap-tool" && (
+            {exportGroup == 'mindmap-tool' && (
               <div className="my-12">
                 <Select
                   block
@@ -110,13 +110,13 @@ export default function ExportModal({
           type="button"
           variant="ghost"
         >
-          {t("explorer.cancel")}
+          {t('explorer.cancel')}
         </Button>
         <Button color="primary" variant="filled" onClick={handleOnSubmit}>
-          {t("mindmap.export", { ns: appCode })}
+          {t('mindmap.export', { ns: appCode })}
         </Button>
       </Modal.Footer>
     </Modal>,
-    document.getElementById("portal") as HTMLElement,
+    document.getElementById('portal') as HTMLElement,
   );
 }

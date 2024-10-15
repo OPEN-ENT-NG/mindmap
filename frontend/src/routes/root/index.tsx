@@ -1,7 +1,7 @@
-import { Layout, LoadingScreen, useOdeClient } from "@edifice-ui/react";
-import { Outlet, matchPath } from "react-router-dom";
+import { Layout, LoadingScreen, useOdeClient } from '@edifice-ui/react';
+import { Outlet, matchPath } from 'react-router-dom';
 
-import { basename } from "..";
+import { basename } from '..';
 
 /** Check old format URL and redirect if needed */
 export const loader = async () => {
@@ -9,13 +9,13 @@ export const loader = async () => {
 
   // Check if the URL is an old format (angular root with hash) and redirect to the new format
   if (hashLocation) {
-    const isMindmapPath = matchPath("/view/:id", hashLocation);
+    const isMindmapPath = matchPath('/view/:id', hashLocation);
 
     if (isMindmapPath) {
       // Redirect to the new format
       const redirectPath = `/id/${isMindmapPath?.params.id}`;
       location.replace(
-        location.origin + basename.replace(/\/$/g, "") + redirectPath,
+        location.origin + basename.replace(/\/$/g, '') + redirectPath,
       );
     }
   }

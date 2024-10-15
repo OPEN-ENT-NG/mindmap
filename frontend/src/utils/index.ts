@@ -1,14 +1,14 @@
 import {
   Designer,
-  ImageExporterFactory,
   Exporter,
+  ImageExporterFactory,
+  Mindmap,
   SizeType,
   TextExporterFactory,
-  Mindmap,
   // @ts-ignore
-} from "@edifice-wisemapping/editor";
+} from '@edifice-wisemapping/editor';
 
-type ExportFormat = "svg" | "jpg" | "png" | "mm" | "wxml";
+type ExportFormat = 'svg' | 'jpg' | 'png' | 'mm' | 'wxml';
 
 export const exporter = async (
   formatType: ExportFormat,
@@ -18,6 +18,7 @@ export const exporter = async (
   let size: SizeType;
   let mindmap: Mindmap;
 
+  // @ts-ignore
   const designer: Designer = globalThis.designer;
   // exporting from editor toolbar action
   if (designer) {
@@ -30,9 +31,9 @@ export const exporter = async (
 
   let exporter: Exporter;
   switch (formatType) {
-    case "png":
-    case "jpg":
-    case "svg": {
+    case 'png':
+    case 'jpg':
+    case 'svg': {
       exporter = ImageExporterFactory.create(
         formatType,
         svgElement,
@@ -42,8 +43,8 @@ export const exporter = async (
       );
       break;
     }
-    case "wxml":
-    case "mm": {
+    case 'wxml':
+    case 'mm': {
       exporter = TextExporterFactory.create(formatType, mindmap);
       break;
     }

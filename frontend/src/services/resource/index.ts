@@ -7,20 +7,19 @@ import {
   ResourceService,
   ResourceType,
   UpdateResult,
-} from "edifice-ts-client";
+} from 'edifice-ts-client';
 
-const APP = "mindmap";
-const RESOURCE = "mindmap";
+const APP = 'mindmap';
+const RESOURCE = 'mindmap';
 
 export class MindmapResourceService extends ResourceService {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getEditUrl(resourceId?: string | undefined): string {
-    throw new Error("Method not implemented.");
+  getEditUrl(): string {
+    throw new Error('Method not implemented.');
   }
   async create(parameters: CreateParameters): Promise<CreateResult> {
     const thumbnail = parameters.thumbnail
       ? await this.getThumbnailPath(parameters.thumbnail)
-      : "";
+      : '';
 
     const res = await this.http.post<{ _id: string }>(`/mindmap`, {
       name: parameters.name,
@@ -29,7 +28,7 @@ export class MindmapResourceService extends ResourceService {
       folder: parameters.folder,
       map: `<map version="tango" theme="prism"><topic central="true" text="${parameters.name}"/></map>`,
       trashed: false,
-      visibility: "OWNER",
+      visibility: 'OWNER',
     });
 
     this.checkHttpResponse(res);
@@ -40,14 +39,14 @@ export class MindmapResourceService extends ResourceService {
   async update(parameters: MindmapUpdate): Promise<UpdateResult> {
     const thumbnail = parameters.thumbnail
       ? await this.getThumbnailPath(parameters.thumbnail)
-      : "";
+      : '';
     const res = await this.http.put<IResource>(`/mindmap/${parameters.entId}`, {
       trashed: parameters.trashed,
       _id: parameters.entId,
       name: parameters.name,
       thumbnail,
       description: parameters.description,
-      visibility: parameters.public ? "PUBLIC" : "OWNER",
+      visibility: parameters.public ? 'PUBLIC' : 'OWNER',
     });
     this.checkHttpResponse(res);
     return { thumbnail, entId: parameters.entId } as UpdateResult;

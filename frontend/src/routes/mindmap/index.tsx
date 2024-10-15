@@ -1,6 +1,6 @@
-import { Suspense, useState } from "react";
+import { Suspense, useState } from 'react';
 
-import { Redo, Undo } from "@edifice-ui/icons";
+import { Redo, Undo } from '@edifice-ui/icons';
 import {
   AppHeader,
   Breadcrumb,
@@ -10,27 +10,27 @@ import {
   checkUserRight,
   useOdeClient,
   useTrashedResource,
-} from "@edifice-ui/react";
+} from '@edifice-ui/react';
 // @ts-ignore
-import Editor, { useEditor } from "@edifice-wisemapping/editor";
-import { IWebApp, odeServices } from "edifice-ts-client";
-import { useTranslation } from "react-i18next";
-import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
+import Editor, { useEditor } from '@edifice-wisemapping/editor';
+import { IWebApp, odeServices } from 'edifice-ts-client';
+import { useTranslation } from 'react-i18next';
+import { LoaderFunctionArgs, useLoaderData, useParams } from 'react-router-dom';
 
-import { DEFAULT_MAP } from "~/config";
-import ExportModal from "~/features/export-modal";
-import { mapInfo, persistenceManager } from "~/features/mindmap/configuration";
-import { useAccessStore } from "~/hooks/useAccessStore";
-import { MindmapProps } from "~/models/mindmap";
-import { getMindmap } from "~/services/api";
-import { useUserRightsStore } from "~/store";
+import { DEFAULT_MAP } from '~/config';
+import ExportModal from '~/features/export-modal';
+import { mapInfo, persistenceManager } from '~/features/mindmap/configuration';
+import { useAccessStore } from '~/hooks/useAccessStore';
+import { MindmapProps } from '~/models/mindmap';
+import { getMindmap } from '~/services/api';
+import { useUserRightsStore } from '~/store';
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
   const data = await getMindmap(`/mindmap/${id}`);
 
   if (odeServices.http().isResponseError()) {
-    throw new Response("", {
+    throw new Response('', {
       status: odeServices.http().latestResponse.status,
       statusText: odeServices.http().latestResponse.statusText,
     });
@@ -63,8 +63,8 @@ export const Mindmap = () => {
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
     options: {
-      mode: canUpdate ? "edition-owner" : "viewonly",
-      locale: currentLanguage ?? "en",
+      mode: canUpdate ? 'edition-owner' : 'viewonly',
+      locale: currentLanguage ?? 'en',
       enableKeyboardEvents: true,
       enableAppBar: false,
       saveOnLoad: false,
@@ -84,13 +84,13 @@ export const Mindmap = () => {
     data?.map && (
       <>
         <AppHeader
-          style={{ position: "fixed" }}
+          style={{ position: 'fixed' }}
           isFullscreen
           render={() => (
             <>
               {canExport ? (
                 <Button variant="outline" onClick={() => setOpenModal(true)}>
-                  {t("mindmap.export", { ns: appCode })}
+                  {t('mindmap.export', { ns: appCode })}
                 </Button>
               ) : null}
               {canUpdate ? (
@@ -100,7 +100,7 @@ export const Mindmap = () => {
                   className="ms-4"
                   onClick={handleOnEditorSave}
                 >
-                  {t("mindmap.save", { ns: appCode })}
+                  {t('mindmap.save', { ns: appCode })}
                 </Button>
               ) : null}
             </>
@@ -112,7 +112,7 @@ export const Mindmap = () => {
           {canUpdate ? (
             <div className="undo-redo-toolbar">
               <Tooltip
-                message={t("mindmap.undo", { ns: appCode })}
+                message={t('mindmap.undo', { ns: appCode })}
                 placement="bottom-end"
               >
                 <button aria-label="undo" onClick={() => designer.undo()}>
@@ -120,7 +120,7 @@ export const Mindmap = () => {
                 </button>
               </Tooltip>
               <Tooltip
-                message={t("mindmap.redo", { ns: appCode })}
+                message={t('mindmap.redo', { ns: appCode })}
                 placement="bottom-end"
               >
                 <button onClick={() => designer.redo()} aria-label="redo">
