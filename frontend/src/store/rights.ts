@@ -1,5 +1,5 @@
-import { RightRole } from "edifice-ts-client";
-import { create } from "zustand";
+import { RightRole } from 'edifice-ts-client';
+import { create } from 'zustand';
 
 type UserRights = Record<RightRole, boolean>;
 

@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 import {
   useNavigate,
   useLocation,
   useNavigation,
   matchPath,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 export const useMindmapRedirect = () => {
   const navigate = useNavigate();
@@ -14,10 +14,10 @@ export const useMindmapRedirect = () => {
 
   const ngLocation = location.hash.substring(1);
 
-  const mindmap = matchPath("/view/:mindmapId", ngLocation);
+  const mindmap = matchPath('/view/:mindmapId', ngLocation);
   const mindmapPath = `/id/${mindmap?.params.mindmapId}`;
 
-  const isLoading = navigation.state === "loading";
+  const isLoading = navigation.state === 'loading';
 
   useEffect(() => {
     if (mindmap) navigate(mindmapPath);
