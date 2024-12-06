@@ -1,6 +1,5 @@
 import { Suspense, useState } from 'react';
 
-import { Redo, Undo } from '@edifice-ui/icons';
 import {
   AppHeader,
   Breadcrumb,
@@ -8,12 +7,13 @@ import {
   LoadingScreen,
   Tooltip,
   checkUserRight,
-  useOdeClient,
+  useEdificeClient,
   useTrashedResource,
-} from '@edifice-ui/react';
+} from '@edifice.io/react';
+import { IconRedo, IconUndo } from '@edifice.io/react/icons';
 // @ts-ignore
 import Editor, { useEditor } from '@edifice-wisemapping/editor';
-import { IWebApp, odeServices } from 'edifice-ts-client';
+import { IWebApp, odeServices } from '@edifice.io/client';
 import { useTranslation } from 'react-i18next';
 import { LoaderFunctionArgs, useLoaderData, useParams } from 'react-router-dom';
 
@@ -54,7 +54,7 @@ export const Mindmap = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const { appCode, currentApp, currentLanguage } = useOdeClient();
+  const { appCode, currentApp, currentLanguage } = useEdificeClient();
   const { canUpdate, canExport } = useAccessStore();
   const { t } = useTranslation();
 
@@ -116,7 +116,7 @@ export const Mindmap = () => {
                 placement="bottom-end"
               >
                 <button aria-label="undo" onClick={() => designer.undo()}>
-                  <Undo width={20} height={20} />
+                  <IconUndo width={20} height={20} />
                 </button>
               </Tooltip>
               <Tooltip
@@ -124,7 +124,7 @@ export const Mindmap = () => {
                 placement="bottom-end"
               >
                 <button onClick={() => designer.redo()} aria-label="redo">
-                  <Redo width={20} height={20} />
+                  <IconRedo width={20} height={20} />
                 </button>
               </Tooltip>
             </div>

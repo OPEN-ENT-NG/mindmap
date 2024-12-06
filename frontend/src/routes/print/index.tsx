@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { Heading, Image, useOdeClient } from '@edifice-ui/react';
 import Editor, {
   Designer,
   ImageExporterFactory,
   useEditor,
   // @ts-ignore
 } from '@edifice-wisemapping/editor';
-import { odeServices } from 'edifice-ts-client';
+import { Heading, Image, useEdificeClient } from '@edifice.io/react';
+import { odeServices } from '@edifice.io/client';
 import { LoaderFunctionArgs, useLoaderData, useParams } from 'react-router-dom';
 
 import { DEFAULT_MAP } from '~/config';
@@ -41,7 +41,7 @@ export const Mindmap = () => {
 
   const [hrefImage, setHrefImage] = useState<string>('');
 
-  const { currentLanguage } = useOdeClient();
+  const { currentLanguage } = useEdificeClient();
 
   const editor = useEditor({
     mapInfo: mapInfo(data?.name, data?.name),
