@@ -1,12 +1,9 @@
-version: '3'
 services:
   node:
-    image: 'opendigitaleducation/node:18-alpine-pnpm'
-    user: 'node'
+    image: opendigitaleducation/node:20-alpine-pnpm
     working_dir: /home/node/app
-    network_mode: host
+    environment:
+      - TIPTAP_PRO_TOKEN
     volumes:
       - ./:/home/node/app
       - ~/.pnpm:/.pnpm
-      - ~/.npm:/.npm
-      - ~/.cache:/.cache

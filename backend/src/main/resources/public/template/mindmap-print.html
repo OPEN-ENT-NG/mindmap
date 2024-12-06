@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html class="print">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style media="screen">
+		h1 {position: absolute}
+		svg#workspace {
+			max-height: 800px;
+			margin: 0 auto;
+			position: absolute;
+			top: 0;
+		}
+  </style>
+</head>
+
+<body style="border-style: solid;border-width: 1px;border-color: white;">
+<h1>
+  <i class="mindmap"></i>
+  [[mindmap.name]]
+</h1>
+<div>
+    <ng-bind-html ng-bind-html="svg"> </ng-bind-html>
+</div>
+
+<div id="mindmap-editor" class="mindmap__hidden">
+    <mindmap-editor mindmap="mindmap" editorId="editorId" svg-loaded="svgLoaded()"></mindmap-editor>
+</div>
+</body>
+</html>
