@@ -16,8 +16,7 @@ pipeline {
       steps {
         dir('backend') {
           sh 'mkdir -p ./src/main/resources/public/ || TRUE'
-          sh 'rm -rf ./src/main/resources/public/*.js'
-          sh 'rm -rf ./src/main/resources/public/*.css'
+          sh 'find ./src/main/resources/public/ -maxdepth 1 -type f -exec rm -f {} +'
           sh 'cp -R ../frontend/old/* ./src/main/resources/public/'
           sh 'cp -R ../frontend/old/*.html ./src/main/resources/'
           sh 'cp -R ../frontend/dist/* ./src/main/resources/'

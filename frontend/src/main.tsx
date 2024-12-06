@@ -1,7 +1,6 @@
 import React from 'react';
 
-import './i18n';
-import { OdeClientProvider, ThemeProvider } from '@edifice-ui/react';
+import { EdificeClientProvider, EdificeThemeProvider } from '@edifice.io/react';
 import {
   QueryCache,
   QueryClient,
@@ -10,14 +9,15 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
+import './i18n';
 
+import '@edifice.io/bootstrap/dist/index.css';
 import { router } from './routes';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement!);
 
 if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line global-require
   import('@axe-core/react').then((axe) => {
     axe.default(React, root, 1000);
   });
@@ -39,15 +39,15 @@ const queryClient = new QueryClient({
 
 root.render(
   <QueryClientProvider client={queryClient}>
-    <OdeClientProvider
+    <EdificeClientProvider
       params={{
         app: 'mindmap',
       }}
     >
-      <ThemeProvider>
+      <EdificeThemeProvider>
         <RouterProvider router={router} />
-      </ThemeProvider>
-    </OdeClientProvider>
+      </EdificeThemeProvider>
+    </EdificeClientProvider>
     <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
   </QueryClientProvider>,
 );
