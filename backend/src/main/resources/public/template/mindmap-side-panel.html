@@ -1,0 +1,8 @@
+<nav class="vertical">
+    <h2 ng-click="openMainPage()"><i18n >mindmap.title</i18n></h2>
+    <ul>
+        <li ng-repeat="mindmap in mindmapsItem.mindmapsRight">
+            <a ng-click="openMindmap(mindmap, true)">[[mindmap.name]]</a>
+        </li>
+    </ul>
+</nav>
