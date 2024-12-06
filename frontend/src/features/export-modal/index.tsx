@@ -5,8 +5,8 @@ import {
   Modal,
   Radio,
   Select,
-  useOdeClient,
-} from '@edifice-ui/react';
+  useEdificeClient,
+} from '@edifice.io/react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +24,7 @@ export default function ExportModal({
   setOpenModal,
 }: ModalProps) {
   const { t } = useTranslation();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
 
   const handleOnCancel = () => {
     setOpenModal(false);
