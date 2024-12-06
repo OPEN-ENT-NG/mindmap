@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><i18n>mindmap.title</i18n></title>
+    <link rel="icon" id="favicon" href="" />
+    <link rel="stylesheet" href="/assets/themes/edifice-bootstrap/index.css" />
+    <script type="module" src="/assets/js/ode-explorer/index.js"></script>
+    <link rel="stylesheet" href="/assets/js/ode-explorer/style.css" />
+  </head>
+  <body class="app-react" data-ode-app>
+    <!-- blog, collaborativeeditor, collaborativewall, exercizer, mindmap, pages, timelinegenerator, wiki, scrapbook -->
+    <div id="root"></div>
+    <div id="portal"></div>
+
+    <!-- SET INITIALISATION CONFIG -->
+    <script>
+      var WORFLOW_ACCESS =
+        "net.atos.entng.mindmap.controllers.MindmapController|view";
+      var WORKFLOW_CREATE =
+        "net.atos.entng.mindmap.controllers.MindmapController|create";
+      var WORKFLOW_PRINT =
+        "net.atos.entng.mindmap.controllers.MindmapController|printView";
+      var WORKFLOW_EXPORT_PNG =
+        "net.atos.entng.mindmap.controllers.MindmapController|exportPngMindmap";
+      var WORKFLOW_EXPORT_SVG =
+        "net.atos.entng.mindmap.controllers.MindmapController|exportSvgMindmap";
+      var WORKFLOW_PUBLISH =
+        "net.atos.entng.mindmap.controllers.MindmapController|publish";
+      var odeConfig = {
+        app: "mindmap",
+        types: ["mindmap"],
+        libraryAppFilter: "MindMap",
+        filters: [
+          { id: "owner", defaultValue: true },
+          { id: "public", defaultValue: false },
+          { id: "shared", defaultValue: true },
+        ],
+        orders: [
+          { id: "name", defaultValue: "asc", i18n: "explorer.sorts.name" },
+          { id: "updatedAt", i18n: "explorer.sorts.updatedat" },
+        ],
+        actions: [
+          {
+            id: "open",
+            workflow: WORFLOW_ACCESS,
+            target: "actionbar",
+            right: "read",
+          },
+          {
+            id: "share",
+            workflow: WORFLOW_ACCESS,
+            target: "actionbar",
+            right: "manager",
+          },
+          {
+            id: "edit",
+            workflow: WORFLOW_ACCESS,
+            target: "actionbar",
+            right: "manager",
+          },
+          {
+            id: "create",
+            workflow: WORKFLOW_CREATE,
+            target: "tree",
+          },
+          {
+            id: "move",
+            workflow: WORFLOW_ACCESS,
+            target: "actionbar",
+            right: "read",
+          },
+          {
+            id: "publish",
+            workflow: WORKFLOW_PUBLISH,
+            target: "actionbar",
+            right: "creator",
+          },
+          {
+            id: "print",
+            workflow: WORKFLOW_PRINT,
+            target: "actionbar",
+            right: "read",
+          },
+          {
+            id: "delete",
+            workflow: WORFLOW_ACCESS,
+            target: "actionbar",
+            right: "read",
+          },
+        ],
+        trashActions: [
+          {
+            id: "restore",
+            available: true,
+            target: "actionbar",
+            workflow: "",
+            right: "manager",
+          },
+          {
+            id: "delete",
+            available: true,
+            target: "actionbar",
+            workflow: "",
+            right: "manager",
+          },
+        ],
+      };
+      var rootElement = document.querySelector("[data-ode-app]");
+      rootElement.setAttribute("data-ode-app", JSON.stringify(odeConfig));
+    </script>
+  </body>
+</html>
