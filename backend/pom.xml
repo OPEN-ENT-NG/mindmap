@@ -33,7 +33,6 @@
         <explorerVersion>2.0-SNAPSHOT</explorerVersion>
         <apacheBatikVersion>1.7</apacheBatikVersion>
         <junitVersion>4.13.2</junitVersion>
-        <mongodbHelper.version>3.0-SNAPSHOT</mongodbHelper.version>
     </properties>
 
     <dependencies>
