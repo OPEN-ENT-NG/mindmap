@@ -1,5 +1,5 @@
 import { Layout, LoadingScreen, useOdeClient } from '@edifice-ui/react';
-import { Outlet, matchPath } from 'react-router-dom';
+import { Outlet, matchPath, useLocation } from 'react-router-dom';
 
 import { basename } from '..';
 
@@ -24,12 +24,14 @@ export const loader = async () => {
 };
 
 export function Root() {
+  const location = useLocation();
+
   const { init } = useOdeClient();
 
   if (!init) return <LoadingScreen position={false} />;
 
   return (
-    <Layout>
+    <Layout headless={location.pathname !== '/'}>
       <Outlet />
     </Layout>
   );
