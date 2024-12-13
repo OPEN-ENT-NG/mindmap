@@ -22,18 +22,18 @@ const routes: RouteObject[] = [
         index: true,
         element: <Explorer config={explorerConfig} />,
       },
+      {
+        path: 'id/:id',
+        async lazy() {
+          const { loader, Mindmap } = await import('./mindmap');
+          return {
+            loader,
+            Component: Mindmap,
+          };
+        },
+        errorElement: <PageError />,
+      },
     ],
-  },
-  {
-    path: 'id/:id',
-    async lazy() {
-      const { loader, Mindmap } = await import('./mindmap');
-      return {
-        loader,
-        Component: Mindmap,
-      };
-    },
-    errorElement: <PageError />,
   },
   {
     path: 'print/id/:id',
