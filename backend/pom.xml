@@ -29,13 +29,8 @@
     </repositories>
 
     <properties>
-<<<<<<< HEAD
-        <entCoreVersion>6.1-SNAPSHOT</entCoreVersion>
-        <explorerVersion>2.1-SNAPSHOT</explorerVersion>
-=======
-        <entCoreVersion>6.0-SNAPSHOT</entCoreVersion>
-        <explorerVersion>2.0-SNAPSHOT</explorerVersion>
->>>>>>> d2e63a9 (chore: prepare next development iteration)
+        <entCoreVersion>6.0-develop-pedago-SNAPSHOT</entCoreVersion>
+        <explorerVersion>2.0-develop-pedago-SNAPSHOT</explorerVersion>
         <apacheBatikVersion>1.7</apacheBatikVersion>
         <junitVersion>4.13.2</junitVersion>
     </properties>
