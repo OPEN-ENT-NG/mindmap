@@ -160,7 +160,7 @@ public class MindmapController extends MongoDbControllerHelper {
             if(user != null){
                 RequestUtils.bodyToJson(request, pathPrefix + "mindmap", object -> {
                     object.put("owner", new JsonObject().put("userId", user.getUserId()).put("displayName", user.getUsername()));
-                    this.mindmapService.createMindmap(object).onSuccess(e -> {
+                    this.mindmapService.createMindmap(object.copy()).onSuccess(e -> {
                         eventHelper.onCreateResource(request, RESOURCE_NAME);
                         Renders.renderJson(request, new JsonObject().put("_id", e));
                     }).onFailure(e -> {
