@@ -123,6 +123,8 @@ public class MindmapController extends MongoDbControllerHelper {
             // redirect to old ui
             redirect(request, "/mindmap#/view/"+request.params().get("id"));
         }
+        // Create event "access to application Mindmap" and store it, for module "statistics"
+        eventHelper.onAccess(request);
     }
     /**
      * Display react front print /print/id/:id
