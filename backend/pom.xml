@@ -29,8 +29,8 @@
     </repositories>
 
     <properties>
-        <entCoreVersion>6.8-SNAPSHOT</entCoreVersion>
-        <explorerVersion>2.2-SNAPSHOT</explorerVersion>
+        <entCoreVersion>6.8-develop-pedago-SNAPSHOT</entCoreVersion>
+        <explorerVersion>2.2-develop-pedago-SNAPSHOT</explorerVersion>
         <apacheBatikVersion>1.7</apacheBatikVersion>
         <junitVersion>4.13.2</junitVersion>
     </properties>
