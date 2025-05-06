@@ -29,8 +29,8 @@
     </repositories>
 
     <properties>
-        <entCoreVersion>6.6-SNAPSHOT</entCoreVersion>
-        <explorerVersion>2.2-SNAPSHOT</explorerVersion>
+        <entCoreVersion>6.6-develop-b2school-SNAPSHOT</entCoreVersion>
+        <explorerVersion>2.2-develop-b2school-SNAPSHOT</explorerVersion>
         <apacheBatikVersion>1.7</apacheBatikVersion>
         <junitVersion>4.13.2</junitVersion>
     </properties>
