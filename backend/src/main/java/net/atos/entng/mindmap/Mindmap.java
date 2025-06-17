@@ -26,14 +26,19 @@ import net.atos.entng.mindmap.controllers.MindmapController;
 import net.atos.entng.mindmap.explorer.MindmapExplorerPlugin;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
 import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
+import net.atos.entng.mindmap.listeners.ResourceBrokerListenerImpl;
 import net.atos.entng.mindmap.service.impl.MindmapRepositoryEvents;
 import net.atos.entng.mindmap.service.impl.MindmapSearchingEvents;
+import org.entcore.broker.api.utils.AddressParameter;
+import org.entcore.broker.api.utils.BrokerProxyUtils;
 import org.entcore.common.explorer.IExplorerPlugin;
 import org.entcore.common.explorer.IExplorerPluginClient;
 import org.entcore.common.explorer.impl.ExplorerRepositoryEvents;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
+import org.entcore.common.share.ShareService;
+import org.entcore.common.share.impl.ShareBrokerListenerImpl;
 
 import org.entcore.common.service.impl.MongoDbSearchService;
 
@@ -88,6 +93,11 @@ public class Mindmap extends BaseServer {
         // Register verticle into the container
         getVertx().deployVerticle(MindmapPNGExporter.class.getName());
         getVertx().deployVerticle(MindmapSVGExporter.class.getName());
+        // add broker listener for workspace resources
+        BrokerProxyUtils.addBrokerProxy(new ResourceBrokerListenerImpl(), vertx, new AddressParameter("application", "mindmap"));
+        // add broker listener for share service
+        final ShareService shareService = plugin.createShareService(securedActions, null);
+        BrokerProxyUtils.addBrokerProxy(new ShareBrokerListenerImpl(this.securedActions, shareService), vertx, new AddressParameter("application", "mindmap"));
         // start plugin
         plugin.start();
     }
