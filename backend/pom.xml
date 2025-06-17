@@ -12,7 +12,7 @@
 
     <groupId>net.atos</groupId>
     <artifactId>mindmap</artifactId>
-    <version>3.1-develop-pedago-SNAPSHOT</version>
+    <version>3.1-develop-community-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/mindmap.git</connection>
@@ -29,7 +29,7 @@
     </repositories>
 
     <properties>
-        <entCoreVersion>6.5-develop-pedago-SNAPSHOT</entCoreVersion>
+        <entCoreVersion>6.5-develop-community-SNAPSHOT</entCoreVersion>
         <explorerVersion>2.2-develop-pedago-SNAPSHOT</explorerVersion>
         <apacheBatikVersion>1.7</apacheBatikVersion>
         <junitVersion>4.13.2</junitVersion>
