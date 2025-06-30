@@ -1,8 +1,8 @@
 {
   "mindmap": "Carte mentale",
+  "mindmap.notification.shared": "Carte mentale: Une carte mentale vous a été partagée",
   "mindmap.share": "Partage de carte mentale",
   "timeline.mindmap.has.created.page": "a créé la carte mentale",
   "timeline.mindmap.has.shared": "vous a partagé la carte mentale",
-  "timeline.mindmap.in": "dans la carte mentale",
-  "mindmap.notification.shared": "Carte mentale: Une carte mentale vous a été partagée"
+  "timeline.mindmap.in": "dans la carte mentale"
 }
