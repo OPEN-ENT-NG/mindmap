@@ -29,7 +29,7 @@
     </repositories>
 
     <properties>
-        <entCoreVersion>6.5-develop-community-SNAPSHOT</entCoreVersion>
+        <entCoreVersion>6.6-develop-community-SNAPSHOT</entCoreVersion>
         <explorerVersion>2.2-develop-pedago-SNAPSHOT</explorerVersion>
         <apacheBatikVersion>1.7</apacheBatikVersion>
         <junitVersion>4.13.2</junitVersion>
