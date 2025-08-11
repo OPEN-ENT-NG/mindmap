@@ -1,7 +1,7 @@
 # À propos de l'application Carte Mentale
 
-- Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Conseil Edifice, Région Hauts-de-France
-- Développeur(s) : Edifice, 
+- Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Edifice, Région Hauts-de-France
+- Développeur(s) : Edifice 
 - Financeur(s) : Edifice, Région Hauts-de-France
 - Description : Application de conception de carte mentale. L'application permet de construire en ligne une carte mentale, de la partager et de l'exporter. Elle s'appuie sur une librairie issue de http://www.wisemapping.com/.
 
