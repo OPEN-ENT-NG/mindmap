@@ -9,6 +9,10 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.MongoClient;
 import net.atos.entng.mindmap.Mindmap;
+import org.entcore.broker.api.dto.resources.ResourcesDeletedDTO;
+import org.entcore.broker.api.publisher.BrokerPublisherFactory;
+import org.entcore.broker.api.utils.AddressParameter;
+import org.entcore.broker.proxy.ResourceBrokerPublisher;
 import org.entcore.common.explorer.*;
 import org.entcore.common.explorer.impl.ExplorerPluginResourceMongo;
 import org.entcore.common.explorer.impl.ExplorerSubResource;
@@ -28,6 +32,7 @@ public class MindmapExplorerPlugin extends ExplorerPluginResourceMongo {
     private final MongoClient mongoClient;
     private final Map<String, SecuredAction> securedActions;
     private final MindmapFolderExplorerPlugin mindmapFolderExplorerPlugin;
+    private final ResourceBrokerPublisher resourcePublisher;
 
     public static MindmapExplorerPlugin create(final Map<String, SecuredAction> securedActions) throws Exception {
         final IExplorerPlugin plugin = ExplorerPluginFactory.createMongoPlugin((params) ->
@@ -42,6 +47,12 @@ public class MindmapExplorerPlugin extends ExplorerPluginResourceMongo {
         this.securedActions = securedActions;
         //init folder plugin
         mindmapFolderExplorerPlugin = new MindmapFolderExplorerPlugin(this);
+        // Initialize resource publisher for deletion notifications
+        this.resourcePublisher = BrokerPublisherFactory.create(
+                ResourceBrokerPublisher.class,
+                communication.vertx(),
+                new AddressParameter("application", Mindmap.APPLICATION)
+        );
     }
 
     @Override
@@ -135,5 +146,14 @@ public class MindmapExplorerPlugin extends ExplorerPluginResourceMongo {
     @Override
     protected List<ExplorerSubResource> getSubResourcesPlugin() {
         return Collections.emptyList();
+    }
+
+    @Override
+    protected Future<List<Boolean>> doDelete(UserInfos user, List<String> ids) {
+        return super.doDelete(user, ids).onSuccess(result -> {
+            // Notify resource deletion via broker and dont wait for completion
+            final ResourcesDeletedDTO notification = new ResourcesDeletedDTO(ids, Mindmap.MINDMAP_TYPE);
+            resourcePublisher.notifyResourcesDeleted(notification);
+        });
     }
 }
