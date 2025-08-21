@@ -78,13 +78,13 @@ public class MindmapController extends MongoDbControllerHelper {
     /**
      * Default constructor.
      *
-     * @param eb         VertX event bus
+     * @param vertx         VertX instance
      * @param collection MongoDB collection to request.
      */
-    public MindmapController(EventBus eb, String collection, final MindmapExplorerPlugin plugin) {
+    public MindmapController(Vertx vertx, String collection, final MindmapExplorerPlugin plugin) {
         super(collection);
         this.plugin = plugin;
-        this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance(), plugin);
+        this.mindmapService = new MindmapServiceImpl(vertx, MongoDb.getInstance(), plugin);
     }
     @Override
     protected boolean shouldNormalizedRights() {

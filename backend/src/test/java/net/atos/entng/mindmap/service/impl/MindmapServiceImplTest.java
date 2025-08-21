@@ -39,7 +39,7 @@ public class MindmapServiceImplTest {
         final IExplorerPluginCommunication communication = explorerTest.getCommunication();
         final MongoClient mongoClient = test.database().createMongoClient(mongoDBContainer);
         final MindmapExplorerPlugin mindmapPlugin = new MindmapExplorerPlugin(communication, mongoClient, securedActions);
-        this.mindmapService = new MindmapServiceImpl(vertx.eventBus(), MongoDb.getInstance(), mindmapPlugin);
+        this.mindmapService = new MindmapServiceImpl(vertx, MongoDb.getInstance(), mindmapPlugin);
     }
 
     @Test

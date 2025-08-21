@@ -74,7 +74,7 @@ public class MindmapRepositoryEventTest {
         final Vertx vertx = communication.vertx();
         final MongoClient mongoClient = test.database().createMongoClient(mongoDBContainer);
         explorerPlugin = new MindmapExplorerPlugin(communication, mongoClient, securedActions);
-        mindmapService = new MindmapServiceImpl(vertx.eventBus(), mongo, explorerPlugin);
+        mindmapService = new MindmapServiceImpl(vertx, mongo, explorerPlugin);
         shareService = explorerPlugin.createMongoShareService(Mindmap.MINDMAP_COLLECTION, securedActions, new HashMap<>());
         final IExplorerPluginClient mainClient = IExplorerPluginClient.withBus(vertx, Mindmap.APPLICATION, Mindmap.MINDMAP_TYPE);
         final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();

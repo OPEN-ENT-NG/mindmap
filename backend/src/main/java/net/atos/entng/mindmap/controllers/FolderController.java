@@ -7,6 +7,7 @@ import fr.wseduc.security.SecuredAction;
 import fr.wseduc.webutils.request.RequestUtils;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
@@ -32,10 +33,10 @@ public class FolderController extends MongoDbControllerHelper {
     private final FolderService folderService;
     private final MindmapService mindmapService;
 
-    public FolderController(EventBus eb, String collection, final MindmapExplorerPlugin plugin) {
+    public FolderController(Vertx vertx, String collection, final MindmapExplorerPlugin plugin) {
         super(collection);
-        this.folderService = new FolderServiceImpl(eb, MongoDb.getInstance(), plugin);
-        this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance(), plugin);
+        this.folderService = new FolderServiceImpl(vertx, MongoDb.getInstance(), plugin);
+        this.mindmapService = new MindmapServiceImpl(vertx, MongoDb.getInstance(), plugin);
     }
 
 

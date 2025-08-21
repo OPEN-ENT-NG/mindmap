@@ -37,10 +37,12 @@ import org.entcore.common.explorer.impl.ExplorerRepositoryEvents;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
+import org.entcore.common.resources.ResourceBrokerRepositoryEvents;
 import org.entcore.common.share.ShareService;
 import org.entcore.common.share.impl.ShareBrokerListenerImpl;
 
 import org.entcore.common.service.impl.MongoDbSearchService;
+import org.entcore.common.user.RepositoryEvents;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,7 +79,9 @@ public class Mindmap extends BaseServer {
         final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
         final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
         pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
-        setRepositoryEvents(new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection, mainPlugin));
+        final RepositoryEvents explorerRepository = new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection, mainPlugin);
+        final RepositoryEvents resourceRepository = new ResourceBrokerRepositoryEvents(explorerRepository, vertx, APPLICATION, MINDMAP_TYPE);
+        setRepositoryEvents(resourceRepository);
 
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(MINDMAP_COLLECTION);
@@ -87,8 +91,8 @@ public class Mindmap extends BaseServer {
         if (config.getBoolean("searching-event", true)) {
             setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
         }
-        addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION, plugin));
-        addController(new FolderController(vertx.eventBus(), FOLDER_COLLECTION, plugin));
+        addController(new MindmapController(vertx, MINDMAP_COLLECTION, plugin));
+        addController(new FolderController(vertx, FOLDER_COLLECTION, plugin));
 
         // Register verticle into the container
         getVertx().deployVerticle(MindmapPNGExporter.class.getName());

@@ -64,7 +64,7 @@ public class MindmapExplorerPluginTest {
         final IExplorerPluginCommunication communication = explorerTest.getCommunication();
         final MongoClient mongoClient = test.database().createMongoClient(mongoDBContainer);
         mindmapPlugin = new MindmapExplorerPlugin(communication, mongoClient, securedActions);
-        mindmapService = new MindmapServiceImpl(test.vertx().eventBus(),mongo, mindmapPlugin);
+        mindmapService = new MindmapServiceImpl(test.vertx(),mongo, mindmapPlugin);
         shareService = mindmapPlugin.createMongoShareService(Mindmap.MINDMAP_COLLECTION, securedActions, new HashMap<>());
     }
 

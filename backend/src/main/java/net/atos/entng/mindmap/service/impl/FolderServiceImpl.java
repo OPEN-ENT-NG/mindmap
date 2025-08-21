@@ -9,6 +9,7 @@ import io.vertx.core.Future;
 
 
 import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 
 
@@ -47,9 +48,9 @@ public class FolderServiceImpl implements FolderService {
     private final MindmapService mindmapService;
 
 
-    public FolderServiceImpl(EventBus eb, MongoDb mongoDb, final MindmapExplorerPlugin plugin) {
+    public FolderServiceImpl(Vertx vertx, MongoDb mongoDb, final MindmapExplorerPlugin plugin) {
         this.mongoDb = mongoDb;
-        this.mindmapService = new MindmapServiceImpl(eb, MongoDb.getInstance(), plugin);
+        this.mindmapService = new MindmapServiceImpl(vertx, MongoDb.getInstance(), plugin);
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderServiceImpl.class);
