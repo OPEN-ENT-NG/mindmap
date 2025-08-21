@@ -69,7 +69,7 @@ public class MindmapExplorerClientTest {
         final IExplorerPluginCommunication communication = explorerTest.getCommunication();
         mongoClient = test.database().createMongoClient(mongoDBContainer);
         mindmapPlugin = new MindmapExplorerPlugin(communication, mongoClient, securedActions);
-        mindmapService = new MindmapServiceImpl(test.vertx().eventBus(), mongo, mindmapPlugin);
+        mindmapService = new MindmapServiceImpl(test.vertx(), mongo, mindmapPlugin);
         mindmapPlugin.start();
         client = IExplorerPluginClient.withBus(test.vertx(), application, resourceType);
         final Async async = context.async();

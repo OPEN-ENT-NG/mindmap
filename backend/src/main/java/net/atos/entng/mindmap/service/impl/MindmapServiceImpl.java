@@ -25,10 +25,9 @@ import fr.wseduc.mongodb.MongoQueryBuilder;
 import fr.wseduc.mongodb.MongoUpdateBuilder;
 
 import fr.wseduc.webutils.Utils;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Promise;
+import io.vertx.core.*;
 import io.vertx.core.json.JsonArray;
+import net.atos.entng.mindmap.Mindmap;
 import net.atos.entng.mindmap.core.constants.Field;
 import net.atos.entng.mindmap.explorer.MindmapExplorerPlugin;
 import net.atos.entng.mindmap.exporter.MindmapPNGExporter;
@@ -36,7 +35,6 @@ import net.atos.entng.mindmap.exporter.MindmapSVGExporter;
 import net.atos.entng.mindmap.model.MindmapModel;
 import net.atos.entng.mindmap.service.MindmapService;
 import net.atos.entng.mindmap.helper.PromiseHelper;
-import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.http.HttpServerRequest;
@@ -45,6 +43,10 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import fr.wseduc.webutils.http.Renders;
 import org.bson.conversions.Bson;
+import org.entcore.broker.api.dto.resources.ResourcesDeletedDTO;
+import org.entcore.broker.api.publisher.BrokerPublisherFactory;
+import org.entcore.broker.api.utils.AddressParameter;
+import org.entcore.broker.proxy.ResourceBrokerPublisher;
 import org.entcore.common.explorer.IdAndVersion;
 import org.entcore.common.explorer.IngestJobState;
 import org.entcore.common.mongodb.MongoDbResult;
@@ -77,16 +79,22 @@ public class MindmapServiceImpl implements MindmapService {
     private final EventBus eb;
     private final MongoDb mongoDb;
     private final MindmapExplorerPlugin plugin;
+    private final ResourceBrokerPublisher resourcePublisher;
 
     /**
      * Constructor of the mindmap service
      *
-     * @param eb Event bus
      */
-    public MindmapServiceImpl(EventBus eb, MongoDb mongoDb, final MindmapExplorerPlugin plugin) {
-        this.eb = eb;
+    public MindmapServiceImpl(Vertx vertx, MongoDb mongoDb, final MindmapExplorerPlugin plugin) {
+        this.eb = vertx.eventBus();
         this.mongoDb = mongoDb;
         this.plugin = plugin;
+        // Initialize resource publisher for deletion notifications
+        this.resourcePublisher = BrokerPublisherFactory.create(
+                ResourceBrokerPublisher.class,
+                vertx,
+                new AddressParameter("application", Mindmap.APPLICATION)
+        );
     }
 
     @Override
@@ -285,6 +293,11 @@ public class MindmapServiceImpl implements MindmapService {
         mongoDb.delete(Field.COLLECTION_MINDMAP, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(PromiseHelper.handlerJsonObject(promise)));
         return promise.future().compose(result -> {
             final long now = System.currentTimeMillis();
+            // Notify resource deletion via broker and don't wait for completion
+            final ResourcesDeletedDTO notification = ResourcesDeletedDTO.forSingleResource(id, Mindmap.MINDMAP_TYPE);
+            resourcePublisher.notifyResourcesDeleted(notification);
+            // Notify EUR and Wait for explorer notifications to complete
+
             return plugin.notifyDeleteById(user, new IdAndVersion(id, now)).map(result);
         }).onFailure(e->{
             log.error("Failed to notify delete mindmap: ", e);
