@@ -20,6 +20,7 @@
 package net.atos.entng.mindmap;
 
 
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import net.atos.entng.mindmap.controllers.FolderController;
 import net.atos.entng.mindmap.controllers.MindmapController;
@@ -74,9 +75,20 @@ public class Mindmap extends BaseServer {
      */
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
-        super.start(startPromise);
-        plugin = MindmapExplorerPlugin.create(securedActions);
-        final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
+        final Promise<Void> promise = Promise.promise();
+        super.start(promise);
+        promise.future()
+		        .compose(init -> initMindmap())
+		        .onComplete(startPromise);
+    }
+
+    public Future<Void> initMindmap() {
+	    try {
+		    plugin = MindmapExplorerPlugin.create(securedActions);
+	    } catch (Exception e) {
+		    return Future.failedFuture(e);
+	    }
+	    final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
         final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
         pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
         final RepositoryEvents explorerRepository = new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection, mainPlugin);
@@ -104,6 +116,8 @@ public class Mindmap extends BaseServer {
         BrokerProxyUtils.addBrokerProxy(new ShareBrokerListenerImpl(this.securedActions, shareService), vertx, new AddressParameter("application", "mindmap"));
         // start plugin
         plugin.start();
+
+        return Future.succeededFuture();
     }
 
     @Override
