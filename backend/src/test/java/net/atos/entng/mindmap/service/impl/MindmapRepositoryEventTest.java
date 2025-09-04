@@ -62,7 +62,7 @@ public class MindmapRepositoryEventTest {
 
     @BeforeClass
     public static void setUp(TestContext context) throws Exception {
-        IngestJobMetricsRecorderFactory.init(test.vertx(), new JsonObject());
+        IngestJobMetricsRecorderFactory.init(null, new JsonObject());
         test.database().initNeo4j(context, neo4jContainer);
         user.setLogin("user1");
         explorerTest.start(context);

@@ -20,6 +20,7 @@
 package net.atos.entng.mindmap;
 
 
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import net.atos.entng.mindmap.controllers.FolderController;
 import net.atos.entng.mindmap.controllers.MindmapController;
@@ -74,36 +75,47 @@ public class Mindmap extends BaseServer {
      */
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
-        super.start(startPromise);
-        plugin = MindmapExplorerPlugin.create(securedActions);
-        final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
-        final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
-        pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
+        final Promise<Void> promise = Promise.promise();
+        super.start(promise);
+        promise.future()
+		        .compose(init -> initMindmap())
+		        .onComplete(startPromise);
+    }
+
+    public Future<Void> initMindmap() {
+	    return MindmapExplorerPlugin.create(securedActions).compose(p -> {
+            this.plugin = p;
+            final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
+            final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
+            pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
         final RepositoryEvents explorerRepository = new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection, mainPlugin);
         final RepositoryEvents resourceRepository = new ResourceBrokerRepositoryEvents(explorerRepository, vertx, APPLICATION, MINDMAP_TYPE);
         setRepositoryEvents(resourceRepository);
 
-        MongoDbConf conf = MongoDbConf.getInstance();
-        conf.setCollection(MINDMAP_COLLECTION);
+            MongoDbConf conf = MongoDbConf.getInstance();
+            conf.setCollection(MINDMAP_COLLECTION);
 
 
-        setDefaultResourceFilter(new ShareAndOwner());
-        if (config.getBoolean("searching-event", true)) {
-            setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
-        }
+            setDefaultResourceFilter(new ShareAndOwner());
+            if (config.getBoolean("searching-event", true)) {
+                setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
+            }
         addController(new MindmapController(vertx, MINDMAP_COLLECTION, plugin));
         addController(new FolderController(vertx, FOLDER_COLLECTION, plugin));
 
-        // Register verticle into the container
-        getVertx().deployVerticle(MindmapPNGExporter.class.getName());
-        getVertx().deployVerticle(MindmapSVGExporter.class.getName());
+            // Register verticle into the container
+            getVertx().deployVerticle(MindmapPNGExporter.class.getName());
+            getVertx().deployVerticle(MindmapSVGExporter.class.getName());
         // add broker listener for workspace resources
         BrokerProxyUtils.addBrokerProxy(new ResourceBrokerListenerImpl(), vertx, new AddressParameter("application", "mindmap"));
         // add broker listener for share service
         final ShareService shareService = plugin.createShareService(securedActions, null);
         BrokerProxyUtils.addBrokerProxy(new ShareBrokerListenerImpl(this.securedActions, shareService), vertx, new AddressParameter("application", "mindmap"));
-        // start plugin
-        plugin.start();
+            // start plugin
+            plugin.start();
+
+            return Future.succeededFuture();
+        });
     }
 
     @Override
