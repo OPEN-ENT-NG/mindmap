@@ -67,7 +67,19 @@ public class Mindmap extends BaseServer {
      */
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
-        super.start(startPromise);
+        final Promise<Void> promise = Promise.promise();
+        super.start(promise);
+        promise.future().onSuccess(init -> {
+            try {
+                initMindmap(startPromise);
+            } catch (Exception e) {
+                startPromise.fail(e);
+                log.error("Error when start Mindmap", e);
+            }
+        }).onFailure(ex -> log.error("Error when start Mindmap server super classes", ex));
+    }
+
+    public void initMindmap(final Promise<Void> startPromise) throws Exception {
         plugin = MindmapExplorerPlugin.create(securedActions);
         final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
         final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
@@ -90,6 +102,8 @@ public class Mindmap extends BaseServer {
         getVertx().deployVerticle(MindmapSVGExporter.class.getName());
         // start plugin
         plugin.start();
+
+        startPromise.tryComplete();
     }
 
     @Override
