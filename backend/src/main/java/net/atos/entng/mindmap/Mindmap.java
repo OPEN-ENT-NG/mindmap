@@ -83,41 +83,39 @@ public class Mindmap extends BaseServer {
     }
 
     public Future<Void> initMindmap() {
-	    try {
-		    plugin = MindmapExplorerPlugin.create(securedActions);
-	    } catch (Exception e) {
-		    return Future.failedFuture(e);
-	    }
-	    final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
-        final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
-        pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
+	    return MindmapExplorerPlugin.create(securedActions).compose(p -> {
+            this.plugin = p;
+            final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
+            final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
+            pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
         final RepositoryEvents explorerRepository = new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection, mainPlugin);
         final RepositoryEvents resourceRepository = new ResourceBrokerRepositoryEvents(explorerRepository, vertx, APPLICATION, MINDMAP_TYPE);
         setRepositoryEvents(resourceRepository);
 
-        MongoDbConf conf = MongoDbConf.getInstance();
-        conf.setCollection(MINDMAP_COLLECTION);
+            MongoDbConf conf = MongoDbConf.getInstance();
+            conf.setCollection(MINDMAP_COLLECTION);
 
 
-        setDefaultResourceFilter(new ShareAndOwner());
-        if (config.getBoolean("searching-event", true)) {
-            setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
-        }
+            setDefaultResourceFilter(new ShareAndOwner());
+            if (config.getBoolean("searching-event", true)) {
+                setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
+            }
         addController(new MindmapController(vertx, MINDMAP_COLLECTION, plugin));
         addController(new FolderController(vertx, FOLDER_COLLECTION, plugin));
 
-        // Register verticle into the container
-        getVertx().deployVerticle(MindmapPNGExporter.class.getName());
-        getVertx().deployVerticle(MindmapSVGExporter.class.getName());
+            // Register verticle into the container
+            getVertx().deployVerticle(MindmapPNGExporter.class.getName());
+            getVertx().deployVerticle(MindmapSVGExporter.class.getName());
         // add broker listener for workspace resources
         BrokerProxyUtils.addBrokerProxy(new ResourceBrokerListenerImpl(), vertx, new AddressParameter("application", "mindmap"));
         // add broker listener for share service
         final ShareService shareService = plugin.createShareService(securedActions, null);
         BrokerProxyUtils.addBrokerProxy(new ShareBrokerListenerImpl(this.securedActions, shareService), vertx, new AddressParameter("application", "mindmap"));
-        // start plugin
-        plugin.start();
+            // start plugin
+            plugin.start();
 
-        return Future.succeededFuture();
+            return Future.succeededFuture();
+        });
     }
 
     @Override

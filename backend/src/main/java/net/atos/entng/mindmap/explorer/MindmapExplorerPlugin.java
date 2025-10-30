@@ -34,11 +34,10 @@ public class MindmapExplorerPlugin extends ExplorerPluginResourceMongo {
     private final MindmapFolderExplorerPlugin mindmapFolderExplorerPlugin;
     private final ResourceBrokerPublisher resourcePublisher;
 
-    public static MindmapExplorerPlugin create(final Map<String, SecuredAction> securedActions) throws Exception {
-        final IExplorerPlugin plugin = ExplorerPluginFactory.createMongoPlugin((params) ->
+    public static Future<MindmapExplorerPlugin> create(final Map<String, SecuredAction> securedActions) {
+        return ExplorerPluginFactory.createMongoPlugin((params) ->
                 new MindmapExplorerPlugin(params.getCommunication(), params.getDb(), securedActions)
-        );
-        return (MindmapExplorerPlugin) plugin;
+        ).map(p -> (MindmapExplorerPlugin) p);
     }
 
     public MindmapExplorerPlugin(final IExplorerPluginCommunication communication, final MongoClient mongoClient, final Map<String, SecuredAction> securedActions) {
