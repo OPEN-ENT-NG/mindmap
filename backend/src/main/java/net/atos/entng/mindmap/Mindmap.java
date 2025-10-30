@@ -76,34 +76,32 @@ public class Mindmap extends BaseServer {
     }
 
     public Future<Void> initMindmap() {
-	    try {
-		    plugin = MindmapExplorerPlugin.create(securedActions);
-	    } catch (Exception e) {
-		    return Future.failedFuture(e);
-	    }
-	    final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
-        final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
-        pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
-        setRepositoryEvents(new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection, mainPlugin));
+	    return MindmapExplorerPlugin.create(securedActions).compose(p -> {
+            this.plugin = p;
+            final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
+            final IExplorerPluginClient mainPlugin = IExplorerPluginClient.withBus(vertx, APPLICATION, MINDMAP_TYPE);
+            pluginClientPerCollection.put(MINDMAP_COLLECTION, mainPlugin);
+            setRepositoryEvents(new ExplorerRepositoryEvents(new MindmapRepositoryEvents(vertx), pluginClientPerCollection, mainPlugin));
 
-        MongoDbConf conf = MongoDbConf.getInstance();
-        conf.setCollection(MINDMAP_COLLECTION);
+            MongoDbConf conf = MongoDbConf.getInstance();
+            conf.setCollection(MINDMAP_COLLECTION);
 
 
-        setDefaultResourceFilter(new ShareAndOwner());
-        if (config.getBoolean("searching-event", true)) {
-            setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
-        }
-        addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION, plugin));
-        addController(new FolderController(vertx.eventBus(), FOLDER_COLLECTION, plugin));
+            setDefaultResourceFilter(new ShareAndOwner());
+            if (config.getBoolean("searching-event", true)) {
+                setSearchingEvents(new MindmapSearchingEvents(new MongoDbSearchService(MINDMAP_COLLECTION)));
+            }
+            addController(new MindmapController(vertx.eventBus(), MINDMAP_COLLECTION, plugin));
+            addController(new FolderController(vertx.eventBus(), FOLDER_COLLECTION, plugin));
 
-        // Register verticle into the container
-        getVertx().deployVerticle(MindmapPNGExporter.class.getName());
-        getVertx().deployVerticle(MindmapSVGExporter.class.getName());
-        // start plugin
-        plugin.start();
+            // Register verticle into the container
+            getVertx().deployVerticle(MindmapPNGExporter.class.getName());
+            getVertx().deployVerticle(MindmapSVGExporter.class.getName());
+            // start plugin
+            plugin.start();
 
-        return Future.succeededFuture();
+            return Future.succeededFuture();
+        });
     }
 
     @Override

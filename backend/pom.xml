@@ -30,7 +30,7 @@
 
     <properties>
         <entCoreVersion>6.8-zookeeper-SNAPSHOT</entCoreVersion>
-        <explorerVersion>2.2-SNAPSHOT</explorerVersion>
+        <explorerVersion>2.3-zookeeper-SNAPSHOT</explorerVersion>
         <apacheBatikVersion>1.7</apacheBatikVersion>
         <junitVersion>4.13.2</junitVersion>
     </properties>
