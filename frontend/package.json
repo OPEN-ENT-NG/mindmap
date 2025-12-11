@@ -38,9 +38,9 @@
     ]
   },
   "dependencies": {
-    "@edifice.io/react": "develop",
-    "@edifice.io/client": "develop",
-    "@edifice.io/bootstrap": "develop",
+    "@edifice.io/react": "zookeeper",
+    "@edifice.io/client": "zookeeper",
+    "@edifice.io/bootstrap": "zookeeper",
     "@edifice-wisemapping/editor": "0.7.10",
     "@react-spring/web": "^9.7.5",
     "@tanstack/react-query": "5.62.7",
