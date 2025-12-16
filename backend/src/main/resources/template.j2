@@ -1,0 +1,21 @@
+{
+  "name": "net.atos~mindmap",
+  "config": {
+    "main": "net.atos.entng.mindmap.Mindmap",
+    "port": 8666,
+    "csrf-token": {{ csrfToken | default('true') }},
+    "use-explorer-ui": {{ mindmapUseExplorerUi | default('true') }},
+    "auto-redeploy": false,
+    "app-name": "Mindmap",
+    "app-address": "/mindmap",
+    "app-icon": "mindmap-large",
+    "app-type" : "END_USER",
+    "host": "https://{{ host }}",
+    "ssl": true,
+    "userbook-host": "https://{{ host }}",
+    "integration-mode": "{{ integration_mode|default('HTTP') }}",
+    "app-registry.port": 8012,
+    "mode": "prod",
+    "entcore.port": 8009
+  }
+}
