@@ -1,6 +1,6 @@
 {
   "name": "mindmap",
-  "version": "3.4.2-develop.0",
+  "version": "3.4.2-develop.1",
   "description": "ENT mindmap module.",
   "homepage": "https://github.com/OPEN-ENT-NG/mindmap#readme",
   "bugs": {
@@ -38,9 +38,9 @@
     ]
   },
   "dependencies": {
-    "@edifice.io/react": "develop-pedago",
-    "@edifice.io/client": "develop-pedago",
-    "@edifice.io/bootstrap": "develop-pedago",
+    "@edifice.io/react": "develop",
+    "@edifice.io/client": "develop",
+    "@edifice.io/bootstrap": "develop",
     "@edifice-wisemapping/editor": "0.7.10",
     "@react-spring/web": "9.7.5",
     "@tanstack/react-query": "5.62.7",
