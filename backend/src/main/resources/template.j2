@@ -2,6 +2,10 @@
   "name": "net.atos~mindmap",
   "config": {
     "main": "net.atos.entng.mindmap.Mindmap",
+    "probes": [
+      "org.entcore.common.http.health.Neo4jProbe",
+      "org.entcore.common.http.health.MongoProbe"
+    ],
     "port": 8666,
     "csrf-token": {{ csrfToken | default('true') }},
     "use-explorer-ui": {{ mindmapUseExplorerUi | default('true') }},
