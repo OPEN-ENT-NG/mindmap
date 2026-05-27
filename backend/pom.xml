@@ -29,7 +29,7 @@
     <explorerVersion>2.5-SNAPSHOT</explorerVersion>
     <apacheBatikVersion>1.7</apacheBatikVersion>
     <junitVersion>4.13.2</junitVersion>
-    <entCoreLibsVersion>6.14-separation-SNAPSHOT</entCoreLibsVersion>
+    <entCoreLibsVersion>6.14-SNAPSHOT</entCoreLibsVersion>
     <modMongoVersion>4.1-SNAPSHOT</modMongoVersion>
     <modJsonSchemaValidatorVersion>2.1-SNAPSHOT</modJsonSchemaValidatorVersion>
   </properties>
