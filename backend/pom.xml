@@ -11,7 +11,7 @@
   </parent>
   <groupId>net.atos</groupId>
   <artifactId>mindmap</artifactId>
-  <version>3.5-SNAPSHOT</version>
+  <version>3.5.2</version>
   <scm>
     <connection>scm:git:https://github.com/OPEN-ENT-NG/mindmap.git</connection>
     <developerConnection>scm:git:https://github.com/OPEN-ENT-NG/mindmap.git</developerConnection>
@@ -25,13 +25,13 @@
     </repository>
   </repositories>
   <properties>
-    <entCoreVersion>6.15-SNAPSHOT</entCoreVersion>
-    <explorerVersion>2.6-SNAPSHOT</explorerVersion>
+    <entCoreVersion>6.15.6</entCoreVersion>
+    <explorerVersion>2.6.2</explorerVersion>
     <apacheBatikVersion>1.7</apacheBatikVersion>
     <junitVersion>4.13.2</junitVersion>
-    <entCoreLibsVersion>6.15-SNAPSHOT</entCoreLibsVersion>
-    <modMongoVersion>4.2-SNAPSHOT</modMongoVersion>
-    <modJsonSchemaValidatorVersion>2.2-SNAPSHOT</modJsonSchemaValidatorVersion>
+    <entCoreLibsVersion>6.15.2</entCoreLibsVersion>
+    <modMongoVersion>4.2.0</modMongoVersion>
+    <modJsonSchemaValidatorVersion>2.2.0</modJsonSchemaValidatorVersion>
   </properties>
   <dependencies>
     <dependency>
