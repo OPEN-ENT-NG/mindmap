@@ -25,11 +25,11 @@
     </repository>
   </repositories>
   <properties>
-    <entCoreVersion>6.16-SNAPSHOT</entCoreVersion>
-    <explorerVersion>2.6-SNAPSHOT</explorerVersion>
+    <entCoreVersion>6.16-develop-enabling-SNAPSHOT</entCoreVersion>
+    <explorerVersion>2.6-develop-enabling-SNAPSHOT</explorerVersion>
     <apacheBatikVersion>1.7</apacheBatikVersion>
     <junitVersion>4.13.2</junitVersion>
-    <entCoreLibsVersion>6.16-SNAPSHOT</entCoreLibsVersion>
+    <entCoreLibsVersion>6.16-develop-enabling-SNAPSHOT</entCoreLibsVersion>
     <modMongoVersion>4.2-SNAPSHOT</modMongoVersion>
     <modJsonSchemaValidatorVersion>2.2-SNAPSHOT</modJsonSchemaValidatorVersion>
   </properties>
