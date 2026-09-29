@@ -81,7 +81,6 @@ export const useExportMindmap = ({
         .then((url: string) => {
           // Create hidden anchor to force download ...
           const anchor: HTMLAnchorElement = document.createElement('a');
-          anchor.style.display = 'display: none';
           anchor.download = `${mapName}.${exportFormat}`;
           anchor.href = url;
           document.body.appendChild(anchor);
