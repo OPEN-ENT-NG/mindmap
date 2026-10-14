@@ -25,7 +25,7 @@
     </repository>
   </repositories>
   <properties>
-    <entCoreVersion>6.16-develop-enabling-SNAPSHOT</entCoreVersion>
+    <entCoreVersion>6.17-develop-enabling-SNAPSHOT</entCoreVersion>
     <explorerVersion>2.6-develop-enabling-SNAPSHOT</explorerVersion>
     <apacheBatikVersion>1.7</apacheBatikVersion>
     <junitVersion>4.13.2</junitVersion>
