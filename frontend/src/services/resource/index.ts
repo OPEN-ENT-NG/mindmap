@@ -12,11 +12,13 @@ import {
 const APP = 'mindmap';
 const RESOURCE = 'mindmap';
 
+type MindmapCreateParameters = CreateParameters & { map?: string };
+
 export class MindmapResourceService extends ResourceService {
   getEditUrl(): string {
     throw new Error('Method not implemented.');
   }
-  async create(parameters: CreateParameters): Promise<CreateResult> {
+  async create(parameters: MindmapCreateParameters): Promise<CreateResult> {
     const thumbnail = parameters.thumbnail
       ? await this.getThumbnailPath(parameters.thumbnail)
       : '';
@@ -26,7 +28,9 @@ export class MindmapResourceService extends ResourceService {
       description: parameters.description,
       thumbnail,
       folder: parameters.folder,
-      map: `<map version="tango" theme="prism"><topic central="true" text="${parameters.name}"/></map>`,
+      map:
+        parameters.map ??
+        `<map version="tango" theme="prism"><topic central="true" text="${parameters.name}"/></map>`,
       trashed: false,
       visibility: 'OWNER',
     });

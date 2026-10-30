@@ -12,6 +12,16 @@
 
   "mindmap.export.description": "Get a graphic representation of your map including all colors and shapes to reuse in documents or for archiving",
 
+  "mindmap.import": "Import",
+  "mindmap.import.error": "An error occurred during the import.",
+  "mindmap.import.error.content": "The file does not contain a valid mind map.",
+  "mindmap.import.error.format": "This file format is not supported.",
+  "mindmap.import.error.size": "The file is too large ([[maxSize]] MB maximum).",
+  "mindmap.import.file.remove": "Remove the file",
+  "mindmap.import.formats": "Accepted formats: .mm (FreeMind, Freeplane and mind mapping tools offering a FreeMind export) and .wxml (WiseMapping). Maximum size: [[maxSize]] MB.",
+  "mindmap.import.modal.title": "Import a mind map",
+  "mindmap.import.warning": "Icons, arrows between items and text formatting are not imported.",
+
   "mindmap.name": "Name",
   "mindmap.description": "Description",
 

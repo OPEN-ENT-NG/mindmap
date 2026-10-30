@@ -1,5 +1,6 @@
 import { AppParams } from 'ode-explorer/lib';
 
+import ImportMindmapAction from '~/features/import-modal/ImportMindmapAction';
 import { MindmapResourceService } from '~/services/resource';
 import { workflows } from './workflows';
 
@@ -88,4 +89,7 @@ export const explorerConfig: AppParams = {
       right: 'manager',
     },
   ],
+  renderAppActions: ({ currentFolder }) => (
+    <ImportMindmapAction currentFolder={currentFolder} />
+  ),
 };
